@@ -14,7 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      workspace_preferences: {
+        Row: {
+          dismissed_ids: Json
+          profiles: Json
+          saved_ids: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          dismissed_ids?: Json
+          profiles?: Json
+          saved_ids?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          dismissed_ids?: Json
+          profiles?: Json
+          saved_ids?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
