@@ -1,0 +1,352 @@
+{
+  "company_name": "Roxtec",
+  "website": "https://www.roxtec.com",
+  "summary": {
+    "text": "Global supplier of flexible, modular sealing solutions for cable and pipe transits; focuses on safety, protection (fire, gas, water) and operational reliability.",
+    "status": "fact",
+    "evidence": [
+      {
+        "url": "https://www.roxtec.com/en/about-us/about-roxtec/",
+        "quote": "Roxtec is the world leader within sealing solutions for cable and pipe transits.",
+        "quote_verified": true
+      },
+      {
+        "url": "https://www.roxtec.com/en/",
+        "quote": "Flexible sealing solutions for cables and pipes",
+        "quote_verified": true
+      }
+    ],
+    "note": "Description is taken from Roxtec's corporate site (company self-published)."
+  },
+  "offerings": [
+    {
+      "text": "Modular sealing products and system components for cable and pipe penetrations (including frames, seals, kits and accessories).",
+      "status": "uncertain",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/products/",
+          "quote": "Roxtec develops, manufactures and delivers flexible sealing solutions for cable and pipe penetrations.",
+          "quote_verified": false
+        }
+      ],
+      "note": "Downgraded: no verified source quote."
+    },
+    {
+      "text": "Services: installation training, onsite supervision and certified transit inspections.",
+      "status": "uncertain",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/services/roxtec-services/",
+          "quote": "Installation training, Supervision, Transit inspections",
+          "quote_verified": false
+        }
+      ],
+      "note": "Downgraded: no verified source quote."
+    },
+    {
+      "text": "Software tools: Roxtec Transit Designer™, Transit Build™ and Transit Operate™ to support selection, design and lifecycle management.",
+      "status": "fact",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/",
+          "quote": "Roxtec Transit Designer™ Smart engineering tool",
+          "quote_verified": true
+        },
+        {
+          "url": "https://www.roxtec.com/en/services/roxtec-services/",
+          "quote": "Roxtec Transit Designer™, Roxtec Transit Build™, Roxtec Transit Operate™",
+          "quote_verified": false
+        }
+      ],
+      "note": "Software suite is positioned as part of the product/service offering on the site."
+    }
+  ],
+  "technologies_expertise": [
+    {
+      "text": "Multidiameter™ modular sealing technology (removable rubber layers for adaptability to different cable/pipe diameters).",
+      "status": "uncertain",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/about-us/about-roxtec/",
+          "quote": "the invention of Multidiameter™, a solution that improved the process of sealing cable and pipe penetrations",
+          "quote_verified": false
+        }
+      ],
+      "note": "Downgraded: no verified source quote."
+    },
+    {
+      "text": "EMC/EMP shielding and electrical bonding & grounding solutions for cable transits (EMC seals, BG™ seals).",
+      "status": "fact",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/products/",
+          "quote": "Use Roxtec EMC sealing solutions to ensure first class protection against EMI, electromagnetic interference, and EMP, electromagnetic pulses.",
+          "quote_verified": true
+        },
+        {
+          "url": "https://www.roxtec.com/en/services/roxtec-services/",
+          "quote": "Roxtec EM C specialists develop and test cable seals for electromagnetic shielding in the Roxtec electromagnetic laboratory.",
+          "quote_verified": false
+        }
+      ],
+      "note": ""
+    },
+    {
+      "text": "Certified fire, gas and water sealing solutions (extensive registered tests and approvals).",
+      "status": "fact",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/",
+          "quote": "the seals provide certified protection against multiple risks, including fire, gas and water.",
+          "quote_verified": false
+        },
+        {
+          "url": "https://www.roxtec.com/en/about-us/about-roxtec/",
+          "quote": "Registered product certificates More than 300 Registered tests and approvals More than 500",
+          "quote_verified": true
+        }
+      ],
+      "note": ""
+    }
+  ],
+  "application_areas": [
+    {
+      "text": "Infrastructure (ports, tunnels, data centers, buildings, rail, telecom, water management).",
+      "status": "uncertain",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/industries/",
+          "quote": "Infrastructure ... Ports Road tunnels and bridges ... Data centers ... Rail infrastructure ... Water management",
+          "quote_verified": false
+        }
+      ],
+      "note": "Downgraded: no verified source quote."
+    },
+    {
+      "text": "Marine and shipping (carriers, cruise, naval vessels, offshore support vessels, yachts).",
+      "status": "uncertain",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/industries/",
+          "quote": "Marine ... Carriers & cargo ships Cruise & ferry Naval vessels Offshore support vessels Yachts",
+          "quote_verified": false
+        }
+      ],
+      "note": "Downgraded: no verified source quote."
+    },
+    {
+      "text": "Offshore oil & gas and offshore support units (drill ships, FPSOs, jack-ups).",
+      "status": "uncertain",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/industries/",
+          "quote": "Offshore oil & gas ... Drill ships FPSOs Jack-up rigs Offshore support vessels Semi-submersible rigs",
+          "quote_verified": false
+        }
+      ],
+      "note": "Downgraded: no verified source quote."
+    },
+    {
+      "text": "Power sector, including HVDC/HV transmission, wind, solar, energy storage and nuclear applications.",
+      "status": "uncertain",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/industries/",
+          "quote": "Power ... Transmission HVDC Transmission AC Distribution Onshore wind Offshore wind Wind turbines",
+          "quote_verified": false
+        }
+      ],
+      "note": "Downgraded: no verified source quote."
+    },
+    {
+      "text": "Process industries (mining & metals, petrochem, pulp & paper, hydrogen, carbon capture, e-fuels and biofuels).",
+      "status": "uncertain",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/industries/",
+          "quote": "Process industries ... Mining & metals Onshore oil & gas & petrochem Pulp & paper Hydrogen, carbon capture, e-fuels and biofuels",
+          "quote_verified": false
+        }
+      ],
+      "note": "Downgraded: no verified source quote."
+    }
+  ],
+  "markets_customers": [
+    {
+      "text": "Active customer presence in more than 80 markets with 30 sales companies (global distribution network).",
+      "status": "fact",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/",
+          "quote": "the Roxtec Group, which serves and supports cable and pipe seal users in more than 80 markets",
+          "quote_verified": false
+        },
+        {
+          "url": "https://www.roxtec.com/en/about-us/about-roxtec/",
+          "quote": "Sales companies 30",
+          "quote_verified": true
+        }
+      ],
+      "note": ""
+    },
+    {
+      "text": "Reported sales in fiscal year 2025: 4 072 MSEK; average employees FY2025: 1,120.",
+      "status": "uncertain",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/about-us/about-roxtec/",
+          "quote": "Sales in fiscal year 2025 4 072 MSEK ... Average number of employees, fiscal year 2025 1120",
+          "quote_verified": false
+        }
+      ],
+      "note": "Financials are the company's reported figures for FY2025 on its about page. Downgraded: no verified source quote."
+    },
+    {
+      "text": "Privately owned by Mellby Gård Holding AB; headquarters in Karlskrona, Sweden.",
+      "status": "uncertain",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/about-us/about-roxtec/",
+          "quote": "Headquarters Karlskrona, Sweden ... Ownership Privately owned by Mellby Gård Holding AB",
+          "quote_verified": false
+        }
+      ],
+      "note": "Downgraded: no verified source quote."
+    }
+  ],
+  "geographic_focus": [
+    {
+      "text": "Global market presence (local market sites for Americas, Europe, Africa/Middle East, Asia/Pacific).",
+      "status": "uncertain",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/",
+          "quote": "Local sites ... Americas ... Europe ... Africa/Middle East ... Asia/Pacific",
+          "quote_verified": false
+        }
+      ],
+      "note": "Company operates local market websites and lists many country sites. Downgraded: no verified source quote."
+    },
+    {
+      "text": "Headquarters and principal operations based in Karlskrona, Sweden.",
+      "status": "fact",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/about-us/about-roxtec/",
+          "quote": "Headquarters Karlskrona, Sweden",
+          "quote_verified": true
+        }
+      ],
+      "note": ""
+    }
+  ],
+  "stated_priorities_projects": [
+    {
+      "text": "Sustainability: published sustainability report, EcoVadis Gold rating and CDP B score; focus on decoupling growth from emissions.",
+      "status": "uncertain",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/about-us/sustainability/",
+          "quote": "EcoVadis Gold ... CDP B Score ... The goal is to decouple growth from emissions and build a safer, more sustainable society.",
+          "quote_verified": false
+        }
+      ],
+      "note": "Sustainability is presented as a strategic focus area on the corporate website. Downgraded: no verified source quote."
+    },
+    {
+      "text": "Provide verified environmental product data (approved module EPDs) and transparency via reports and ratings.",
+      "status": "fact",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/about-us/sustainability/",
+          "quote": "Approved module EPDs Transparent data for customers.",
+          "quote_verified": true
+        }
+      ],
+      "note": ""
+    }
+  ],
+  "inferred_interests": [
+    {
+      "text": "Active participation in energy-transition projects (HVDC, wind, hydrogen, energy storage) where high-integrity cable/pipe seals are required.",
+      "status": "inferred",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/industries/",
+          "quote": "Power ... Transmission HVDC ... Onshore wind ... Offshore wind ... Energy storage",
+          "quote_verified": false
+        },
+        {
+          "url": "https://www.roxtec.com/en/",
+          "quote": "Why use Roxtec seals in HVDC projects?",
+          "quote_verified": true
+        }
+      ],
+      "note": "Roxtec highlights HVDC and renewables on its site and has recent news about HVDC; likely to prioritise collaboration and product use in such projects."
+    },
+    {
+      "text": "Collaboration opportunities around testing, certification and EMC/EMP protection for critical infrastructure.",
+      "status": "inferred",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/about-us/about-roxtec/",
+          "quote": "Registered tests and approvals More than 500",
+          "quote_verified": true
+        },
+        {
+          "url": "https://www.roxtec.com/en/services/roxtec-services/",
+          "quote": "Roxtec EM C specialists develop and test cable seals for electromagnetic shielding in the Roxtec electromagnetic laboratory.",
+          "quote_verified": false
+        }
+      ],
+      "note": "Given the emphasis on certifications, tests and an EMC lab, partnerships for testing, validation and EMC solutions are plausible."
+    },
+    {
+      "text": "Demand for lifecycle and digitalisation services (design tools, transit lifecycle management).",
+      "status": "inferred",
+      "evidence": [
+        {
+          "url": "https://www.roxtec.com/en/",
+          "quote": "Roxtec Transit Designer™ is your shortcut to safety and efficiency. This free, web-based application simplifies product selection",
+          "quote_verified": true
+        }
+      ],
+      "note": "Software suite presence suggests interest in digital tools that integrate with projects and ongoing asset management."
+    }
+  ],
+  "gaps": [
+    "No public breakdown of manufacturing locations or production capacity on the fetched pages.",
+    "No detailed list of major customers or project references beyond general 'customers in more than 80 markets' and success stories section.",
+    "No public R&D spend, margins or segment-level financials found on the fetched pages.",
+    "No patent portfolio details or technical whitepapers (beyond product guides) were located in fetched pages."
+  ],
+  "retrieved_at": "2026-11-13T10:55:51+00:00",
+  "sources_fetched": [
+    "https://www.roxtec.com/en/",
+    "https://www.roxtec.com/en/about-us/about-roxtec/",
+    "https://www.roxtec.com/en/about-us/sustainability/",
+    "https://www.roxtec.com/en/industries/",
+    "https://www.roxtec.com/en/products/",
+    "https://www.roxtec.com/en/services/roxtec-services/"
+  ],
+  "verification_warnings": [
+    "offerings: quote not found on https://www.roxtec.com/en/products/",
+    "offerings: quote not found on https://www.roxtec.com/en/services/roxtec-services/",
+    "offerings: quote not found on https://www.roxtec.com/en/services/roxtec-services/",
+    "technologies_expertise: quote not found on https://www.roxtec.com/en/about-us/about-roxtec/",
+    "technologies_expertise: quote not found on https://www.roxtec.com/en/services/roxtec-services/",
+    "technologies_expertise: quote not found on https://www.roxtec.com/en/",
+    "application_areas: quote not found on https://www.roxtec.com/en/industries/",
+    "application_areas: quote not found on https://www.roxtec.com/en/industries/",
+    "application_areas: quote not found on https://www.roxtec.com/en/industries/",
+    "application_areas: quote not found on https://www.roxtec.com/en/industries/",
+    "application_areas: quote not found on https://www.roxtec.com/en/industries/",
+    "markets_customers: quote not found on https://www.roxtec.com/en/",
+    "markets_customers: quote not found on https://www.roxtec.com/en/about-us/about-roxtec/",
+    "markets_customers: quote not found on https://www.roxtec.com/en/about-us/about-roxtec/",
+    "geographic_focus: quote not found on https://www.roxtec.com/en/",
+    "stated_priorities_projects: quote not found on https://www.roxtec.com/en/about-us/sustainability/",
+    "inferred_interests: quote not found on https://www.roxtec.com/en/industries/",
+    "inferred_interests: quote not found on https://www.roxtec.com/en/services/roxtec-services/"
+  ]
+}
