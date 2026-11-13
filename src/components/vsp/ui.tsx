@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { X } from "lucide-react";
 import type { ClaimType, OpportunityType } from "@/lib/science-park";
 
@@ -41,8 +41,9 @@ export function Drawer({ open, onClose, title, wide, children }: { open: boolean
   </div>;
 }
 
-export function Segmented<T extends string>({ value, options, onChange, label }: { value: T; options: { value: T; label: string }[]; onChange: (v: T) => void; label: string }) {
-  return <div className="segmented" role="radiogroup" aria-label={label}>
-    {options.map(o => <button key={o.value} role="radio" aria-checked={value === o.value} data-active={value === o.value} onClick={() => onChange(o.value)}>{o.label}</button>)}
-  </div>;
+export function CompanyLogo({ src, name, size = 48 }: { src: string; name: string; size?: number }) {
+  const [failed, setFailed] = useState(false);
+  return <span className="company-logo" style={{ width: size, height: size }}>
+    {failed ? <span className="company-logo-fallback">{name.slice(0, 1)}</span> : <img src={src} alt={`${name} logo`} onError={() => setFailed(true)}/>}
+  </span>;
 }

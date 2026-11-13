@@ -1,63 +1,59 @@
-import { THEMES, companies, emptyEdits, rankOpportunities, suggestedConnections, themeClaims } from "@/lib/science-park";
-import { TypeTag } from "./ui";
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { THEMES, companies, logoUrl, suggestedConnections, themeClaims, type Connection } from "@/lib/science-park";
+import { CompanyLogo } from "./ui";
 
-/** View for Blue Science Park staff: shared interests across members, possible connections and opportunity reach. */
+/** Staff view: themes members share and possible connections between them. */
 export function EcosystemView({ onOpenCompany }: { onOpenCompany: (id: string) => void }) {
-  const matrix = companies.map(c => ({ company: c, cells: THEMES.map(t => themeClaims(c.claims, t)) }));
-  const max = Math.max(1, ...matrix.flatMap(r => r.cells.map(c => c.length)));
-  const shared = THEMES.map((t, i) => ({ theme: t.name, members: matrix.filter(r => r.cells[i]!.length > 0).map(r => r.company.name) })).filter(s => s.members.length >= 2);
+  const [tab, setTab] = useState<"themes" | "connections">("themes");
+  const themes = THEMES.map(t => ({ name: t.name, members: companies.map(c => ({ company: c, n: themeClaims(c.claims, t).length })).filter(m => m.n > 0).sort((a, b) => b.n - a.n) }))
+    .filter(t => t.members.length > 0)
+    .sort((a, b) => b.members.length - a.members.length);
   const connections = suggestedConnections();
-  const reach = rankOpportunities([], emptyEdits).map(({ opportunity }) => ({
-    opportunity,
-    members: companies.filter(c => (rankOpportunities(c.claims, emptyEdits).find(m => m.opportunity.id === opportunity.id)?.score ?? 0) >= 40).map(c => c.name),
-  })).filter(r => r.members.length > 0).sort((a, b) => b.members.length - a.members.length);
 
   return <div>
     <header className="page-head">
-      <div>
-        <div className="eyebrow">For Blue Science Park staff</div>
-        <h1 className="display">Ecosystem</h1>
-        <p className="lede">Shared interests across {companies.length} profiled members, built only from public, verified claims. In production this covers all 40+ members.</p>
-      </div>
+      <h1 className="page-title">Ecosystem</h1>
+      <p className="page-sub">Shared interests and possible connections across members, based only on their public profiles.</p>
     </header>
 
-    <section className="panel">
-      <h3 className="panel-title">Theme map</h3>
-      <p className="panel-help">Number of verified or inferred claims per member that mention each theme.</p>
-      <div className="heat-wrap">
-        <table className="heat">
-          <thead><tr><th/>{THEMES.map(t => <th key={t.name}><span>{t.name}</span></th>)}</tr></thead>
-          <tbody>{matrix.map(r => <tr key={r.company.id}>
-            <th><button className="link" onClick={() => onOpenCompany(r.company.id)}>{r.company.name}</button></th>
-            {r.cells.map((cell, i) => <td key={i} title={cell.map(c => `${c.id}: ${c.value}`).join("\n")} style={{ ["--heat" as string]: cell.length / max }}>{cell.length || ""}</td>)}
-          </tr>)}</tbody>
-        </table>
-      </div>
-      {shared.length > 0 && <p className="mt-4 text-sm">Shared by several members: {shared.map(s => <span key={s.theme} className="chip static">{s.theme} · {s.members.join(", ")}</span>)}</p>}
-    </section>
+    <nav className="section-tabs" aria-label="Ecosystem">
+      <button data-active={tab === "themes"} onClick={() => setTab("themes")}>Shared themes<span className="tab-count">{themes.length}</span></button>
+      <button data-active={tab === "connections"} onClick={() => setTab("connections")}>Suggested connections<span className="tab-count">{connections.length}</span></button>
+    </nav>
 
-    <div className="eco-grid">
-      <section className="panel">
-        <h3 className="panel-title">Suggested connections</h3>
-        <p className="panel-help">Based on overlapping public claims. Neither company has expressed an interest in collaborating.</p>
-        {connections.map(c => <article key={c.a.id + c.b.id} className="connection">
-          <div className="connection-head">{c.a.name} <span className="text-ink-soft">↔</span> {c.b.name}</div>
-          {c.themes.slice(0, 3).map(t => <div key={t.name} className="connection-theme">
-            <strong>{t.name}</strong>
-            <p><span className="ref">{t.aClaims[0]!.id}</span> {c.a.name}: {t.aClaims[0]!.value}</p>
-            <p><span className="ref">{t.bClaims[0]!.id}</span> {c.b.name}: {t.bClaims[0]!.value}</p>
-          </div>)}
-        </article>)}
-      </section>
-
-      <section className="panel">
-        <h3 className="panel-title">Opportunity reach</h3>
-        <p className="panel-help">Which members each opportunity is relevant to (score ≥ 40 on the baseline profile). Useful for joint information sessions.</p>
-        <ul className="reach-list">{reach.map(r => <li key={r.opportunity.id}>
-          <div className="flex items-center gap-2"><TypeTag type={r.opportunity.type}/><span className="font-medium">{r.opportunity.title}</span></div>
-          <div className="text-xs text-ink-soft">{r.members.join(", ")}</div>
-        </li>)}</ul>
-      </section>
-    </div>
+    {tab === "themes" ? <div className="theme-grid">
+      {themes.map(t => <article key={t.name} className="card theme-card">
+        <div className="flex items-center justify-between"><h3 className="card-title">{t.name}</h3><span className="text-xs text-ink-soft">{t.members.length} of {companies.length} members</span></div>
+        <ul className="theme-members">
+          {t.members.map(m => <li key={m.company.id}>
+            <button className="member-chip" onClick={() => onOpenCompany(m.company.id)}><CompanyLogo src={logoUrl(m.company.id)} name={m.company.name} size={22}/>{m.company.name}</button>
+            <span className="theme-bar"><span style={{ width: `${Math.min(100, m.n * 8)}%` }}/></span>
+            <span className="text-xs text-ink-soft">{m.n} {m.n === 1 ? "claim" : "claims"}</span>
+          </li>)}
+        </ul>
+      </article>)}
+    </div> : <div className="connection-grid">
+      {connections.map(c => <ConnectionCard key={c.a.id + c.b.id} connection={c}/>)}
+    </div>}
+    <p className="fine-print">Suggestions are based on overlapping public claims. Neither company has expressed an interest in collaborating; Blue Science Park decides whether to make an introduction.</p>
   </div>;
+}
+
+function ConnectionCard({ connection: c }: { connection: Connection }) {
+  const [open, setOpen] = useState(false);
+  return <article className="card connection-card">
+    <div className="connection-pair">
+      <span className="member-chip"><CompanyLogo src={logoUrl(c.a.id)} name={c.a.name} size={28}/>{c.a.name}</span>
+      <span className="pair-line"/>
+      <span className="member-chip"><CompanyLogo src={logoUrl(c.b.id)} name={c.b.name} size={28}/>{c.b.name}</span>
+    </div>
+    <div className="chip-row">{c.themes.map(t => <span key={t.name} className="chip static">{t.name}</span>)}</div>
+    <button className="link mt-3 text-sm" onClick={() => setOpen(!open)} aria-expanded={open}>Why this suggestion<ChevronDown size={14} className={open ? "rotate-180" : ""}/></button>
+    {open && <div className="mt-3 space-y-4">{c.themes.slice(0, 3).map(t => <div key={t.name}>
+      <p className="text-xs font-semibold">{t.name}</p>
+      <p className="quote-line"><strong>{c.a.name}:</strong> {t.aClaims[0]!.value}</p>
+      <p className="quote-line"><strong>{c.b.name}:</strong> {t.bClaims[0]!.value}</p>
+    </div>)}</div>}
+  </article>;
 }

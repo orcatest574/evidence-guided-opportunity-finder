@@ -1,149 +1,140 @@
-import { useLayoutEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowUp, Bookmark, CalendarDays, ExternalLink, MapPin, ThumbsDown } from "lucide-react";
-import { statusLabel, type Claim, type Company, type Edits, type Match, type OpportunityType } from "@/lib/science-park";
-import { FOCUS_OPTIONS } from "./profile-view";
-import { Segmented, TypeTag } from "./ui";
+import { useState } from "react";
+import { ArrowUpRight, Bookmark, Building2, CalendarDays, ExternalLink, Globe2, Sparkles, ThumbsDown } from "lucide-react";
+import { logoUrl, matchLevel, opportunities, relevantMembers, statusLabel, type Claim, type Company, type Match, type Opportunity, type OpportunityType } from "@/lib/science-park";
+import { CompanyLogo, TypeTag } from "./ui";
 
-type Props = {
-  company: Company; claims: Claim[]; edits: Edits; setEdits: (e: Edits) => void; matches: Match[];
-  saved: string[]; toggleSaved: (id: string) => void; dismissed: string[]; restoreDismissed: () => void;
-  onOpen: (m: Match) => void;
-};
+const FILTERS: ("All" | OpportunityType)[] = ["All", "Testing", "Funding", "Event"];
+const filterLabel = (f: "All" | OpportunityType) => (f === "All" ? "All opportunities" : f === "Event" ? "Events" : f);
 
-/** Animates cards to their new position when the ranking changes (FLIP technique). */
-function useFlip(keys: string[]) {
-  const nodes = useRef(new Map<string, HTMLElement>());
-  const last = useRef(new Map<string, DOMRect>());
-  useLayoutEffect(() => {
-    nodes.current.forEach((el, key) => {
-      const before = last.current.get(key);
-      const after = el.getBoundingClientRect();
-      if (before && Math.abs(before.top - after.top) > 1) {
-        el.animate([{ transform: `translateY(${before.top - after.top}px)` }, { transform: "none" }], { duration: 450, easing: "cubic-bezier(.2,.8,.2,1)" });
-      }
-      last.current.set(key, after);
-    });
-  }, [keys.join("|")]);
-  return (key: string) => (el: HTMLElement | null) => { if (el) nodes.current.set(key, el); else nodes.current.delete(key); };
+function Filters({ value, onChange, counts }: { value: "All" | OpportunityType; onChange: (f: "All" | OpportunityType) => void; counts: Record<string, number> }) {
+  return <div className="filter-bar">{FILTERS.map(f => <button key={f} className="filter-btn" data-active={value === f} onClick={() => onChange(f)}>{filterLabel(f)}<span className="tab-count">{counts[f] ?? 0}</span></button>)}</div>;
 }
 
-export function OpportunitiesView({ company, claims, edits, setEdits, matches, saved, toggleSaved, dismissed, restoreDismissed, onOpen }: Props) {
-  const [type, setType] = useState<"All" | OpportunityType>("All");
-  const [savedOnly, setSavedOnly] = useState(false);
-  const list = matches.filter(m => !dismissed.includes(m.opportunity.id) && (type === "All" || m.opportunity.type === type) && (!savedOnly || saved.includes(m.opportunity.id)));
-  const flip = useFlip(list.map(m => m.opportunity.id));
+function Meta({ o }: { o: Opportunity }) {
+  return <div className="opp-meta"><span><Globe2 size={13}/>{o.source}</span><span><CalendarDays size={13}/>{o.dates[0]?.value}</span><span><Building2 size={13}/>{o.location}</span></div>;
+}
 
-  // Rank movement since the previous ranking (shown as ↑/↓ after a refinement).
-  const prevRanks = useRef<Map<string, number>>(new Map());
-  const prevKey = useRef("");
-  const [moves, setMoves] = useState<Map<string, number>>(new Map());
-  const rankKey = matches.map(m => m.opportunity.id).join("|");
-  useLayoutEffect(() => {
-    const now = new Map(matches.map((m, i) => [m.opportunity.id, i]));
-    if (prevKey.current && prevKey.current !== rankKey) {
-      const delta = new Map<string, number>();
-      now.forEach((i, id) => { const before = prevRanks.current.get(id); if (before !== undefined && before !== i) delta.set(id, before - i); });
-      setMoves(delta);
-    }
-    prevRanks.current = now; prevKey.current = rankKey;
-  }, [rankKey]);
-  useLayoutEffect(() => { setMoves(new Map()); }, [company.id]);
-
-  const claimText = (id: string) => claims.find(c => c.id === id)?.value ?? id;
+/** Member view: opportunities ranked for the signed-in company. */
+export function MemberOpportunities({ company, matches, saved, toggleSaved, dismissed, savedOnly, onOpen }: {
+  company: Company; matches: Match[]; saved: string[]; toggleSaved: (id: string) => void; dismissed: string[]; savedOnly: boolean; onOpen: (m: Match) => void;
+}) {
+  const [filter, setFilter] = useState<"All" | OpportunityType>("All");
+  const base = matches.filter(m => !dismissed.includes(m.opportunity.id) && (!savedOnly || saved.includes(m.opportunity.id)));
+  const counts = Object.fromEntries(FILTERS.map(f => [f, base.filter(m => f === "All" || m.opportunity.type === f).length]));
+  const list = base.filter(m => filter === "All" || m.opportunity.type === filter);
 
   return <div>
     <header className="page-head">
-      <div>
-        <div className="eyebrow">Ranked for {company.name}</div>
-        <h1 className="display">Opportunities</h1>
-        <p className="lede">Testing environments, funding and events from {new Set(matches.map(m => m.opportunity.source)).size} public sources, ranked against {company.name}'s verified profile.</p>
-      </div>
+      <h1 className="page-title">{savedOnly ? "Saved opportunities" : `Opportunities for ${company.name}`}</h1>
+      <p className="page-sub">{savedOnly ? "Your shortlist." : `Testing environments, funding and events from public sources – most relevant to ${company.name}'s profile first.`}</p>
     </header>
-
-    <div className="toolbar">
-      <div><span className="toolbar-label">Your priority</span><Segmented label="Your priority" value={edits.focus} options={FOCUS_OPTIONS} onChange={focus => setEdits({ ...edits, focus })}/></div>
-      <div><span className="toolbar-label">Show</span><Segmented label="Type" value={type} options={[{ value: "All", label: "All" }, { value: "Testing", label: "Testing" }, { value: "Funding", label: "Funding" }, { value: "Event", label: "Events" }]} onChange={setType}/></div>
-      <label className="check"><input type="checkbox" checked={savedOnly} onChange={e => setSavedOnly(e.target.checked)}/>Saved only ({saved.length})</label>
-      {dismissed.length > 0 && <button className="link text-xs" onClick={restoreDismissed}>Show {dismissed.length} hidden</button>}
-    </div>
-
-    <ol className="opp-list">
+    <Filters value={filter} onChange={setFilter} counts={counts}/>
+    <div className="opp-grid">
       {list.map(m => {
-        const o = m.opportunity;
-        const move = moves.get(o.id);
-        const why = m.keywordHits.slice(0, 3);
-        return <li key={o.id} ref={flip(o.id)} className="opp-card" data-closed={o.status === "closed"}>
-          <div className="opp-score" title="Heuristic relevance score, not a probability">
-            <span className="score-num">{m.score}</span>
-            <span className="score-bar"><span style={{ width: `${m.score}%` }}/></span>
-            {move ? <span className="rank-move" data-up={move > 0}>{move > 0 ? <ArrowUp size={11}/> : <ArrowDown size={11}/>}{Math.abs(move)}</span> : null}
+        const o = m.opportunity, level = matchLevel(m.score);
+        const reasons = m.keywordHits.slice(0, 3).map(h => h.keyword);
+        return <article key={o.id} className="opp-card" data-closed={o.status === "closed"}>
+          <div className="opp-top">
+            <div className="flex flex-wrap items-center gap-2"><TypeTag type={o.type}/><span className="status" data-status={o.status}>{statusLabel(o)}</span></div>
+            <button className="icon-btn" aria-label={saved.includes(o.id) ? `Unsave ${o.title}` : `Save ${o.title}`} onClick={() => toggleSaved(o.id)}><Bookmark size={17} className={saved.includes(o.id) ? "fill-current text-brand" : ""}/></button>
           </div>
-          <div className="min-w-0 flex-1">
-            <div className="opp-tags"><TypeTag type={o.type}/><span className="status" data-status={o.status}>{statusLabel(o)}</span><span className="text-ink-soft">{o.source}</span></div>
-            <button className="opp-title" onClick={() => onOpen(m)}>{o.title}</button>
-            <div className="opp-meta"><span><CalendarDays size={13}/>{o.dates[0]?.value}</span><span><MapPin size={13}/>{o.location}</span></div>
-            <p className="opp-why">
-              {why.length ? <>Matches <strong>{why.map(h => h.keyword).join(", ")}</strong> in your profile (<span title={why.flatMap(h => h.claimIds).map(claimText).join("\n")}>{[...new Set(why.flatMap(h => h.claimIds))].slice(0, 3).join(", ")}</span>)</> : "No direct match with your profile"}
-              {m.interestHits.length > 0 && <> · your interest <strong>{m.interestHits.join(", ")}</strong></>}
-              {m.focusBonus && <> · fits your <strong>{edits.focus.toLowerCase()}</strong> priority</>}
-            </p>
+          <h3 className="opp-title">{o.title}</h3>
+          <p className="opp-summary">{o.summary}</p>
+          <Meta o={o}/>
+          <div className="opp-foot">
+            <div className="reason">
+              {level && <span className="match-badge" data-level={level}>{level}</span>}
+              <span>{reasons.length ? <>Your profile mentions <strong>{reasons.join(", ")}</strong>{m.interestHits.length > 0 && <> and your interest <strong>{m.interestHits.join(", ")}</strong></>}</> : m.interestHits.length ? <>Matches your interest <strong>{m.interestHits.join(", ")}</strong></> : "A broader opportunity to explore"}</span>
+            </div>
+            <button className="link text-sm font-semibold" onClick={() => onOpen(m)}>View details<ArrowUpRight size={14}/></button>
           </div>
-          <div className="opp-actions">
-            <button className="icon-btn" aria-label={saved.includes(o.id) ? "Unsave" : "Save"} onClick={() => toggleSaved(o.id)}><Bookmark size={17} className={saved.includes(o.id) ? "fill-current text-brand" : ""}/></button>
-          </div>
-        </li>;
+        </article>;
       })}
-      {!list.length && <li className="empty">Nothing here. Try another filter.</li>}
-    </ol>
-    <p className="fine-print">Scores are a transparent heuristic: profile keyword matches, your interests and your priority. Closed calls are kept visible but ranked lower so you can prepare for the next round.</p>
+      {!list.length && <div className="empty">{savedOnly ? "Save an opportunity to see it here." : "No opportunities in this category."}</div>}
+    </div>
   </div>;
 }
 
-export function OpportunityDetail({ match, company, claims, saved, toggleSaved, dismiss }: { match: Match; company: Company; claims: Claim[]; saved: boolean; toggleSaved: () => void; dismiss: () => void }) {
-  const o = match.opportunity;
-  const hitClaims = [...new Set(match.keywordHits.flatMap(h => h.claimIds))].map(id => claims.find(c => c.id === id)).filter(Boolean) as Claim[];
+/** Staff view: every opportunity, with the members it is relevant to. */
+export function StaffOpportunities({ onOpen }: { onOpen: (o: Opportunity) => void }) {
+  const [filter, setFilter] = useState<"All" | OpportunityType>("All");
+  const rows = opportunities.map(o => ({ o, members: relevantMembers(o) })).sort((a, b) => b.members.length - a.members.length);
+  const counts = Object.fromEntries(FILTERS.map(f => [f, rows.filter(r => f === "All" || r.o.type === f).length]));
+  return <div>
+    <header className="page-head">
+      <h1 className="page-title">Opportunities</h1>
+      <p className="page-sub">{opportunities.length} opportunities from {new Set(opportunities.map(o => o.source)).size} public sources, with the members each one is relevant to.</p>
+    </header>
+    <Filters value={filter} onChange={setFilter} counts={counts}/>
+    <div className="opp-grid">
+      {rows.filter(r => filter === "All" || r.o.type === filter).map(({ o, members }) => <article key={o.id} className="opp-card" data-closed={o.status === "closed"}>
+        <div className="opp-top"><div className="flex flex-wrap items-center gap-2"><TypeTag type={o.type}/><span className="status" data-status={o.status}>{statusLabel(o)}</span></div></div>
+        <h3 className="opp-title">{o.title}</h3>
+        <p className="opp-summary">{o.summary}</p>
+        <Meta o={o}/>
+        <div className="opp-foot">
+          <div className="reason">{members.length ? <><span className="text-ink-soft">Relevant for</span>{members.map(c => <span key={c.id} className="member-chip"><CompanyLogo src={logoUrl(c.id)} name={c.name} size={20}/>{c.name}</span>)}</> : <span className="text-ink-soft">No clear member match yet</span>}</div>
+          <button className="link text-sm font-semibold" onClick={() => onOpen(o)}>View details<ArrowUpRight size={14}/></button>
+        </div>
+      </article>)}
+    </div>
+  </div>;
+}
+
+/** Detail drawer. With a match (member view) it explains the relevance; without one (staff view) it lists relevant members. */
+export function OpportunityDetail({ opportunity: o, match, company, claims, saved, toggleSaved, dismiss }: {
+  opportunity: Opportunity; match?: Match | undefined; company?: Company | undefined; claims?: Claim[] | undefined;
+  saved?: boolean | undefined; toggleSaved?: (() => void) | undefined; dismiss?: (() => void) | undefined;
+}) {
+  const hitClaims = match && claims ? [...new Set(match.keywordHits.flatMap(h => h.claimIds))].map(id => claims.find(c => c.id === id)).filter(Boolean) as Claim[] : [];
+  const level = match ? matchLevel(match.score) : null;
+  const members = match ? [] : relevantMembers(o);
   return <div className="space-y-6">
     <div>
-      <div className="opp-tags"><TypeTag type={o.type}/><span className="status" data-status={o.status}>{statusLabel(o)}</span></div>
-      <h2 className="display-sm mt-3">{o.title}</h2>
+      <div className="flex flex-wrap items-center gap-2"><TypeTag type={o.type}/><span className="status" data-status={o.status}>{statusLabel(o)}</span></div>
+      <h2 className="drawer-title">{o.title}</h2>
       <p className="mt-1 text-sm text-ink-soft">{o.organiser}</p>
       <p className="mt-4 text-[15px] leading-6">{o.summary}</p>
     </div>
 
     <dl className="facts-table">
-      <div><dt>For</dt><dd>{o.audience}</dd></div>
+      <div><dt>Who it's for</dt><dd>{o.audience}</dd></div>
       <div><dt>Format</dt><dd>{o.format}</dd></div>
       <div><dt>Where</dt><dd>{o.location}</dd></div>
       {o.dates.map(d => <div key={d.label}><dt>{d.label}</dt><dd>{d.value}</dd></div>)}
     </dl>
 
-    <section className="why-box">
-      <h3 className="panel-title">Why this may matter to {company.name}</h3>
-      <ul className="score-parts">
-        <li><span>Base</span><span>10</span></li>
-        <li><span>Profile matches: {match.keywordHits.map(h => h.keyword).join(", ") || "none"}</span><span>+{Math.min(4, match.keywordHits.length) * 15}</span></li>
-        {match.interestHits.length > 0 && <li><span>Your interests: {match.interestHits.join(", ")}</span><span>+{Math.min(2, match.interestHits.length) * 15}</span></li>}
-        {match.focusBonus && <li><span>Fits your current priority</span><span>+25</span></li>}
-        {match.closedPenalty && <li><span>Call is closed</span><span>−20</span></li>}
-        <li className="total"><span>Relevance</span><span>{match.score}</span></li>
+    {match && company && <section className="why-box">
+      <h3 className="card-title flex items-center gap-2"><Sparkles size={15} className="text-brand"/>Why this may matter to {company.name}</h3>
+      {level && <span className="match-badge mt-2" data-level={level}>{level}</span>}
+      <ul className="bullets mt-2">
+        {match.keywordHits.length > 0 && <li>Your profile mentions <strong>{match.keywordHits.map(h => h.keyword).join(", ")}</strong>.</li>}
+        {match.interestHits.length > 0 && <li>It fits the interest you added: <strong>{match.interestHits.join(", ")}</strong>.</li>}
+        {match.closedPenalty && <li>The call is closed – useful to prepare for the next round.</li>}
+        {!match.keywordHits.length && !match.interestHits.length && <li>No direct link to your profile – shown as a broader opportunity.</li>}
       </ul>
-      {hitClaims.length > 0 && <div className="mt-3 space-y-1">{hitClaims.slice(0, 4).map(c => <p key={c.id} className="text-xs"><span className="ref">{c.id}</span> {c.value}</p>)}</div>}
-      <p className="mt-3 text-xs font-medium">A potential match on topic – not confirmed eligibility.</p>
-    </section>
+      {hitClaims.length > 0 && <div className="mt-3 space-y-1">{hitClaims.slice(0, 4).map(c => <p key={c.id} className="quote-line">“{c.value}”</p>)}</div>}
+      <p className="mt-3 text-xs font-semibold">A potential match on topic – not confirmed eligibility.</p>
+    </section>}
 
-    <section><h3 className="panel-title">Key requirements</h3><ul className="note-list">{o.eligibility.map(e => <li key={e}>{e}</li>)}</ul></section>
-    <section><h3 className="panel-title">Possible next step</h3><p className="text-sm leading-6">{o.nextStep}</p></section>
-    <section><h3 className="panel-title">Uncertainties</h3><p className="text-sm leading-6">{o.caveat}</p></section>
+    {!match && <section className="why-box">
+      <h3 className="card-title">Relevant members</h3>
+      {members.length ? <div className="chip-row">{members.map(c => <span key={c.id} className="member-chip"><CompanyLogo src={logoUrl(c.id)} name={c.name} size={20}/>{c.name}</span>)}</div> : <p className="card-help">No clear member match yet.</p>}
+    </section>}
+
+    <section><h3 className="card-title">Key requirements</h3><ul className="bullets mt-2">{o.eligibility.map(e => <li key={e}>{e}</li>)}</ul></section>
+    <section><h3 className="card-title">Possible next step</h3><p className="mt-2 text-sm leading-6">{o.nextStep}</p></section>
+    <section><h3 className="card-title">Uncertainties</h3><p className="mt-2 text-sm leading-6">{o.caveat}</p></section>
 
     <section className="source-card">
       <a className="link text-sm font-semibold" href={o.url} target="_blank" rel="noreferrer">Open the {o.source} source<ExternalLink size={13}/></a>
       <p className="mt-1 text-xs text-ink-soft">Retrieved {o.retrievedAt} · {o.verification === "page-checked" ? "details checked on the source page" : "details from search results – confirm on the source"}</p>
     </section>
 
-    <div className="flex flex-wrap gap-2">
+    {toggleSaved && <div className="flex flex-wrap gap-2">
       <button className="btn primary" onClick={toggleSaved}><Bookmark size={15}/>{saved ? "Saved" : "Save"}</button>
-      <button className="btn" onClick={dismiss}><ThumbsDown size={15}/>Not relevant</button>
-    </div>
+      {dismiss && <button className="btn" onClick={dismiss}><ThumbsDown size={15}/>Not relevant</button>}
+    </div>}
     <p className="fine-print">Information and suggested next steps only – not professional advice, an eligibility decision or a commitment by Blue Science Park.</p>
   </div>;
 }

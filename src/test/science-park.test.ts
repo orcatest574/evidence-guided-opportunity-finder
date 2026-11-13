@@ -29,11 +29,10 @@ describe("Opportunities and matching", () => {
     const tops = companies.map(c => rankOpportunities(c.claims, emptyEdits).slice(0, 3).map(m => m.opportunity.id).join());
     expect(new Set(tops).size).toBeGreaterThan(1);
   });
-  it("a priority refinement changes the ranking", () => {
+  it("adding an interest raises matching opportunities", () => {
     for (const c of companies) {
-      const order = (focus: "All" | "Testing" | "Funding") => rankOpportunities(c.claims, { ...emptyEdits, focus }).map(m => m.opportunity.id).join();
-      expect(order("Testing")).not.toBe(order("All"));
-      expect(order("Funding")).not.toBe(order("Testing"));
+      const score = (interests: string[]) => rankOpportunities(c.claims, { ...emptyEdits, interests }).find(m => m.opportunity.id === "cetp-2026")!.score;
+      expect(score(["hydrogen"])).toBeGreaterThan(score([]));
     }
   });
 });

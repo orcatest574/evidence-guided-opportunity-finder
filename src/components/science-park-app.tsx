@@ -1,119 +1,170 @@
-import { useEffect, useMemo, useState } from "react";
-import { CircleHelp, LogOut, MessageSquareText } from "lucide-react";
-import { companies, effectiveClaims, rankOpportunities, type Claim, type Evidence, type Match } from "@/lib/science-park";
+import { useEffect, useMemo, useState, type ComponentType } from "react";
+import { Bookmark, Building2, CircleHelp, LogOut, Menu, MessageSquareText, Network, Sparkles, Users } from "lucide-react";
+import { companies, effectiveClaims, emptyEdits, logoUrl, rankOpportunities, type Claim, type Evidence, type Match, type Opportunity } from "@/lib/science-park";
 import { AskPanel } from "./vsp/ask-panel";
 import { EcosystemView } from "./vsp/ecosystem-view";
-import { OpportunitiesView, OpportunityDetail } from "./vsp/opportunities-view";
+import { MembersView } from "./vsp/members-view";
+import { MemberOpportunities, OpportunityDetail, StaffOpportunities } from "./vsp/opportunities-view";
 import { ProfileView } from "./vsp/profile-view";
 import { SourcePanel } from "./vsp/source-panel";
-import { Drawer } from "./vsp/ui";
+import { CompanyLogo, Drawer } from "./vsp/ui";
 import { useWorkspace } from "./vsp/use-workspace";
 
-// Hardcoded demo login. Not real security: the check runs in the browser.
-const DEMO_USER = "demo";
-const DEMO_PASSWORD = "bluepark2026";
-const AUTH_KEY = "vsp-auth";
-
-type View = "profile" | "opportunities" | "ecosystem";
+// ---- Hardcoded demo accounts. Not real security: the check runs in the browser. ----
+type Session = { role: "member"; companyId: string } | { role: "staff" };
+const PASSWORD = "bluepark2026";
+const ACCOUNTS: Record<string, Session> = {
+  staff: { role: "staff" },
+  ...Object.fromEntries(companies.map(c => [c.id, { role: "member", companyId: c.id } as Session])),
+};
+const SESSION_KEY = "vsp-session";
 
 export function ScienceParkApp() {
-  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
-  useEffect(() => { try { setLoggedIn(localStorage.getItem(AUTH_KEY) === "true"); } catch { setLoggedIn(false); } }, []);
-  if (loggedIn === null) return null;
-  if (!loggedIn) return <LoginScreen onLogin={() => { localStorage.setItem(AUTH_KEY, "true"); setLoggedIn(true); }}/>;
+  const [session, setSession] = useState<Session | null | undefined>(undefined);
+  useEffect(() => {
+    try { const raw = localStorage.getItem(SESSION_KEY); setSession(raw ? (JSON.parse(raw) as Session) : null); } catch { setSession(null); }
+  }, []);
+  const signIn = (s: Session) => { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); setSession(s); };
+  const signOut = () => { localStorage.removeItem(SESSION_KEY); setSession(null); };
+
+  if (session === undefined) return null;
+  if (!session) return <LoginScreen onLogin={signIn}/>;
   if (!companies.length) return <div className="p-10 text-sm">No company data found in src/data/companies/.</div>;
-  return <Workspace onLogout={() => { localStorage.removeItem(AUTH_KEY); setLoggedIn(false); }}/>;
+  return session.role === "staff" ? <StaffApp onLogout={signOut}/> : <MemberApp companyId={session.companyId} onLogout={signOut}/>;
 }
 
-function LoginScreen({ onLogin }: { onLogin: () => void }) {
+function LoginScreen({ onLogin }: { onLogin: (s: Session) => void }) {
   const [user, setUser] = useState(""); const [password, setPassword] = useState(""); const [error, setError] = useState("");
   return <div className="login">
     <div className="login-side">
       <img src="/Blue-Science-Park-white-horizontal.svg" alt="Blue Science Park" className="h-9 w-auto self-start"/>
       <div>
-        <h1 className="display text-white">Virtual Science Park</h1>
-        <p className="mt-4 max-w-md text-[17px] leading-7 text-white/75">Verified company profiles, matched with testing environments, funding and events – every claim traceable to its source.</p>
+        <h1 className="login-title">Virtual Science Park</h1>
+        <p className="mt-4 max-w-md text-[17px] leading-7 text-white/80">Verified company profiles, matched with testing environments, funding and events – every claim traceable to its source.</p>
       </div>
       <p className="text-xs text-white/50">BUILD Hackathon 2026 · Prototype</p>
     </div>
-    <form className="login-form" onSubmit={e => { e.preventDefault(); if (user === DEMO_USER && password === DEMO_PASSWORD) onLogin(); else setError("Wrong username or password."); }}>
-      <h2 className="display-sm">Sign in</h2>
+    <form className="login-form" onSubmit={e => { e.preventDefault(); const s = ACCOUNTS[user.trim().toLowerCase()]; if (s && password === PASSWORD) onLogin(s); else setError("Wrong username or password."); }}>
+      <h2 className="page-title">Sign in</h2>
       <label className="field-label" htmlFor="login-user">Username</label>
       <input id="login-user" className="text-input" value={user} onChange={e => setUser(e.target.value)} autoComplete="username"/>
       <label className="field-label" htmlFor="login-password">Password</label>
       <input id="login-password" className="text-input" type="password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password"/>
       {error && <p role="alert" className="mt-3 text-sm text-danger">{error}</p>}
       <button className="btn primary mt-6 w-full justify-center" type="submit">Sign in</button>
-      <p className="mt-4 text-xs text-ink-soft">Simulated login for the demo.</p>
+      <div className="demo-accounts">
+        <p className="font-semibold">Demo accounts (password {PASSWORD})</p>
+        <p><code>staff</code> – Blue Science Park staff</p>
+        <p>{companies.map((c, i) => <span key={c.id}>{i > 0 && ", "}<code>{c.id}</code></span>)} – member companies</p>
+      </div>
     </form>
   </div>;
 }
 
-function Workspace({ onLogout }: { onLogout: () => void }) {
-  const ws = useWorkspace();
-  const [view, setView] = useState<View>("profile");
-  const [companyId, setCompanyId] = useState(companies[0]!.id);
-  const [source, setSource] = useState<{ claim: Claim; evidence: Evidence } | null>(null);
-  const [detail, setDetail] = useState<Match | null>(null);
-  const [askOpen, setAskOpen] = useState(false);
+// ---- Shared layout ----
+type NavItem = { id: string; label: string; icon: ComponentType<{ size?: number }>; count?: number };
+
+function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children }: {
+  nav: NavItem[]; active: string; onNavigate: (id: string) => void; who: { name: string; role: string; logo?: string }; onLogout: () => void; onAsk?: () => void; children: React.ReactNode;
+}) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
-
-  const company = companies.find(c => c.id === companyId) ?? companies[0]!;
-  const edits = ws.editsFor(company.id);
-  const claims = useMemo(() => effectiveClaims(company, edits), [company, edits]);
-  const matches = useMemo(() => rankOpportunities(claims, edits), [claims, edits]);
-  const setEdits = (e: typeof edits) => ws.setEdits(company.id, e);
-
-  const tabs: { id: View; label: string }[] = [{ id: "profile", label: "Profile" }, { id: "opportunities", label: "Opportunities" }, { id: "ecosystem", label: "Ecosystem" }];
-
-  return <div className="app">
-    <header className="topbar">
-      <div className="topbar-inner">
-        <img src="/Blue-Science-Park-white-horizontal.svg" alt="Blue Science Park" className="h-7 w-auto"/>
-        <nav className="tabs" aria-label="Main">{tabs.map(t => <button key={t.id} data-active={view === t.id} onClick={() => setView(t.id)}>{t.label}</button>)}</nav>
-        <div className="topbar-right">
-          {view !== "ecosystem" && <label className="company-pick"><span className="sr-only">Company</span>
-            <select value={companyId} onChange={e => setCompanyId(e.target.value)}>{companies.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select>
-          </label>}
-          <button className="topbar-btn" onClick={() => setAskOpen(true)}><MessageSquareText size={16}/><span className="hidden sm:inline">Ask</span></button>
-          <button className="topbar-icon" aria-label="About this prototype" onClick={() => setAboutOpen(true)}><CircleHelp size={18}/></button>
-          <button className="topbar-icon" aria-label="Sign out" onClick={onLogout}><LogOut size={18}/></button>
-        </div>
+  const go = (id: string) => { onNavigate(id); setMenuOpen(false); window.scrollTo(0, 0); };
+  return <div className="shell">
+    {menuOpen && <div className="sidebar-scrim" onClick={() => setMenuOpen(false)}/>}
+    <aside className="sidebar" data-open={menuOpen}>
+      <img src="/Blue-Science-Park-white-horizontal.svg" alt="Blue Science Park" className="sidebar-logo"/>
+      <p className="nav-label">Virtual Science Park</p>
+      <nav aria-label="Main">{nav.map(n => <button key={n.id} className="nav-item" data-active={active === n.id} onClick={() => go(n.id)}><n.icon size={18}/>{n.label}{!!n.count && <span className="nav-count">{n.count}</span>}</button>)}</nav>
+      {onAsk && <><p className="nav-label">Get help</p><button className="nav-item" onClick={() => { onAsk(); setMenuOpen(false); }}><MessageSquareText size={18}/>Innovation assistant</button></>}
+      <div className="sidebar-bottom">
+        <button className="nav-item" onClick={() => setAboutOpen(true)}><CircleHelp size={18}/>About this prototype</button>
+        <a className="nav-item" href="https://www.bluesciencepark.se/" target="_blank" rel="noreferrer"><Network size={18}/>bluesciencepark.se</a>
       </div>
-    </header>
-
-    <main className="page">
-      {view === "profile" && <ProfileView company={company} edits={edits} setEdits={setEdits} onReset={() => ws.resetEdits(company.id)} onOpenSource={(claim, evidence) => setSource({ claim, evidence })}/>}
-      {view === "opportunities" && <OpportunitiesView company={company} claims={claims} edits={edits} setEdits={setEdits} matches={matches}
-        saved={ws.saved} toggleSaved={ws.toggleSaved} dismissed={ws.dismissed} restoreDismissed={ws.restoreDismissed} onOpen={setDetail}/>}
-      {view === "ecosystem" && <EcosystemView onOpenCompany={id => { setCompanyId(id); setView("profile"); }}/>}
-    </main>
-
-    <footer className="footer">
-      <span>Prototype · Profiles generated by the profiler agent from public pages and verified against them · Opportunities curated from public sources on 2026-11-13</span>
-      <span>Simulated: login, browser-only storage, rule-based question box</span>
-    </footer>
-
-    <Drawer open={!!source} onClose={() => setSource(null)} title="Source evidence" wide>{source && <SourcePanel claim={source.claim} evidence={source.evidence}/>}</Drawer>
-    <Drawer open={!!detail} onClose={() => setDetail(null)} title="Opportunity">{detail && <OpportunityDetail match={detail} company={company} claims={claims}
-      saved={ws.saved.includes(detail.opportunity.id)} toggleSaved={() => ws.toggleSaved(detail.opportunity.id)} dismiss={() => { ws.dismiss(detail.opportunity.id); setDetail(null); }}/>}</Drawer>
-    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title={`Ask · ${company.name}`}><AskPanel company={company} matches={matches}/></Drawer>
+    </aside>
+    <div className="main">
+      <header className="topbar">
+        <button className="icon-btn mobile-only" aria-label="Open menu" onClick={() => setMenuOpen(true)}><Menu size={20}/></button>
+        <div className="who">
+          {who.logo ? <CompanyLogo src={who.logo} name={who.name} size={32}/> : <span className="who-badge">BSP</span>}
+          <div><div className="who-name">{who.name}</div><div className="who-role">{who.role}</div></div>
+        </div>
+        <button className="btn ml-auto" onClick={onLogout}><LogOut size={15}/>Sign out</button>
+      </header>
+      <main className="page">{children}</main>
+      <footer className="footer">
+        <span>Prototype · Profiles built by the profiler agent from public pages and verified against them · Opportunities curated from public sources on 2026-11-13</span>
+        <span>Simulated: login, browser-only storage, rule-based assistant</span>
+      </footer>
+    </div>
     <Drawer open={aboutOpen} onClose={() => setAboutOpen(false)} title="About this prototype"><About/></Drawer>
   </div>;
 }
 
+// ---- Member: sees only their own company ----
+function MemberApp({ companyId, onLogout }: { companyId: string; onLogout: () => void }) {
+  const ws = useWorkspace();
+  const [view, setView] = useState("profile");
+  const [source, setSource] = useState<{ claim: Claim; evidence: Evidence } | null>(null);
+  const [detail, setDetail] = useState<Match | null>(null);
+  const [askOpen, setAskOpen] = useState(false);
+  const company = companies.find(c => c.id === companyId) ?? companies[0]!;
+  const edits = ws.editsFor(company.id);
+  const claims = useMemo(() => effectiveClaims(company, edits), [company, edits]);
+  const matches = useMemo(() => rankOpportunities(claims, edits), [claims, edits]);
+
+  const nav: NavItem[] = [
+    { id: "profile", label: "Company profile", icon: Building2 },
+    { id: "opportunities", label: "Opportunities", icon: Sparkles },
+    { id: "saved", label: "Saved", icon: Bookmark, count: ws.saved.length },
+  ];
+  return <Shell nav={nav} active={view} onNavigate={setView} who={{ name: company.name, role: "Member company", logo: logoUrl(company.id) }} onLogout={onLogout} onAsk={() => setAskOpen(true)}>
+    {view === "profile" && <ProfileView company={company} edits={edits} setEdits={e => ws.setEdits(company.id, e)} onOpenSource={(claim, evidence) => setSource({ claim, evidence })}/>}
+    {(view === "opportunities" || view === "saved") && <MemberOpportunities key={view} company={company} matches={matches} saved={ws.saved} toggleSaved={ws.toggleSaved} dismissed={ws.dismissed} savedOnly={view === "saved"} onOpen={setDetail}/>}
+    <Drawer open={!!source} onClose={() => setSource(null)} title="Source evidence" wide>{source && <SourcePanel claim={source.claim} evidence={source.evidence}/>}</Drawer>
+    <Drawer open={!!detail} onClose={() => setDetail(null)} title="Opportunity">{detail && <OpportunityDetail opportunity={detail.opportunity} match={detail} company={company} claims={claims}
+      saved={ws.saved.includes(detail.opportunity.id)} toggleSaved={() => ws.toggleSaved(detail.opportunity.id)} dismiss={() => { ws.dismiss(detail.opportunity.id); setDetail(null); }}/>}</Drawer>
+    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title="Innovation assistant"><AskPanel company={company} matches={matches}/></Drawer>
+  </Shell>;
+}
+
+// ---- Staff: sees all members' public profiles, never their private edits ----
+function StaffApp({ onLogout }: { onLogout: () => void }) {
+  const [view, setView] = useState("members");
+  const [openCompany, setOpenCompany] = useState<string | null>(null);
+  const [source, setSource] = useState<{ claim: Claim; evidence: Evidence } | null>(null);
+  const [detail, setDetail] = useState<Opportunity | null>(null);
+  const company = companies.find(c => c.id === openCompany);
+  const openProfile = (id: string) => { setOpenCompany(id); setView("members"); window.scrollTo(0, 0); };
+
+  const nav: NavItem[] = [
+    { id: "members", label: "Members", icon: Users },
+    { id: "opportunities", label: "Opportunities", icon: Sparkles },
+    { id: "ecosystem", label: "Ecosystem", icon: Network },
+  ];
+  return <Shell nav={nav} active={view} onNavigate={id => { setView(id); setOpenCompany(null); }} who={{ name: "Blue Science Park", role: "Staff" }} onLogout={onLogout}>
+    {view === "members" && (company
+      ? <ProfileView key={company.id} company={company} edits={emptyEdits} onBack={() => setOpenCompany(null)} onOpenSource={(claim, evidence) => setSource({ claim, evidence })}/>
+      : <MembersView onOpen={openProfile}/>)}
+    {view === "opportunities" && <StaffOpportunities onOpen={setDetail}/>}
+    {view === "ecosystem" && <EcosystemView onOpenCompany={openProfile}/>}
+    <Drawer open={!!source} onClose={() => setSource(null)} title="Source evidence" wide>{source && <SourcePanel claim={source.claim} evidence={source.evidence}/>}</Drawer>
+    <Drawer open={!!detail} onClose={() => setDetail(null)} title="Opportunity">{detail && <OpportunityDetail opportunity={detail}/>}</Drawer>
+  </Shell>;
+}
+
 function About() {
   return <div className="space-y-6 text-sm leading-6">
-    <section><h3 className="panel-title">Agents and roles</h3>
-      <ol className="pipeline-steps">
+    <section><h3 className="card-title">Agents and roles</h3>
+      <ol className="steps">
         <li><strong>Profiler</strong> fetches a member's public pages and lets an AI model extract facts with verbatim quotes, inferred interests and missing information.</li>
         <li><strong>Verifier</strong> (plain code) searches every quote in the fetched page text. Quotes that are not found are removed; facts without a verified quote become “Unverified”.</li>
-        <li><strong>Matcher</strong> (plain code) ranks opportunities by profile keyword matches, the user's interests and priority, and explains every point of the score.</li>
-        <li><strong>Boundary check</strong> (plain code) classifies each question before anything is answered.</li>
+        <li><strong>Matcher</strong> (plain code) ranks opportunities by what the profile mentions and the interests the member adds, and explains why.</li>
+        <li><strong>Boundary check</strong> (plain code) classifies each question to the assistant before anything is answered.</li>
       </ol>
     </section>
-    <section><h3 className="panel-title">Keeping profiles current</h3><p>The profiler re-runs on a schedule (weekly in production). It never overwrites a profile a user has edited; changes become proposals instead.</p></section>
-    <section><h3 className="panel-title">Boundaries</h3><p>Web pages are treated as data, never as instructions. The service does not disclose other companies' non-public information, separates potential matches from eligibility, and refers decisions to Blue Science Park staff.</p></section>
-    <section><h3 className="panel-title">Simulated in this prototype</h3><p>Login, browser-only storage of edits, the rule-based question box, and part of the opportunity details (marked “from search results”).</p></section>
+    <section><h3 className="card-title">Roles and privacy</h3><p>Members see and refine only their own profile. Blue Science Park staff see all public profiles read-only and never see members' edits, saved items or questions.</p></section>
+    <section><h3 className="card-title">Keeping profiles current</h3><p>The profiler re-runs on a schedule (weekly in production) and never overwrites a profile a member has edited.</p></section>
+    <section><h3 className="card-title">Simulated in this prototype</h3><p>Login, browser-only storage of edits, the rule-based assistant, and some opportunity details (marked “from search results”).</p></section>
   </div>;
 }

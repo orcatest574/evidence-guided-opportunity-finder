@@ -142,6 +142,18 @@ export function matchOpportunity(claims: Claim[], edits: Edits, opportunity: Opp
   return { opportunity, score, keywordHits, interestHits, focusBonus, closedPenalty };
 }
 
+/** Plain-language match level instead of a number. */
+export function matchLevel(score: number): "Strong match" | "Possible match" | null {
+  return score >= 55 ? "Strong match" : score >= 40 ? "Possible match" : null;
+}
+
+/** Members an opportunity is relevant to, on their baseline profiles (used in the staff view). */
+export function relevantMembers(opportunity: Opportunity): Company[] {
+  return companies.filter(c => matchOpportunity(c.claims, emptyEdits, opportunity).score >= 40);
+}
+
+export const logoUrl = (companyId: string) => `/logos/${companyId}.png`;
+
 export function rankOpportunities(claims: Claim[], edits: Edits): Match[] {
   return opportunities.map(o => matchOpportunity(claims, edits, o)).sort((a, b) => b.score - a.score || a.opportunity.title.localeCompare(b.opportunity.title));
 }
