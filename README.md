@@ -5,13 +5,7 @@ Hackathon prototype for Blue Science Park (BUILD Hackathon 2026).
 ## Run
 
 ```sh
-<<<<<<< HEAD
-git clone <this-repository-url>
-cd <repository-name>
-npm i --legacy-peer-deps
-=======
 npm install
->>>>>>> 570775dea3288a1767065b18550376052a184887
 npm run dev
 ```
 
