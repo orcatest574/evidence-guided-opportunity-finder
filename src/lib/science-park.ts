@@ -5,7 +5,7 @@ export type Evidence = { id: string; url: string; title?: string; publisher?: st
 type RawClaim = { id: string; value: string; type: string; confidence?: string; claimEvidence?: string[]; basedOnClaims?: string[]; reasoning?: string; note?: string; correctionNote?: string };
 export type Claim = RawClaim & { evidence: Evidence[] };
 type CompanyFile = {
-  company: { id: string; name: string; website?: string };
+  company: { id: string; name: string; website?: string; logo?: string };
   summary?: { text: string };
   evidence?: Evidence[];
   matchingProfile?: { topics?: { topic: string }[] };
@@ -27,7 +27,7 @@ export const sectionLabels: Record<string, string> = {
 };
 
 export type Company = {
-  id: string; name: string; initials: string; website: string; summary: string; lastUpdated: string;
+  id: string; name: string; initials: string; logo?: string; website: string; summary: string; lastUpdated: string;
   sections: { key: string; label: string; claims: Claim[] }[];
   sources: Evidence[];
   notes: string[];
@@ -48,6 +48,7 @@ function toCompany(file: CompanyFile): Company {
     id: file.company.id,
     name: file.company.name,
     initials: file.company.name.slice(0, 1).toUpperCase(),
+    logo: file.company.logo,
     website: file.company.website ?? "",
     summary: file.summary?.text ?? "",
     lastUpdated: file.metadata?.createdAt ?? "",

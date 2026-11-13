@@ -4,7 +4,8 @@
   "company": {
     "id": "nkt",
     "name": "NKT",
-    "website": "https://www.nkt.com"
+    "website": "https://www.nkt.com",
+    "logo": "/companies/nkt.png"
   },
   "summary": {
     "text": "NKT provides power cable solutions, including low-, medium- and high-voltage cable systems and accessories.",
