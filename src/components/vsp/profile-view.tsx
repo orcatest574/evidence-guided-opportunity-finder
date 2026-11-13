@@ -120,12 +120,12 @@ function AboutProfile({ company }: { company: Company }) {
     <div className="card">
       <h3 className="card-title">How this profile was built</h3>
       <ol className="steps">
-        <li><strong>Fetch</strong> {company.pagesFetched} public web pages about {company.name}.</li>
-        <li><strong>Extract</strong> facts with verbatim quotes and inferred interests using an AI model ({company.createdBy.replace("profiler-agent ", "").replace(/[()]/g, "")}).</li>
-        <li><strong>Verify</strong> every quote against the fetched page text with plain code. Quotes that are not found are removed.</li>
+        <li><strong>Sources:</strong> {company.pagesFetched} public web pages about {company.name}.</li>
+        <li><strong>Facts</strong> carry a verbatim quote that was checked against the page text. Quotes that could not be found were removed.</li>
+        <li><strong>Inferred interests</strong> are reasoned from the facts and are not confirmed priorities.</li>
         <li><strong>Review</strong> by the company, who can confirm, remove or add.</li>
       </ol>
-      <p className="card-help mt-3">Built {company.createdAt}. The profiler re-runs on a schedule and never overwrites a profile the company has edited.</p>
+      <p className="card-help mt-3">Snapshot from {company.createdAt}.</p>
     </div>
     <div className="card">
       <h3 className="card-title">Missing or uncertain</h3>

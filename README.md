@@ -23,20 +23,20 @@ Demo login (hardcoded, simulated): `demo` / `bluepark2026`
 | **Ecosystem** | For Blue Science Park staff: theme map across members, suggested connections with the claims behind them, and which members each opportunity is relevant to. |
 | **Ask** | Rule-based question box that classifies each question (in scope, out of scope, override attempt, private data, needs a human, unclear) before answering. |
 
-## Agents
+## How it works
 
-| Agent | Where | AI? |
+| Part | Where | AI? |
 |---|---|---|
-| Profiler – fetches public pages and extracts claims with quotes | `backend/profiler/` (see `backend/README.md`) | Yes (Azure OpenAI) |
-| Verifier – checks every quote against the page text | `backend/profiler/verifier.py` | No |
-| Matcher – ranks and explains opportunities | `src/lib/science-park.ts` | No |
-| Boundary check – classifies questions | `src/lib/science-park.ts` | No |
+| Company profiles – facts with verbatim quotes, inferred interests, gaps | `src/data/companies/*.json` | No (static data) |
+| Opportunities – testbeds, funding, events with links and dates | `src/data/opportunities.json` | No (static data) |
+| Matching – ranks and explains opportunities per company | `src/lib/science-park.ts` | No |
+| Boundary check – classifies questions to the assistant | `src/lib/science-park.ts` | No |
 
 ## Data
 
 No database. All data is JSON:
 
-- `src/data/companies/*.json` – profiles written by the profiler (`--publish`).
+- `src/data/companies/*.json` – one profile per company (schema v1.1). Add a file and the company appears.
 - `src/data/sources/*.json` – fetched page text, used to highlight quotes.
 - `src/data/opportunities.json` – curated opportunities with source, retrieval date and verification level.
 

@@ -93,8 +93,8 @@ function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children }: {
       </header>
       <main className="page">{children}</main>
       <footer className="footer">
-        <span>Prototype · Profiles built by the profiler agent from public pages and verified against them · Opportunities curated from public sources on 2026-11-13</span>
-        <span>Simulated: login, browser-only storage, rule-based assistant</span>
+        <span>Prototype · Profiles and opportunities are JSON snapshots from public sources, retrieved 2026-11-13</span>
+        <span>Simulated: login, browser-only storage, rule-based assistant, static data</span>
       </footer>
     </div>
     <Drawer open={aboutOpen} onClose={() => setAboutOpen(false)} title="About this prototype"><About/></Drawer>
@@ -155,16 +155,16 @@ function StaffApp({ onLogout }: { onLogout: () => void }) {
 
 function About() {
   return <div className="space-y-6 text-sm leading-6">
-    <section><h3 className="card-title">Agents and roles</h3>
+    <section><h3 className="card-title">How it works</h3>
       <ol className="steps">
-        <li><strong>Profiler</strong> fetches a member's public pages and lets an AI model extract facts with verbatim quotes, inferred interests and missing information.</li>
-        <li><strong>Verifier</strong> (plain code) searches every quote in the fetched page text. Quotes that are not found are removed; facts without a verified quote become “Unverified”.</li>
-        <li><strong>Matcher</strong> (plain code) ranks opportunities by what the profile mentions and the interests the member adds, and explains why.</li>
+        <li><strong>Profiles</strong> are JSON files built from members' public web pages. Every fact carries a verbatim quote, the source URL and the retrieval date; inferred interests carry their reasoning.</li>
+        <li><strong>Opportunities</strong> are a JSON list of testbeds, funding calls and events from public sources, each with a link and retrieval date.</li>
+        <li><strong>Matching</strong> (plain code) ranks opportunities by what the profile mentions and the interests the member adds, and explains why.</li>
         <li><strong>Boundary check</strong> (plain code) classifies each question to the assistant before anything is answered.</li>
       </ol>
     </section>
     <section><h3 className="card-title">Roles and privacy</h3><p>Members see and refine only their own profile. Blue Science Park staff see all public profiles read-only and never see members' edits, saved items or questions.</p></section>
-    <section><h3 className="card-title">Keeping profiles current</h3><p>The profiler re-runs on a schedule (weekly in production) and never overwrites a profile a member has edited.</p></section>
-    <section><h3 className="card-title">Simulated in this prototype</h3><p>Login, browser-only storage of edits, the rule-based assistant, and some opportunity details (marked “from search results”).</p></section>
+    <section><h3 className="card-title">Keeping profiles current</h3><p>In this prototype the data is a static snapshot. In production the JSON files would be refreshed on a schedule, without overwriting what a member has edited.</p></section>
+    <section><h3 className="card-title">Simulated in this prototype</h3><p>Login, browser-only storage of edits, the rule-based assistant, static JSON data, and some opportunity details (marked “from search results”).</p></section>
   </div>;
 }

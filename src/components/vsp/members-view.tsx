@@ -38,6 +38,6 @@ export function MembersView({ onOpen }: { onOpen: (companyId: string) => void })
         </button>;
       })}
     </div>
-    <p className="fine-print">The prototype covers three members. The same profiler runs for all 40+ members by adding them to backend/members.json.</p>
+    <p className="fine-print">The prototype covers three members. More members are added by placing their profile JSON in src/data/companies/.</p>
   </div>;
 }
