@@ -11,6 +11,10 @@ dist-ssr
 
 *.local
 
+# Wrangler / Cloudflare
+.wrangler/
+.dev.vars
+
 # Logs
 logs
 *.log
