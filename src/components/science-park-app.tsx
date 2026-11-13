@@ -109,13 +109,15 @@ function ProfileView({ company, refined, onSave }: { company: Company; refined: 
   const [draft, setDraft] = useState<Refinement>({ summary: company.summary, topics: company.topics, priority: company.priority });
   return <div className="profile-layout"><section>
     <div className="company-header"><div className="company-monogram">{company.initials}</div><div><h3>{company.name}</h3><p>Updated {company.lastUpdated}</p></div></div>
-    {company.sections.map(s => <div key={s.key}><h2 className="mt-7 text-base font-bold">{s.label}</h2>{s.claims.map((c, i) => <div key={i} className="fact">
-      <span className="verified-line !mt-0 !mb-2"><ShieldCheck size={13}/>{c.status === "fact" ? "Public fact" : `Inferred (${c.status})`}</span>
+    {company.sections.map(s => <div key={s.key}><h2 className="mt-7 text-base font-bold">{s.label}</h2>{s.claims.map(c => <div key={c.id} className="fact">
+      <span className="verified-line !mt-0 !mb-2"><ShieldCheck size={13}/>{c.type === "fact" ? "Public fact" : c.type === "user_confirmed" ? "Confirmed by user" : "Inferred – not a confirmed priority"}{c.confidence && ` · ${c.confidence} confidence`}</span>
       <p>{c.value}</p>
-      {c.evidence.map(e => <div key={e.url}>{e.quote && <p className="text-[11px] italic text-muted-foreground">“{e.quote}”</p>}<a href={e.url} target="_blank" rel="noreferrer">{new URL(e.url).hostname}<ExternalLink size={12}/></a><span className="text-[10px] text-muted-foreground">Retrieved {e.retrieved}</span></div>)}
-      {c.note && <p className="text-[11px] text-muted-foreground">Note: {c.note}</p>}
+      {c.reasoning && <p className="text-[11px] text-muted-foreground">Reasoning: {c.reasoning}{c.basedOnClaims?.length ? ` (based on ${c.basedOnClaims.join(", ")})` : ""}</p>}
+      {c.evidence.map(e => <div key={e.id}>{e.quotes?.map(q => <p key={q} className="text-[11px] italic text-muted-foreground">“{q}”</p>)}<a href={e.url} target="_blank" rel="noreferrer">{e.title ?? new URL(e.url).hostname}<ExternalLink size={12}/></a><span className="text-[10px] text-muted-foreground">{e.publishedAt && `Published ${e.publishedAt} · `}Retrieved {e.retrievedAt}{e.verification === "unverified_url" && " · link not verified"}</span></div>)}
+      {(c.note || c.correctionNote) && <p className="text-[11px] text-muted-foreground">Note: {c.note ?? c.correctionNote}</p>}
     </div>)}</div>)}
     {company.notes.length > 0 && <><h2 className="mt-7 text-base font-bold">Missing or uncertain</h2><ul className="mt-2 list-disc pl-5 text-xs leading-6 text-muted-foreground">{company.notes.map(n => <li key={n}>{n}</li>)}</ul></>}
+    {company.sources.length > 0 && <><h2 className="mt-7 text-base font-bold">Sources ({company.sources.length})</h2><ul className="mt-2 list-disc pl-5 text-xs leading-6">{company.sources.map(e => <li key={e.id}><a className="text-primary" href={e.url} target="_blank" rel="noreferrer">{e.title ?? e.url}</a><span className="text-muted-foreground">{e.publisher && ` · ${e.publisher}`}{e.publishedAt && ` · published ${e.publishedAt}`} · retrieved {e.retrievedAt}{e.verification === "unverified_url" && " · not verified"}{e.freshnessWarning && ` · ${e.freshnessWarning}`}</span></li>)}</ul></>}
   </section>
   <form onSubmit={e => { e.preventDefault(); onSave(draft); }}><h2 className="text-base font-bold">Your interests & priorities</h2><p className="mt-2 text-xs leading-6 text-muted-foreground">{refined ? "User-refined profile" : "Baseline interests and priorities are inferred, not confirmed."}</p>
     <label className="field-label" htmlFor="company-summary">Company summary</label><textarea id="company-summary" className="field-input" rows={4} maxLength={600} value={draft.summary} onChange={e => setDraft({ ...draft, summary: e.target.value })}/>

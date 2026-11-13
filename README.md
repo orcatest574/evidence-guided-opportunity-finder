@@ -5,7 +5,9 @@ Hackathon prototype for Blue Science Park (BUILD Hackathon 2026).
 ## Run
 
 ```sh
-npm install
+git clone git@github.com:orcatest574/evidence-guided-opportunity-finder.git
+cd evidence-guided-opportunity-finder
+npm install --legacy-peer-deps
 npm run dev
 ```
 

@@ -1,29 +1,35 @@
 import opportunityData from "@/data/opportunities.json";
 
-// ---- Company data: one JSON file per company in src/data/companies/ ----
-export type Evidence = { url: string; quote?: string; retrieved: string };
-export type Claim = { value: string; status: string; evidence: Evidence[]; note?: string | null };
+// ---- Company data: one JSON file per company in src/data/companies/ (schema v1.1) ----
+export type Evidence = { id: string; url: string; title?: string; publisher?: string; publishedAt?: string; retrievedAt: string; verification?: string; supports?: string; quotes?: string[]; freshnessWarning?: string };
+type RawClaim = { id: string; value: string; type: string; confidence?: string; claimEvidence?: string[]; basedOnClaims?: string[]; reasoning?: string; note?: string; correctionNote?: string };
+export type Claim = RawClaim & { evidence: Evidence[] };
 type CompanyFile = {
-  company_id: string;
-  name: string;
-  profile: Record<string, Claim[] | string | undefined> & { last_updated?: string };
-  source_register?: { name: string; url: string; source_type?: string }[];
-  data_quality_notes?: string[];
+  company: { id: string; name: string; website?: string };
+  summary?: { text: string };
+  evidence?: Evidence[];
+  matchingProfile?: { topics?: { topic: string }[] };
+  missing?: { field: string; reason: string }[];
+  uncertaintiesAndConflicts?: { topic: string; detail: string }[];
+  metadata?: { createdAt?: string };
+  [section: string]: unknown;
 };
 
 export const sectionLabels: Record<string, string> = {
-  what_they_do: "What they do",
+  whatTheyDo: "What they do",
   technologies: "Technologies & expertise",
-  application_areas: "Application areas",
-  markets_customers: "Markets & customers",
+  applicationAreas: "Application areas",
+  markets: "Markets & customers",
   geography: "Geography",
-  stated_priorities: "Stated priorities & projects",
+  statedPriorities: "Stated priorities & projects",
+  collaborations: "Collaborations",
+  inferredInterests: "Inferred interests (not confirmed priorities)",
 };
 
 export type Company = {
-  id: string; name: string; initials: string; summary: string; lastUpdated: string;
+  id: string; name: string; initials: string; website: string; summary: string; lastUpdated: string;
   sections: { key: string; label: string; claims: Claim[] }[];
-  sources: { name: string; url: string }[];
+  sources: Evidence[];
   notes: string[];
   topics: string[];   // inferred until the user refines them
   priority: string;
@@ -32,29 +38,30 @@ export type Company = {
 // ---- Opportunity data: src/data/opportunities.json ----
 export type Opportunity = { id: string; type: string; title: string; description: string; source: string; url: string; topics: string[]; date: string; location: string; nextStep: string; caveat: string };
 export const opportunities = opportunityData as Opportunity[];
-export const allTopics = [...new Set(opportunities.flatMap(o => o.topics))];
 
 function toCompany(file: CompanyFile): Company {
-  const sections = Object.entries(file.profile)
-    .filter((e): e is [string, Claim[]] => Array.isArray(e[1]))
-    .map(([key, claims]) => ({ key, label: sectionLabels[key] ?? key.replace(/_/g, " "), claims }));
-  const text = sections.flatMap(s => s.claims.map(c => c.value)).join(" ").toLowerCase();
+  const evidence = file.evidence ?? [];
+  const sections = Object.keys(sectionLabels)
+    .filter(key => Array.isArray(file[key]) && (file[key] as RawClaim[]).length > 0)
+    .map(key => ({ key, label: sectionLabels[key]!, claims: (file[key] as RawClaim[]).map(c => ({ ...c, evidence: evidence.filter(e => c.claimEvidence?.includes(e.id)) })) }));
   return {
-    id: file.company_id,
-    name: file.name,
-    initials: file.name.slice(0, 1).toUpperCase(),
-    summary: sections.find(s => s.key === "what_they_do")?.claims[0]?.value ?? "",
-    lastUpdated: typeof file.profile.last_updated === "string" ? file.profile.last_updated : "",
+    id: file.company.id,
+    name: file.company.name,
+    initials: file.company.name.slice(0, 1).toUpperCase(),
+    website: file.company.website ?? "",
+    summary: file.summary?.text ?? "",
+    lastUpdated: file.metadata?.createdAt ?? "",
     sections,
-    sources: file.source_register ?? [],
-    notes: file.data_quality_notes ?? [],
-    topics: allTopics.filter(t => text.includes(t.toLowerCase())),
+    sources: evidence,
+    notes: [...(file.missing ?? []).map(m => `Missing – ${m.field}: ${m.reason}`), ...(file.uncertaintiesAndConflicts ?? []).map(u => `Uncertain – ${u.topic}: ${u.detail}`)],
+    topics: (file.matchingProfile?.topics ?? []).map(t => t.topic),
     priority: "Exploration",
   };
 }
 
 const files = import.meta.glob<CompanyFile>("../data/companies/*.json", { eager: true, import: "default" });
 export const companies: Company[] = Object.values(files).map(toCompany).sort((a, b) => a.name.localeCompare(b.name));
+export const allTopics = [...new Set([...opportunities.flatMap(o => o.topics), ...companies.flatMap(c => c.topics)])];
 
 // ---- Matching ----
 export function matchScore(company: Company, opportunity: Opportunity) {
