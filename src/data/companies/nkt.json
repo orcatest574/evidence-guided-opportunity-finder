@@ -1,0 +1,355 @@
+{
+  "company_id": "nkt",
+  "name": "NKT",
+  "description": "Company information only. This file describes NKT using publicly documented facts and source evidence. It contains no opportunity recommendations, opportunity search topics, event lists, funding suggestions, or inferred interests. The agent should independently decide which opportunities, if any, are relevant.",
+  "profile": {
+    "company_id": "nkt",
+    "name": "NKT",
+    "what_they_do": [
+      {
+        "value": "NKT provides power cable solutions, including low-, medium- and high-voltage cable systems and accessories.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/about-us/production-sites",
+            "quote": "produce low-, medium-, and high-voltage solutions for power grids and offshore energy projects",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      },
+      {
+        "value": "NKT provides high-voltage onshore and offshore cable systems, including design, manufacturing and installation services.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/products/high-voltage-cables",
+            "quote": "We design, manufacture, and install premium high voltage onshore cable systems.",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      },
+      {
+        "value": "NKT also provides cable accessories and lifecycle services such as repair, maintenance and operations support.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://investors.nkt.com/files/AGM/2026/da/nkt-annual-report-2025-1.pdf",
+            "quote": "leading capabilities within repair, maintenance, and operations services",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      }
+    ],
+    "technologies": [
+      {
+        "value": "High-voltage AC and DC onshore cable systems.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/products/high-voltage-cables/high-voltage-onshore-cable",
+            "quote": "High Voltage Onshore AC Cables",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      },
+      {
+        "value": "High-voltage offshore AC and DC submarine cable systems.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/products/high-voltage-cables/high-voltage-offshore-cables",
+            "quote": "Offshore cables, for both AC and DC",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      },
+      {
+        "value": "Dynamic offshore cables designed to withstand continuous movement and fatigue.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/products/high-voltage-cables/high-voltage-offshore-cables",
+            "quote": "designed to withstand a lifetime of constant movement",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      },
+      {
+        "value": "Cable joints, connectors and terminations for high- and medium-voltage applications.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://investors.nkt.com/files/AGM/2026/da/nkt-annual-report-2025-1.pdf",
+            "quote": "power cable joints, connectors, and terminations",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      }
+    ],
+    "application_areas": [
+      {
+        "value": "Offshore wind power generation and export of electricity from offshore installations.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/products/high-voltage-cables/high-voltage-offshore-cables",
+            "quote": "enable offshore facilities to efficiently harness and transmit renewable energy",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      },
+      {
+        "value": "Electricity transmission, grid modernisation and interconnection between regions or countries.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/products/high-voltage-cables/high-voltage-offshore-cables",
+            "quote": "interconnecting regions and countries",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      },
+      {
+        "value": "Power distribution for buildings, industry and infrastructure.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/about-us/production-sites",
+            "quote": "buildings, industry, and infrastructure",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      },
+      {
+        "value": "Renewable energy integration and electrification of society.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://investors.nkt.com/company-announcements/2025/nkt-launches-new-strategy-medium-term-financial-ambitions-for-2030-and-updates-to-the-organisation/",
+            "quote": "renewable power generation, electrification of societies, and grid modernisation",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      }
+    ],
+    "markets_customers": [
+      {
+        "value": "Power transmission and distribution markets, including customers developing and operating electricity grid infrastructure.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/about-us/production-sites",
+            "quote": "solutions for power grids and offshore energy projects",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": "The cited public material describes markets and applications; it does not identify every customer segment or customer."
+      }
+    ],
+    "geography": [
+      {
+        "value": "NKT has a European manufacturing footprint, with production facilities in several countries.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/about-us",
+            "quote": "locations in more than 16 countries",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      },
+      {
+        "value": "Karlskrona, Sweden is NKT's high-voltage production site for subsea cable systems.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/about-us/production-sites",
+            "quote": "Karlskrona is NKT’s high-voltage production site for subsea cable systems in Sweden.",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      },
+      {
+        "value": "Cologne, Germany is another major high-voltage cable production location.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/products/high-voltage-cables",
+            "quote": "One located in Cologne, Germany, the other in Karlskrona, Sweden.",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      },
+      {
+        "value": "NKT has manufacturing facilities in Sweden, Germany, Poland, the United Kingdom, the Czech Republic, Norway and Denmark.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/about-us",
+            "quote": "manufacturing facilities in Germany, Sweden, Poland, UK, Czech Republic, Norway, and Denmark",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": "This list reflects the cited company page and may not be exhaustive or current for every type of operation."
+      }
+    ],
+    "stated_priorities": [
+      {
+        "value": "Execute: deliver on the high-voltage order backlog and capacity expansions through effective project management and scalable capabilities.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://investors.nkt.com/company-announcements/2025/nkt-launches-new-strategy-medium-term-financial-ambitions-for-2030-and-updates-to-the-organisation/",
+            "quote": "Execute - Deliver on high-voltage backlog and capacity expansions",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": "Publicly stated pillar of the Charging Forward strategy."
+      },
+      {
+        "value": "Excel: strengthen execution excellence and sustainable competitiveness.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://investors.nkt.com/company-announcements/2026/nkt-reaffirms-strategic-direction-and-presents-capital-allocation-priorities-at-investor-day-2026/",
+            "quote": "strategic pillars Execute, Excel and Evolve",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": "Publicly stated strategic pillar; consult the full announcement for detailed interpretation."
+      },
+      {
+        "value": "Evolve: maintain technology leadership and pursue selective growth that strengthens the power cable portfolio.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://investors.nkt.com/company-announcements/2025/nkt-launches-new-strategy-medium-term-financial-ambitions-for-2030-and-updates-to-the-organisation/",
+            "quote": "high focus on technology leadership and selective growth",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": "Publicly stated strategic direction."
+      },
+      {
+        "value": "Sustainability strategy is organised around Environment, Social and Governance pillars.",
+        "status": "fact",
+        "evidence": [
+          {
+            "url": "https://www.nkt.com/sustainability",
+            "quote": "Environment; Social; Governance",
+            "retrieved": "2026-11-13"
+          }
+        ],
+        "note": null
+      }
+    ],
+    "last_updated": "2026-11-13"
+  },
+  "source_register": [
+    {
+      "name": "NKT – About us",
+      "url": "https://www.nkt.com/about-us",
+      "source_type": "official_company_page",
+      "supports": [
+        "company overview",
+        "geography"
+      ]
+    },
+    {
+      "name": "NKT – Production sites",
+      "url": "https://www.nkt.com/about-us/production-sites",
+      "source_type": "official_company_page",
+      "supports": [
+        "production footprint",
+        "Karlskrona",
+        "cable capabilities"
+      ]
+    },
+    {
+      "name": "NKT – High-voltage cables",
+      "url": "https://www.nkt.com/products/high-voltage-cables",
+      "source_type": "official_product_page",
+      "supports": [
+        "high-voltage cable portfolio",
+        "onshore and offshore solutions"
+      ]
+    },
+    {
+      "name": "NKT – High-voltage offshore cables",
+      "url": "https://www.nkt.com/products/high-voltage-cables/high-voltage-offshore-cables",
+      "source_type": "official_product_page",
+      "supports": [
+        "offshore AC/DC cables",
+        "dynamic cables",
+        "lifecycle services"
+      ]
+    },
+    {
+      "name": "NKT – High-voltage onshore cables",
+      "url": "https://www.nkt.com/products/high-voltage-cables/high-voltage-onshore-cable",
+      "source_type": "official_product_page",
+      "supports": [
+        "onshore AC/DC cables"
+      ]
+    },
+    {
+      "name": "NKT – Charging Forward strategy",
+      "url": "https://investors.nkt.com/company-announcements/2025/nkt-launches-new-strategy-medium-term-financial-ambitions-for-2030-and-updates-to-the-organisation/",
+      "source_type": "official_investor_announcement",
+      "supports": [
+        "public strategy",
+        "strategic pillars"
+      ],
+      "published": "2025-11-19"
+    },
+    {
+      "name": "NKT – Investor Day 2026",
+      "url": "https://investors.nkt.com/company-announcements/2026/nkt-reaffirms-strategic-direction-and-presents-capital-allocation-priorities-at-investor-day-2026/",
+      "source_type": "official_investor_announcement",
+      "supports": [
+        "strategy reaffirmation"
+      ],
+      "published": "2026-09-29"
+    },
+    {
+      "name": "NKT – Sustainability",
+      "url": "https://www.nkt.com/sustainability",
+      "source_type": "official_company_page",
+      "supports": [
+        "sustainability framework"
+      ]
+    },
+    {
+      "name": "NKT – Annual Report 2025",
+      "url": "https://investors.nkt.com/files/AGM/2026/da/nkt-annual-report-2025-1.pdf",
+      "source_type": "official_annual_report",
+      "supports": [
+        "services",
+        "accessories",
+        "repair and maintenance"
+      ]
+    }
+  ],
+  "data_quality_notes": [
+    "Only factual company information is included.",
+    "Every fact must retain its supporting source URL and short quote.",
+    "This file does not state which events, funding programmes, partners, or services NKT should pursue.",
+    "The agent must evaluate each opportunity independently against the company facts.",
+    "Do not infer confidential plans, financial condition, procurement needs, attendance, eligibility, or willingness to collaborate.",
+    "Verify source pages again before relying on time-sensitive or changing information."
+  ]
+}

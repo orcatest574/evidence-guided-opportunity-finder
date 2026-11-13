@@ -1,24 +1,26 @@
-# Evidence Guided Opportunity Finder
+# Virtual Science Park
 
-Implement exactly the screenshot and nothing else
+Hackathon prototype for Blue Science Park (BUILD Hackathon 2026).
 
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/4141b9e1-14bb-4900-a819-aed006bff33e).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Run
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+npm install
 npm run dev
 ```
+
+Demo login (hardcoded, simulated): `demo` / `bluepark2026`
+
+## Data
+
+No database. All data comes from JSON files:
+
+- `src/data/companies/*.json` – one file per company. Add a file and it appears in the app.
+- `src/data/opportunities.json` – list of opportunities (testing, funding, events …).
+
+Profile edits and saved opportunities are stored in the browser (localStorage).
+
+## Simulated parts
+
+- Login is a hardcoded demo account checked in the browser.
+- The innovation assistant is rule-based (no LLM).
