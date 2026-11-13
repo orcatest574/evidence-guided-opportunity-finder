@@ -31,7 +31,7 @@ export function ScienceParkApp() {
   const [notice, setNotice] = useState("");
   const [saving, setSaving] = useState(false);
   const userRef = useRef<User | null>(null);
-  const baseCompany = companies.find(c => c.id === companyId) ?? companies[0];
+  const baseCompany = companies.find(c => c.id === companyId) ?? companies[0]!;
   const company = workspace.profiles[companyId] ?? baseCompany;
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export function ScienceParkApp() {
   function navigate(next: View) { setView(next); setMenuOpen(false); setQuery(""); }
   async function toggleSave(id: string) { await persist({ ...workspace, saved: workspace.saved.includes(id) ? workspace.saved.filter(x => x !== id) : [...workspace.saved, id] }); }
   const results = rankedOpportunities(company).filter(o => !workspace.dismissed.includes(o.id) && (view !== "saved" || workspace.saved.includes(o.id)) && (filter === "All opportunities" || o.type === filter) && `${o.title} ${o.description} ${o.source} ${o.topics.join(" ")}`.toLowerCase().includes(query.toLowerCase()));
-  const partner = companies.filter(c => c.id !== companyId).sort((a,b) => b.topics.filter(t => company.topics.includes(t)).length - a.topics.filter(t => company.topics.includes(t)).length)[0];
+  const partner = companies.filter(c => c.id !== companyId).sort((a,b) => b.topics.filter(t => company.topics.includes(t)).length - a.topics.filter(t => company.topics.includes(t)).length)[0]!;
   const nav = [{ view: "dashboard" as View, label: "Overview", icon: LayoutDashboard }, { view: "opportunities" as View, label: "Opportunities", icon: Sparkles }, { view: "saved" as View, label: "Saved opportunities", icon: Bookmark }, { view: "members" as View, label: "Member network", icon: Users }, { view: "profile" as View, label: "Company profile", icon: Building2 }];
   return <div className="app-shell">
     {menuOpen && <div className="fixed inset-0 z-30 bg-overlay" onClick={() => setMenuOpen(false)} />}
@@ -101,7 +101,7 @@ function parseWorkspace(data: { profiles: unknown; saved_ids: unknown; dismissed
   const profiles: Record<string,Company> = {};
   if (data.profiles && typeof data.profiles === "object" && !Array.isArray(data.profiles)) for (const [id, value] of Object.entries(data.profiles)) {
     const base = companies.find(c => c.id === id);
-    if (base && value && typeof value === "object" && "topics" in value && Array.isArray(value.topics) && "priority" in value && typeof value.priority === "string") profiles[id] = { ...base, topics: value.topics.filter((t): t is string => typeof t === "string" && allTopics.includes(t)), priority: value.priority, description: "description" in value && typeof value.description === "string" ? value.description : base.description };
+    if (base && value && typeof value === "object" && "topics" in value && Array.isArray(value.topics) && "priority" in value && typeof value.priority === "string") profiles[id] = { ...base, topics: (value.topics as unknown[]).filter((t): t is string => typeof t === "string" && allTopics.includes(t)), priority: value.priority, description: "description" in value && typeof value.description === "string" ? value.description : base.description };
   }
   const strings = (v: unknown) => Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : [];
   return { profiles, saved: strings(data.saved_ids), dismissed: strings(data.dismissed_ids) };
@@ -125,8 +125,8 @@ function AssistantDialog({ open, setOpen, company, user, onSignIn }: { open: boo
     let reply: string;
     if (!user) {
       const kind = classifyRequest(text);
-      const ranked = rankedOpportunities(company);
-      reply = kind !== "relevant" ? boundaryReply(kind) : `Simulated assistant response for ${company.name}:\n\n${ranked[0].title} may fit your ${company.priority.toLowerCase()} preference and inferred topics. ${ranked[0].nextStep}\n\n${ranked[0].caveat}\n\nSource checked ${checkedOn}: ${ranked[0].url}\n\nSign in to ask the live assistant follow-up questions.`;
+      const top = rankedOpportunities(company)[0]!;
+      reply = kind !== "relevant" ? boundaryReply(kind) : `Simulated assistant response for ${company.name}:\n\n${top.title} may fit your ${company.priority.toLowerCase()} preference and inferred topics. ${top.nextStep}\n\n${top.caveat}\n\nSource checked ${checkedOn}: ${top.url}\n\nSign in to ask the live assistant follow-up questions.`;
     } else {
       try { const result = await callAssistant({ data: { companyId: company.id as "ericsson" | "nkt" | "roxtec", messages: next.slice(-11) } }); reply = result.text; }
       catch { reply = "Your question could not be answered. Please check your connection or sign in again."; }
