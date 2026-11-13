@@ -16,9 +16,20 @@ dist-ssr
 .nitro
 *.local
 
+# Environment files
+.env*
+!.env.example
+!.env.sample
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
+
+# Python virtual environments and caches
+venv/
+.venv/
+__pycache__/
+*.py[cod]
 
 # Editor directories and files
 .vscode/*
