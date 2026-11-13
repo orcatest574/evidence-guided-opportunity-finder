@@ -16,12 +16,16 @@ Demo login (hardcoded, simulated): `demo` / `bluepark2026`
 
 ## Views
 
-| View | What it shows |
-|---|---|
-| **Profile** | Baseline profile per company. Each claim is *Verified* (quote found on the source page), *Inferred* (our reasoning) or *Unverified*. Click a source to see the quote highlighted in the fetched page text. Users confirm or remove claims, set a priority and add interests. |
-| **Opportunities** | Testing, funding and events from public sources, ranked per company. Every score is explained. Changing the priority re-ranks the list live. |
-| **Ecosystem** | For Blue Science Park staff: theme map across members, suggested connections with the claims behind them, and which members each opportunity is relevant to. |
-| **Ask** | Rule-based question box that classifies each question (in scope, out of scope, override attempt, private data, needs a human, unclear) before answering. |
+Demo accounts: `staff` (Blue Science Park staff) and `nkt`, `ericsson`, `roxtec` (member companies).
+
+| View | Who | What it shows |
+|---|---|---|
+| **Company profile** | Member (own company), staff (read-only) | Hero with logo, summary, and tabs per section. Each claim is *Verified*, *Inferred* or *Unverified*; click a source to see the quote highlighted in the page text. Members confirm or remove claims and add their own interests. |
+| **Opportunities** | Member | Testbeds, funding and events from public sources, most relevant first, with “Strong/Possible match” and the reason. |
+| **Opportunities** | Staff | All opportunities with the members each one is relevant to. |
+| **Members** | Staff | Every profiled member as a card with logo; click to open the profile. |
+| **Ecosystem** | Staff | Shared themes across members and suggested connections with the claims behind them. |
+| **Innovation assistant** | Member | Rule-based question box that classifies each question (in scope, out of scope, override attempt, private data, needs a human, unclear) before answering. |
 
 ## How it works
 
