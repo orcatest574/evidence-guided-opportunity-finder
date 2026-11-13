@@ -2,7 +2,7 @@ import opportunityData from "@/data/opportunities.json";
 
 // ---- Company data: one JSON file per company in src/data/companies/ (schema v1.1) ----
 export type Evidence = { id: string; url: string; title?: string; publisher?: string; publishedAt?: string; retrievedAt: string; verification?: string; supports?: string; quotes?: string[]; freshnessWarning?: string };
-type RawClaim = { id: string; value: string; type: string; confidence?: string; claimEvidence?: string[]; basedOnClaims?: string[]; reasoning?: string; note?: string; correctionNote?: string };
+type RawClaim = { id: string; value: string; type: string; confidence?: string; claimEvidence?: string[]; basedOnClaims?: string[]; reasoning?: string; note?: string; correctionNote?: string; quotes?: string[] };
 export type Claim = RawClaim & { evidence: Evidence[] };
 type CompanyFile = {
   company: { id: string; name: string; website?: string };

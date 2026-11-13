@@ -1,0 +1,32 @@
+[
+  {
+    "id": "nkt",
+    "name": "NKT",
+    "website": "https://www.nkt.com",
+    "seed_urls": [
+      "https://www.nkt.com/about-us",
+      "https://www.nkt.com/about-us/production-sites/karlskrona",
+      "https://www.nkt.com/products/high-voltage-cables",
+      "https://www.bluesciencepark.se/medlem/nkt/"
+    ]
+  },
+  {
+    "id": "ericsson",
+    "name": "Ericsson",
+    "website": "https://www.ericsson.com",
+    "seed_urls": [
+      "https://www.ericsson.com/en/about-us",
+      "https://www.bluesciencepark.se/medlem/ericsson/"
+    ]
+  },
+  {
+    "id": "roxtec",
+    "name": "Roxtec",
+    "website": "https://www.roxtec.com",
+    "seed_urls": [
+      "https://www.roxtec.com/en/",
+      "https://www.roxtec.com/en/about-us/about-roxtec/",
+      "https://www.roxtec.com/en/industries/"
+    ]
+  }
+]

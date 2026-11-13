@@ -37,3 +37,6 @@ __pycache__/
 # Office lock files
 ~$*
 .~lock.*
+
+# Profiler page cache
+backend/cache/
