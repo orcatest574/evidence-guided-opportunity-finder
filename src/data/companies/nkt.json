@@ -4,7 +4,8 @@
   "company": {
     "id": "nkt",
     "name": "NKT",
-    "website": "https://www.nkt.com"
+    "website": "https://www.nkt.com",
+    "logo": "/companies/nkt.png"
   },
   "summary": {
     "text": "NKT designs, manufactures and installs low-, medium- and high-voltage cable systems and related accessories and services. The company is investing heavily to expand its high-voltage offshore cable production in Karlskrona, Sweden, including a new third extrusion tower and a material test laboratory.",

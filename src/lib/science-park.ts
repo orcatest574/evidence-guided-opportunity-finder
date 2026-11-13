@@ -11,7 +11,7 @@ type RawClaim = { id: string; value: string; type: ClaimType; confidence?: strin
 export type Claim = RawClaim & { section: string; evidence: Evidence[] };
 
 type CompanyFile = {
-  company: { id: string; name: string; website?: string };
+  company: { id: string; name: string; website?: string; logo?: string };
   summary?: { text: string };
   evidence?: Evidence[];
   matchingProfile?: { topics?: { topic: string; weight: number }[] };
@@ -33,7 +33,7 @@ export const SECTIONS: { key: string; label: string }[] = [
 ];
 
 export type Company = {
-  id: string; name: string; website: string; summary: string; createdAt: string; createdBy: string; pagesFetched: number;
+  id: string; name: string; logo: string; website: string; summary: string; createdAt: string; createdBy: string; pagesFetched: number;
   claims: Claim[];
   evidence: Evidence[];
   topics: { topic: string; weight: number }[];
@@ -50,6 +50,7 @@ function toCompany(file: CompanyFile): Company {
   return {
     id: file.company.id,
     name: file.company.name,
+    logo: file.company.logo ?? `/logos/${file.company.id}.png`,
     website: file.company.website ?? "",
     summary: file.summary?.text ?? "",
     createdAt: file.metadata?.createdAt ?? "",
@@ -152,7 +153,7 @@ export function relevantMembers(opportunity: Opportunity): Company[] {
   return companies.filter(c => matchOpportunity(c.claims, emptyEdits, opportunity).score >= 40);
 }
 
-export const logoUrl = (companyId: string) => `/logos/${companyId}.png`;
+export const logoUrl = (companyId: string) => companies.find(c => c.id === companyId)?.logo ?? `/logos/${companyId}.png`;
 
 export function rankOpportunities(claims: Claim[], edits: Edits): Match[] {
   return opportunities.map(o => matchOpportunity(claims, edits, o)).sort((a, b) => b.score - a.score || a.opportunity.title.localeCompare(b.opportunity.title));

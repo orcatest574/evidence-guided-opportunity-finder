@@ -4,7 +4,8 @@
   "company": {
     "id": "ericsson",
     "name": "Ericsson",
-    "website": "https://www.ericsson.com"
+    "website": "https://www.ericsson.com",
+    "logo": "/companies/ericsson.png"
   },
   "summary": {
     "text": "Ericsson develops and supplies telecommunications infrastructure, cloud software and services across networks, cloud, OSS/BSS, automation/AI and enterprise connectivity. The company emphasizes R&D (including 6G), AI-enabled autonomous network operations, Open RAN and fintech platform offerings and works with global partners and service providers.",
