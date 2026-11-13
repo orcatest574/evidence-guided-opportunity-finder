@@ -7,7 +7,7 @@ import shutil
 from . import config
 from .builder import build_profile
 from .extractor import extract_profile
-from .fetcher import collect_pages
+from .fetcher import collect_pages, fetch_page
 from .members import Member
 from .verifier import verify
 
@@ -51,4 +51,19 @@ def publish(member: Member, force: bool = False) -> bool:
             return False
     shutil.copyfile(source, target)
     log.info("  published %s", target.relative_to(config.REPO_ROOT))
+    _publish_source_texts(member, json.loads(source.read_text(encoding="utf-8")))
     return True
+
+
+def _publish_source_texts(member: Member, profile: dict) -> None:
+    """Write the fetched page text next to the profile so the app can show quotes highlighted in context."""
+    texts = {}
+    for evidence in profile.get("evidence", []):
+        try:
+            texts[evidence["url"]] = fetch_page(evidence["url"]).text
+        except Exception as error:  # cache miss and site unreachable
+            log.warning("  no text for %s (%s)", evidence["url"], error)
+    config.APP_SOURCES_DIR.mkdir(parents=True, exist_ok=True)
+    target = config.APP_SOURCES_DIR / f"{member.id}.json"
+    target.write_text(json.dumps(texts, ensure_ascii=False) + "\n", encoding="utf-8")
+    log.info("  published %s (%d pages)", target.relative_to(config.REPO_ROOT), len(texts))

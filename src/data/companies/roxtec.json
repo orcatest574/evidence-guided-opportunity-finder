@@ -7,7 +7,7 @@
     "website": "https://www.roxtec.com"
   },
   "summary": {
-    "text": "Roxtec develops, manufactures and delivers modular sealing solutions and associated services for cable and pipe penetrations, and supplies related design software and documentation. The company sells to a wide range of industries (infrastructure, manufacturing, marine, offshore oil & gas, power and process industries), maintains a global presence with headquarters in Karlskrona, Sweden, and offers installation training, supervision and certified transit inspections.",
+    "text": "Roxtec develops, manufactures and delivers modular sealing solutions for cable and pipe penetrations and provides related services such as installation training, onsite supervision and certified transit inspections. The company offers digital design tools (Roxtec Transit Designer™, Roxtec Software Suite™), electromagnetic shielding products and publishes sustainability work while serving customers worldwide from its headquarters in Karlskrona, Sweden.",
     "claimEvidence": [
       "ev-1",
       "ev-2",
@@ -35,33 +35,33 @@
     },
     {
       "id": "wtd-2",
-      "value": "Roxtec modular-based transits are used for cable sealing and pipe sealing in demanding industries and provide certified protection against risks including fire, gas and water.",
-      "claimEvidence": [
-        "ev-1"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Roxtec modular-based transits are used for cable sealing and pipe sealing in numerous demanding industries"
-      ]
-    },
-    {
-      "id": "wtd-3",
-      "value": "Roxtec offers installation training, onsite supervision and certified transit inspections as services.",
+      "value": "Roxtec provides services including installation training, onsite supervision and transit inspections.",
       "claimEvidence": [
         "ev-7"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "installation training, onsite supervision and inspections"
+        "installation training, onsite supervision and inspections."
+      ]
+    },
+    {
+      "id": "wtd-3",
+      "value": "Roxtec seals provide certified protection against multiple risks, including fire, gas and water.",
+      "claimEvidence": [
+        "ev-1"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "the seals provide certified protection against multiple risks, including fire , gas and water."
       ]
     }
   ],
   "technologies": [
     {
       "id": "tech-1",
-      "value": "Roxtec's Multidiameter™ invention is based on sealing modules with removable rubber layers that allow adaptation to varying cable and pipe outside dimensions.",
+      "value": "Roxtec's Multidiameter™ concept uses sealing modules with removable rubber layers for adaptability to different cable and pipe diameters.",
       "claimEvidence": [
         "ev-1"
       ],
@@ -73,19 +73,31 @@
     },
     {
       "id": "tech-2",
-      "value": "Roxtec offers EMC sealing solutions to protect against EMI and EMP.",
+      "value": "Roxtec offers the Roxtec Transit Designer™ digital tool to simplify engineering of transits.",
+      "claimEvidence": [
+        "ev-1"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "The Roxtec Transit Designer™ simplifies engineering."
+      ]
+    },
+    {
+      "id": "tech-3",
+      "value": "Roxtec provides EMC sealing solutions to protect against EMI, electromagnetic interference and EMP.",
       "claimEvidence": [
         "ev-6"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "Use Roxtec EMC sealing solutions to ensure first class protection against EMI, electromagnetic interference, and EMP"
+        "Use Roxtec EMC sealing solutions to ensure first class protection against EMI, electromagnetic interference, and EMP, electromagnetic pulses."
       ]
     },
     {
-      "id": "tech-3",
-      "value": "Roxtec BG™ seals provide bonding and grounding for electrical safety.",
+      "id": "tech-4",
+      "value": "Roxtec BG™ seals provide bonding and grounding to deliver electrical safety.",
       "claimEvidence": [
         "ev-7"
       ],
@@ -96,87 +108,34 @@
       ]
     },
     {
-      "id": "tech-4",
-      "value": "Roxtec produces Ex/ATEX cable transit devices for potentially explosive atmospheres.",
-      "claimEvidence": [
-        "ev-7"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Roxtec Ex cable transit devices Sealing solutions for potentially explosive atmospheres."
-      ]
-    },
-    {
       "id": "tech-5",
-      "value": "Roxtec provides the Roxtec Transit Designer™ software to simplify engineering of transits.",
-      "claimEvidence": [
-        "ev-1",
-        "ev-4"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "The Roxtec Transit Designer™ simplifies engineering.",
-        "Access the Roxtec Software Suite™ - Reach your transit management tools, for example the free Roxtec Transit Designer™, and see your latest projects."
-      ]
-    },
-    {
-      "id": "tech-6",
-      "value": "Roxtec provides 3D CAD libraries and technical documentation for use in design and construction software.",
+      "value": "Roxtec promotes the use of its seals, services and software in HVDC projects.",
       "claimEvidence": [
         "ev-1"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "Discover Roxtec 3D CAD libraries Optimize your workflow by using our technical documentation in your design and construction software."
+        "Why use Roxtec in HVDC projects? Discover the benefits of Roxtec seals, services and software."
       ]
     },
     {
-      "id": "tech-7",
-      "value": "Roxtec develops and tests electromagnetic shielding solutions in a dedicated EMC laboratory.",
+      "id": "tech-6",
+      "value": "Roxtec develops and tests cable seals for electromagnetic shielding in the Roxtec electromagnetic laboratory focused on HEMP protection.",
       "claimEvidence": [
         "ev-7"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "Roxtec EMC specialists develop and test cable seals for electromagnetic shielding in the Roxtec electromagnetic laboratory."
-      ]
-    },
-    {
-      "id": "tech-8",
-      "value": "Roxtec documents registered product certificates, with more than 300 product certificates and over 500 tests and approvals.",
-      "claimEvidence": [
-        "ev-2",
-        "ev-5"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Registered product certificates More than 300 Registered tests and approvals More than 500"
+        "Aiming for first class HEMP protection Roxtec EMC specialists develop and test cable seals for electromagnetic shielding in the Roxtec electromagnetic laboratory."
       ]
     }
   ],
   "applicationAreas": [
     {
       "id": "app-1",
-      "value": "Roxtec safety seals are used on land, at sea and underground to protect life, assets and ensure operational reliability.",
-      "claimEvidence": [
-        "ev-2",
-        "ev-1"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Roxtec safety seals are found on land, at sea and underground.",
-        "used in projects worldwide to protect life and assets and to ensure safety and operational reliability"
-      ]
-    },
-    {
-      "id": "app-2",
-      "value": "Roxtec seals are used in walls, floors, decks, bulkheads and cabinet and enclosure applications.",
+      "value": "Roxtec transits are used in walls, floors, decks, bulkheads and cabinet and enclosure applications.",
       "claimEvidence": [
         "ev-1"
       ],
@@ -187,34 +146,8 @@
       ]
     },
     {
-      "id": "app-3",
-      "value": "Roxtec states that 100 offshore wind farms are protected by its cable and pipe seals.",
-      "claimEvidence": [
-        "ev-1"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "There are... 100 offshore wind farms protected by Roxtec cable and pipe seals."
-      ]
-    },
-    {
-      "id": "app-4",
-      "value": "Under Power, Roxtec lists nuclear, HVDC, transmission, onshore and offshore wind and energy storage among application topics.",
-      "claimEvidence": [
-        "ev-3"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Gas turbine power plants Nuclear Solar Energy storage Transmission HVDC Transmission AC Distribution Onshore wind Offshore wind Wind turbines"
-      ]
-    }
-  ],
-  "markets": [
-    {
-      "id": "mkt-1",
-      "value": "Roxtec lists industries it serves including Infrastructure, Manufacturing industry, Process industries, Power, Offshore oil & gas and Marine.",
+      "id": "app-2",
+      "value": "Roxtec lists industries served including Infrastructure, Manufacturing industry, Process industries, Power, Offshore oil & gas and Marine.",
       "claimEvidence": [
         "ev-3"
       ],
@@ -224,34 +157,36 @@
       "note": "No verbatim quote could be found on the cited page. Check the source before relying on this."
     },
     {
-      "id": "mkt-2",
-      "value": "Roxtec lists Data centers as a specific application area under its infrastructure offerings.",
-      "claimEvidence": [
-        "ev-3"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Data centers"
-      ]
-    }
-  ],
-  "geography": [
-    {
-      "id": "geo-1",
-      "value": "Roxtec serves and supports customers in more than 80 markets worldwide.",
+      "id": "app-3",
+      "value": "Roxtec states that there are 100 offshore wind farms protected by Roxtec cable and pipe seals.",
       "claimEvidence": [
         "ev-1"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "serves and supports cable and pipe seal users in more than 80 markets"
+        "There are... 100 offshore wind farms protected by Roxtec cable and pipe seals."
       ]
-    },
+    }
+  ],
+  "markets": [
     {
-      "id": "geo-2",
-      "value": "Roxtec's headquarters are in Karlskrona, Sweden.",
+      "id": "mkt-1",
+      "value": "Roxtec serves and supports cable and pipe seal users in more than 80 markets.",
+      "claimEvidence": [
+        "ev-1"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "the global Roxtec Group, which serves and supports cable and pipe seal users in more than 80 markets"
+      ]
+    }
+  ],
+  "geography": [
+    {
+      "id": "geo-1",
+      "value": "Roxtec is headquartered in Karlskrona, Sweden and has service and product availability through 30 sales and service subsidiaries and a network of distributors and agents.",
       "claimEvidence": [
         "ev-2",
         "ev-5"
@@ -260,7 +195,7 @@
       "confidence": "high",
       "quotes": [
         "Headquarters Karlskrona, Sweden",
-        "Mailing address: Roxtec International AB Box 540 371 23 Karlskrona Sweden"
+        "We ensure service, support and product availability from local stocks through 30 sales and service subsidiaries and a network of distributors and agents."
       ]
     }
   ],
@@ -279,7 +214,7 @@
     },
     {
       "id": "prio-2",
-      "value": "Roxtec publishes sustainability reporting and highlights improved environmental performance (CDP B rating) and EcoVadis recognition.",
+      "value": "Roxtec is publishing sustainability work and reporting, including news items such as achieving EcoVadis Gold and publishing a global sustainability report.",
       "claimEvidence": [
         "ev-1"
       ],
@@ -287,38 +222,162 @@
       "confidence": "high",
       "quotes": [
         "Roxtec International achieves EcoVadis Gold",
-        "We increased our global CDP scores to a B rating.",
         "The global Roxtec sustainability report 2025 is now available"
       ]
     },
     {
       "id": "prio-3",
-      "value": "Roxtec promotes the use of its seals in HVDC projects (communication on 'Why use Roxtec in HVDC projects?').",
+      "value": "Roxtec reports improvements in environmental performance such as increasing global CDP scores to a B rating.",
       "claimEvidence": [
         "ev-1"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "Why use Roxtec in HVDC projects?"
+        "We increased our global CDP scores to a B rating."
       ]
-    }
-  ],
-  "collaborations": [
+    },
     {
-      "id": "collab-1",
-      "value": "Roxtec ensures service, support and product availability from local stocks through 30 sales and service subsidiaries and a network of distributors and agents.",
+      "id": "prio-4",
+      "value": "Roxtec states that its sealing solutions are tested and certified by major classification societies and certifying authorities.",
       "claimEvidence": [
-        "ev-5"
+        "ev-6"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "We ensure service, support and product availability from local stocks through 30 sales and service subsidiaries and a network of distributors and agents."
+        "Roxtec sealing solutions are tested and certified by all major classification societies and certifying authorities."
+      ]
+    },
+    {
+      "id": "prio-5",
+      "value": "My Roxtec is a personal portal where users can sign in to reach Roxtec data and access digital services.",
+      "claimEvidence": [
+        "ev-4"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "My Roxtec is your personal portal where you can sign in to reach your Roxtec data."
+      ]
+    },
+    {
+      "id": "prio-6",
+      "value": "Users can access the Roxtec Software Suite™ including transit management tools such as the free Roxtec Transit Designer™ via My Roxtec.",
+      "claimEvidence": [
+        "ev-4"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "Access the Roxtec Software Suite™ - Reach your transit management tools, for example the free Roxtec Transit Designer™, and see your latest projects."
+      ]
+    },
+    {
+      "id": "prio-7",
+      "value": "Roxtec has made New EPDs for Roxtec products available.",
+      "claimEvidence": [
+        "ev-1"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "New EPDs for Roxtec products available Do you need environmental product data for your projects?"
       ]
     }
   ],
-  "inferredInterests": [],
+  "collaborations": [],
+  "inferredInterests": [
+    {
+      "id": "inf-1",
+      "value": "Access to HVDC testbeds and project partnerships to validate sealing solutions for high-voltage cable penetrations.",
+      "claimEvidence": [
+        "ev-1",
+        "ev-6"
+      ],
+      "type": "inferred",
+      "confidence": "high",
+      "quotes": [],
+      "reasoning": "Roxtec explicitly promotes its seals, services and software for HVDC projects and offers EMC and certified sealing solutions; HVDC projects will need validated high-voltage cable transit performance and third‑party testing or project testbeds would accelerate adoption.",
+      "basedOnClaims": [
+        "tech-5",
+        "tech-3",
+        "prio-4"
+      ],
+      "isConfirmedPriority": false
+    },
+    {
+      "id": "inf-2",
+      "value": "Participation in sustainability and EPD/LCA programmes or funding themes to further document environmental performance of sealing products.",
+      "claimEvidence": [
+        "ev-1"
+      ],
+      "type": "inferred",
+      "confidence": "high",
+      "quotes": [],
+      "reasoning": "Roxtec publishes EPDs, reports sustainability results (EcoVadis Gold, CDP B rating) and offers product environmental data, so collaborations or funding for life‑cycle assessment, circularity or EPD expansion would align with stated activities.",
+      "basedOnClaims": [
+        "prio-7",
+        "prio-2",
+        "prio-3"
+      ],
+      "isConfirmedPriority": false
+    },
+    {
+      "id": "inf-3",
+      "value": "Partnerships with data center, telecom and infrastructure integrators to standardise transit kits and integrate seals into design workflows.",
+      "claimEvidence": [
+        "ev-1",
+        "ev-3"
+      ],
+      "type": "inferred",
+      "confidence": "medium",
+      "quotes": [],
+      "reasoning": "Roxtec targets industries such as data centers, telecom and infrastructure, provides sealing kits and a design tool (Transit Designer™), suggesting value from partnerships that embed Roxtec products and digital libraries into integrator workflows.",
+      "basedOnClaims": [
+        "app-2",
+        "tech-2",
+        "wtd-1"
+      ],
+      "isConfirmedPriority": false
+    },
+    {
+      "id": "inf-4",
+      "value": "Cooperation with local distributors, system integrators or logistics partners to ensure local stock availability and faster project delivery.",
+      "claimEvidence": [
+        "ev-1",
+        "ev-2",
+        "ev-5"
+      ],
+      "type": "inferred",
+      "confidence": "high",
+      "quotes": [],
+      "reasoning": "Roxtec states it ensures service and product availability through 30 sales and service subsidiaries and a network of distributors and agents, so opportunities to improve local stocking, distribution and project logistics would be relevant.",
+      "basedOnClaims": [
+        "geo-1",
+        "mkt-1"
+      ],
+      "isConfirmedPriority": false
+    },
+    {
+      "id": "inf-5",
+      "value": "R&D collaborations on EMC/HEMP and blast/fire testing with specialised laboratories or defence/critical‑infrastructure organisations.",
+      "claimEvidence": [
+        "ev-6",
+        "ev-7"
+      ],
+      "type": "inferred",
+      "confidence": "medium",
+      "quotes": [],
+      "reasoning": "Roxtec runs an electromagnetic laboratory and highlights HEMP and blast testing; joint R&D or access to specialised test facilities and defence-oriented programmes could help advance shielding, qualification and certification for critical applications.",
+      "basedOnClaims": [
+        "tech-6",
+        "tech-3",
+        "prio-4"
+      ],
+      "isConfirmedPriority": false
+    }
+  ],
   "evidence": [
     {
       "id": "ev-1",
@@ -398,88 +457,69 @@
     "simulated": true,
     "topics": [
       {
-        "topic": "hvdc-cable-sealing",
-        "weight": 0.9,
+        "topic": "sealing-solutions",
+        "weight": 1.0,
         "basedOn": [
-          "prio-3",
-          "app-4"
-        ]
-      },
-      {
-        "topic": "offshore-wind-turbine-transits",
-        "weight": 0.85,
-        "basedOn": [
-          "app-3",
-          "mkt-1"
-        ]
-      },
-      {
-        "topic": "data-centers",
-        "weight": 0.8,
-        "basedOn": [
-          "mkt-2",
-          "tech-6"
-        ]
-      },
-      {
-        "topic": "electromagnetic-shielding-hemp-emc",
-        "weight": 0.8,
-        "basedOn": [
-          "tech-2",
-          "tech-7"
-        ]
-      },
-      {
-        "topic": "nuclear-and-high-integrity-power-transits",
-        "weight": 0.7,
-        "basedOn": [
-          "app-4",
-          "tech-8"
-        ]
-      },
-      {
-        "topic": "explosion-proof-ex-atex-seals",
-        "weight": 0.7,
-        "basedOn": [
-          "tech-4",
+          "wtd-1",
+          "tech-1",
           "wtd-3"
         ]
       },
       {
-        "topic": "installation-training-and-inspection-services",
-        "weight": 0.75,
+        "topic": "emc-shielding",
+        "weight": 0.8,
         "basedOn": [
-          "wtd-3",
-          "collab-1"
+          "tech-3",
+          "tech-6",
+          "tech-4"
         ]
       },
       {
-        "topic": "sustainability-and-environmental-product-data",
+        "topic": "sustainability",
         "weight": 0.6,
         "basedOn": [
-          "prio-2"
+          "prio-2",
+          "prio-3",
+          "prio-7"
+        ]
+      },
+      {
+        "topic": "services-training-inspections",
+        "weight": 0.6,
+        "basedOn": [
+          "wtd-2",
+          "prio-4",
+          "prio-5"
+        ]
+      },
+      {
+        "topic": "software-design-tools",
+        "weight": 0.6,
+        "basedOn": [
+          "tech-2",
+          "prio-6"
+        ]
+      },
+      {
+        "topic": "offshore-wind",
+        "weight": 0.5,
+        "basedOn": [
+          "app-3",
+          "app-2"
         ]
       }
     ]
   },
   "uncertaintiesAndConflicts": [
     {
-      "topic": "local-site-availability",
-      "detail": "* Current page is not available for this local site"
+      "topic": "offshore-wind-farms-statistic",
+      "detail": "The page states \"There are... 100 offshore wind farms protected by Roxtec cable and pipe seals.\" but does not indicate the date or scope of this statistic."
     }
   ],
   "missing": [
     {
-      "field": "named-partnerships-and-consortia",
-      "reason": "No named industrial partners, academic research partners, funded research projects or consortia were listed on the provided pages."
-    },
-    {
-      "field": "detailed-rd-projects",
-      "reason": "The pages describe ongoing development areas (e.g., safety, sustainability) but do not list specific R&D projects, timelines or technical milestones."
-    },
-    {
-      "field": "explicit-sales-channels-pricing-or-procurement-needs",
-      "reason": "Public pages list global presence and distributors but do not disclose procurement plans, pricing or active tendering opportunities."
+      "field": "collaborations",
+      "reason": "No explicit partnerships, joint research projects or consortia are named on the provided pages."
     }
   ],
   "boundaries": {
@@ -497,13 +537,13 @@
     "lastEditedByUser": false,
     "pagesFetched": 8,
     "verification": {
-      "claims": 23,
-      "verifiedFacts": 22,
+      "claims": 26,
+      "verifiedFacts": 20,
       "unverified": 1
     },
     "verificationWarnings": [
-      "c10 (markets): quote not found on cited pages, removed: \"Infrastructure Manufacturing industry Process industries Power Offshore oil & ga\"",
-      "c10 (markets): fact has no verified quote, downgraded to unverified"
+      "c8 (applicationAreas): quote not found on cited pages, removed: \"Infrastructure Manufacturing industry Process industries Power Offshore oil & ga\"",
+      "c8 (applicationAreas): fact has no verified quote, downgraded to unverified"
     ]
   }
 }

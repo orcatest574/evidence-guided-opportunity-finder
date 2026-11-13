@@ -7,12 +7,11 @@
     "website": "https://www.nkt.com"
   },
   "summary": {
-    "text": "NKT designs, manufactures and installs high-, medium- and low-voltage power cables, cable accessories and related cable services. The company is investing heavily in expanding its Karlskrona high-voltage offshore cable factory and states commitments to net-zero emissions and running production sites on green electricity.",
+    "text": "NKT designs, manufactures and installs low-, medium- and high-voltage cable systems and related accessories and services. The company is investing heavily to expand its high-voltage offshore cable production in Karlskrona, Sweden, including a new third extrusion tower and a material test laboratory.",
     "claimEvidence": [
       "ev-1",
       "ev-2",
       "ev-3",
-      "ev-4",
       "ev-5",
       "ev-6",
       "ev-8"
@@ -23,88 +22,157 @@
   "whatTheyDo": [
     {
       "id": "wtd-1",
-      "value": "NKT designs, manufactures and installs high-voltage onshore and offshore cable systems.",
+      "value": "NKT designs, manufactures and installs high-voltage onshore cable systems.",
       "claimEvidence": [
-        "ev-3",
-        "ev-1"
+        "ev-3"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "We design, manufacture, and install premium high-voltage onshore cable systems.",
-        "We are a world-leading cable manufacturer for hv offshore cables systems."
+        "We design, manufacture, and install premium high-voltage onshore cable systems."
       ]
     },
     {
       "id": "wtd-2",
-      "value": "NKT supplies medium-voltage and low-voltage cables and provides cable services such as design, maintenance, logistics and testing.",
+      "value": "NKT is a world-leading manufacturer of high-voltage offshore cable systems.",
       "claimEvidence": [
-        "ev-5",
-        "ev-6"
+        "ev-3",
+        "ev-2"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "you can turn to NKT with all your needs across the spectrum, such as design, maintenance, logistics and test requirements.",
-        "We deliver premium low-voltage cables to meet your specific needs"
+        "We are a world-leading cable manufacturer for hv offshore cables systems.",
+        "We are building the world’s largest high-voltage offshore cable production site"
       ]
     },
     {
       "id": "wtd-3",
-      "value": "NKT produces high-voltage cable accessories including connectors, joints and termination systems targeted at wind power applications.",
-      "claimEvidence": [
-        "ev-8"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "We offer a vast range of solutions for offshore and onshore wind farms, including connectors, joints and termination systems."
-      ]
-    },
-    {
-      "id": "wtd-4",
-      "value": "NKT operates and deploys cable installation vessels and provides cable-laying installation capabilities.",
-      "claimEvidence": [
-        "ev-2"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "a state-of-the-art cable-laying vessel NKT Victoria,",
-        "Market-leading cable installation vessel with record-high capacity"
-      ]
-    }
-  ],
-  "technologies": [
-    {
-      "id": "tech-1",
-      "value": "NKT develops and can produce high-voltage power cables capable of (and in the Karlskrona tower: intended for) up to 640 kV and transmission power levels described as 3 gigawatt.",
-      "claimEvidence": [
-        "ev-2"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "In the tower, NKT will produce power cables up to 640 kV",
-        "the cables could be produced for up to 640,000 volt direct current (DC) and 3 gigawatt – equivalent to the power for all households in Denmark."
-      ]
-    },
-    {
-      "id": "tech-2",
-      "value": "NKT uses aluminium conductors for medium-voltage cables and highlights aluminium-based products such as the AXAL-TT Endurance series.",
+      "value": "NKT produces medium-voltage cables and offers a comprehensive service portfolio including design, maintenance, logistics and test requirements.",
       "claimEvidence": [
         "ev-5"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "aluminium is a fantastic material for medium-voltage cables.",
-        "AXAL-TT Endurance 3.0"
+        "Therefore, you can turn to NKT with all your needs across the spectrum, such as design, maintenance, logistics and test requirements."
+      ]
+    },
+    {
+      "id": "wtd-4",
+      "value": "NKT supplies low-voltage cables, wires and conduits for building and other applications.",
+      "claimEvidence": [
+        "ev-6"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "We are a trusted supplier of durable low-voltage cables, wires, and conduits for every imaginable application."
+      ]
+    }
+  ],
+  "technologies": [
+    {
+      "id": "tech-1",
+      "value": "NKT develops high-voltage cable technologies including HVDC subsea systems and produces power cables with insulation extruded in towers up to 640 kV.",
+      "claimEvidence": [
+        "ev-2",
+        "ev-1"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "In the tower, NKT will produce power cables up to 640 kV",
+        "World´s first HVDC MI offshore cable"
+      ]
+    },
+    {
+      "id": "tech-2",
+      "value": "NKT provides high-voltage cable accessories for a range of applications including GIS/transformer terminations, outdoor terminations and joints (52-550 kV).",
+      "claimEvidence": [
+        "ev-8"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "High-voltage cable accessories (52-550 kV)"
       ]
     },
     {
       "id": "tech-3",
-      "value": "NKT has a dedicated Material Lab for testing, verification and development of advanced cable materials (3,200 m², designed for up to 90 specialists).",
+      "value": "NKT has been awarded and involved in large DC grid projects such as the German Corridor projects and projects at 525 kV.",
+      "claimEvidence": [
+        "ev-1"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "NKT wins the German Corridor projects The 525 kV cable system is a key element in developing a DC grid"
+      ]
+    }
+  ],
+  "applicationAreas": [
+    {
+      "id": "app-1",
+      "value": "NKT’s high-voltage cable systems are used to connect and transport renewable energy, particularly for offshore wind and cross-border transmission.",
+      "claimEvidence": [
+        "ev-2",
+        "ev-8"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "Our high-voltage cables systems are connecting countries bringing renewable energy from one place to another.",
+        "We offer a vast range of solutions for offshore and onshore wind farms, including connectors, joints and termination systems."
+      ]
+    }
+  ],
+  "markets": [
+    {
+      "id": "mkt-1",
+      "value": "NKT serves network owners, contractors and other customers involved in power transmission and installation.",
+      "claimEvidence": [
+        "ev-5"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "contractors who will install the cable"
+      ]
+    }
+  ],
+  "geography": [
+    {
+      "id": "geo-1",
+      "value": "NKT operates world-class high-voltage cable production facilities in Karlskrona, Sweden and Cologne, Germany.",
+      "claimEvidence": [
+        "ev-3",
+        "ev-2"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "One located in Cologne, Germany, the other in Karlskrona, Sweden."
+      ]
+    }
+  ],
+  "statedPriorities": [
+    {
+      "id": "prio-1",
+      "value": "NKT is expanding the Karlskrona factory to become the world's largest high-voltage offshore cable production plant, including a new third extrusion tower named NKT Crown.",
+      "claimEvidence": [
+        "ev-2"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "We are building the world’s largest high-voltage offshore cable production site",
+        "NKT Crown is the name of the third extrusion tower at the Swedish high-voltage cable factory in Karlskrona."
+      ]
+    },
+    {
+      "id": "prio-2",
+      "value": "NKT inaugurated a new 3,200 m² Material Lab to test, verify and develop advanced materials, designed for up to 90 specialists.",
       "claimEvidence": [
         "ev-2"
       ],
@@ -116,99 +184,8 @@
       ]
     },
     {
-      "id": "tech-4",
-      "value": "Historically NKT developed a superconducting cable and launched the world’s first HVDC mass-impregnated (MI) submarine cable.",
-      "claimEvidence": [
-        "ev-1"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "NKT became the first company to develop a superconducting cable.",
-        "World´s first HVDC MI offshore cable NKT launches the first HVDC MI submarine cable."
-      ]
-    }
-  ],
-  "applicationAreas": [
-    {
-      "id": "app-1",
-      "value": "NKT supplies cables and systems for offshore wind and the renewable power transition, and states experience in more than 50 awarded offshore wind projects since 2010.",
-      "claimEvidence": [
-        "ev-2",
-        "ev-4"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "we are a leading supplier for renewable power transition with more than 50 awarded projects for offshore wind since 2010.",
-        "Erbjuder design, produktion och installation av högspänningskablar för kraftöverföring, särskilt för förnybar energi och offshore-vindkraft"
-      ]
-    },
-    {
-      "id": "app-2",
-      "value": "NKT supplies low-voltage product types used in buildings, flexible applications, control (including automotive and instrumentation), 1 kV applications and telecom energy site solutions.",
-      "claimEvidence": [
-        "ev-6"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Building wires",
-        "Flexible cables",
-        "Control cables are designed to provide input for objects being controlled and are load-bearing cables, used in automotive and instrumentation applications."
-      ]
-    }
-  ],
-  "markets": [
-    {
-      "id": "mkt-1",
-      "value": "NKT serves utilities and network owners, wind power projects (offshore and onshore), contractors and other infrastructure customers.",
-      "claimEvidence": [
-        "ev-5",
-        "ev-8",
-        "ev-3"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "We offer a vast range of solutions for offshore and onshore wind farms, including connectors, joints and termination systems.",
-        "reinforcing the UK power grid"
-      ]
-    }
-  ],
-  "geography": [
-    {
-      "id": "geo-1",
-      "value": "NKT operates high-voltage production facilities in Karlskrona, Sweden and Cologne, Germany and lists regional sites across several countries.",
-      "claimEvidence": [
-        "ev-2",
-        "ev-3"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "One located in Cologne, Germany, the other in Karlskrona, Sweden.",
-        "We are building the world’s largest high-voltage offshore cable production site"
-      ]
-    }
-  ],
-  "statedPriorities": [
-    {
-      "id": "prio-1",
-      "value": "NKT is expanding its Karlskrona factory and states it is building the world’s largest high-voltage offshore cable production plant with new assets to be operational from 2027.",
-      "claimEvidence": [
-        "ev-2"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "We are building the world’s largest high-voltage offshore cable production site",
-        "The new assets will be operational from 2027"
-      ]
-    },
-    {
-      "id": "prio-2",
-      "value": "NKT states a corporate commitment to net-zero emissions and that it began running all production sites on green electricity.",
+      "id": "prio-3",
+      "value": "NKT has committed to net-zero emissions, signed the Science Based Target initiative and began running all production sites on green electricity.",
       "claimEvidence": [
         "ev-1"
       ],
@@ -218,41 +195,112 @@
         "NKT commits to net-zero emissions",
         "Begins running all production sites on green electricity."
       ]
-    }
-  ],
-  "collaborations": [
+    },
     {
-      "id": "collab-1",
-      "value": "NKT has grown through acquisitions including ABB HV Cables in Sweden (2017), Ericsson’s cable operations (2013) and Ventcroft (2022).",
+      "id": "prio-4",
+      "value": "NKT has deployed and expanded cable installation capability including the vessel NKT Victoria and is building harbour facilities to support a second vessel, NKT Eleonora.",
       "claimEvidence": [
-        "ev-1"
+        "ev-2"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "2017 Acquisition of factory in Karlskrona With the acquisition of ABB HV Cables in Sweden",
-        "2013 We acquire Ericsson’s cable operations",
-        "2022 Fire-resistant cables Acquisition of Ventcroft in the United Kingdom"
+        "Market-leading cable installation vessel with record-high capacity",
+        "we are building a new harbour to support preparations for our second cable-laying vessel, NKT Eleonora."
       ]
-    },
+    }
+  ],
+  "collaborations": [],
+  "inferredInterests": [
     {
-      "id": "collab-2",
-      "value": "NKT has been awarded major HVDC and grid reinforcement projects, citing German Corridor projects and orders such as SuedLink and more recent UK projects.",
+      "id": "inf-1",
+      "value": "Access to collaborative material-testing programs or external testbeds to validate insulation and polymer performance at HVDC and high-temperature conditions.",
       "claimEvidence": [
         "ev-1",
+        "ev-2"
+      ],
+      "type": "inferred",
+      "confidence": "high",
+      "quotes": [],
+      "reasoning": "NKT has invested in a 3,200 m² Material Lab designed for testing and development of advanced materials (c11) and is producing high-voltage cables up to 640 kV and HVDC systems (c5). External material testbeds and collaborative R&D could accelerate qualification for new insulation systems and high-temperature operation.",
+      "basedOnClaims": [
+        "prio-2",
+        "tech-1"
+      ],
+      "isConfirmedPriority": false
+    },
+    {
+      "id": "inf-2",
+      "value": "Partnerships with offshore-wind developers and installation/installation-services providers for integrated cable system delivery and installation.",
+      "claimEvidence": [
+        "ev-2",
+        "ev-8",
+        "ev-3"
+      ],
+      "type": "inferred",
+      "confidence": "high",
+      "quotes": [],
+      "reasoning": "NKT positions Karlskrona close to Europe’s offshore wind market and notes over 50 awarded offshore wind projects (c2, c7) and operates cable-laying vessels and harbour infrastructure (c13), indicating interest in end-to-end project collaboration with wind developers and installers.",
+      "basedOnClaims": [
+        "wtd-2",
+        "app-1",
+        "prio-4"
+      ],
+      "isConfirmedPriority": false
+    },
+    {
+      "id": "inf-3",
+      "value": "Participation in funding calls or consortia for European HVDC grid and cross-border transmission projects targeting decarbonisation and energy security.",
+      "claimEvidence": [
+        "ev-1",
+        "ev-2"
+      ],
+      "type": "inferred",
+      "confidence": "medium",
+      "quotes": [],
+      "reasoning": "NKT cites involvement in large DC grid projects such as German Corridor projects at 525 kV (c14) and is expanding production capacity to support the green transition (c10), so R&D/implementation funding and project consortia for HVDC links align with their activities.",
+      "basedOnClaims": [
+        "tech-3",
+        "prio-1"
+      ],
+      "isConfirmedPriority": false
+    },
+    {
+      "id": "inf-4",
+      "value": "Logistics, harbour-infrastructure and marine services partnerships to support large-scale offshore cable manufacturing, storage and vessel operations.",
+      "claimEvidence": [
         "ev-2",
         "ev-3"
       ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "NKT wins the German Corridor projects The 525 kV cable system is a key element in developing a DC grid",
-        "NKT awarded over EUR 1bn order for the SuedLink high-voltage DC project",
-        "NKT signs record order for power cable project Eastern Green Link 3 reinforcing the UK power grid"
-      ]
+      "type": "inferred",
+      "confidence": "medium",
+      "quotes": [],
+      "reasoning": "NKT is building a new harbour to support a second cable-laying vessel and highlights market-leading cable installation vessels (c13), and is expanding factory capacity in a coastal location (c9, c10), suggesting opportunities for partners in marine logistics and harbour engineering.",
+      "basedOnClaims": [
+        "prio-4",
+        "geo-1",
+        "prio-1"
+      ],
+      "isConfirmedPriority": false
+    },
+    {
+      "id": "inf-5",
+      "value": "Automation, extrusion equipment suppliers and workforce-skills programmes to scale tower-based high-voltage cable extrusion and assembly.",
+      "claimEvidence": [
+        "ev-1",
+        "ev-2"
+      ],
+      "type": "inferred",
+      "confidence": "medium",
+      "quotes": [],
+      "reasoning": "NKT is constructing multiple tall extrusion towers (including a 200 m tower producing up to 640 kV cables) and plans a large production capacity increase and hiring (c10, c5), indicating potential interest in automation technologies and workforce development to scale high-precision extrusion manufacturing.",
+      "basedOnClaims": [
+        "prio-1",
+        "tech-1"
+      ],
+      "isConfirmedPriority": false
     }
   ],
-  "inferredInterests": [],
   "evidence": [
     {
       "id": "ev-1",
@@ -333,67 +381,68 @@
     "topics": [
       {
         "topic": "offshore-wind",
-        "weight": 0.95,
+        "weight": 1.0,
         "basedOn": [
+          "wtd-2",
           "app-1",
-          "wtd-3",
-          "wtd-4"
-        ]
-      },
-      {
-        "topic": "high-voltage-cables",
-        "weight": 0.95,
-        "basedOn": [
-          "wtd-1",
-          "tech-1",
-          "prio-1"
+          "prio-4"
         ]
       },
       {
         "topic": "hvdc",
-        "weight": 0.8,
+        "weight": 0.9,
         "basedOn": [
           "tech-1",
-          "collab-2"
+          "tech-3"
         ]
       },
       {
-        "topic": "materials-testing-and-rd",
-        "weight": 0.75,
+        "topic": "cable-manufacturing",
+        "weight": 0.9,
         "basedOn": [
-          "tech-3",
-          "tech-2"
+          "wtd-1",
+          "prio-1",
+          "tech-1"
         ]
       },
       {
-        "topic": "cable-installation-vessels",
-        "weight": 0.7,
-        "basedOn": [
-          "wtd-4",
-          "prio-1"
-        ]
-      },
-      {
-        "topic": "sustainability-and-decarbonisation",
+        "topic": "materials-testing",
         "weight": 0.7,
         "basedOn": [
           "prio-2",
-          "tech-3"
+          "tech-1"
+        ]
+      },
+      {
+        "topic": "cable-accessories",
+        "weight": 0.6,
+        "basedOn": [
+          "tech-2",
+          "wtd-3"
+        ]
+      },
+      {
+        "topic": "manufacturing-expansion",
+        "weight": 0.6,
+        "basedOn": [
+          "prio-1",
+          "prio-4"
         ]
       }
     ]
   },
   "uncertaintiesAndConflicts": [
     {
-      "topic": "geographic-market-reach",
-      "detail": "Pages emphasise Europe (Karlskrona, Cologne, German projects, UK orders) but also use global phrases; the company’s full global market footprint and priority markets outside Europe are not clearly enumerated on the provided pages."
-    },
-    {
-      "topic": "status-of-nkt-eleonora",
-      "detail": "Karlskrona page describes preparations for a second vessel, NKT Eleonora, and a new harbour under construction but does not state the vessel's operational status or delivery date."
+      "topic": "geography",
+      "detail": "While Karlskrona and Cologne are explicitly named production sites (c9), the extent and focus of NKT's commercial markets outside Europe (for example North America or Asia) is not specified in the provided pages."
     }
   ],
-  "missing": [],
+  "missing": [
+    {
+      "field": "collaborations",
+      "reason": "No named partnerships, research projects or consortia are listed on the provided pages."
+    }
+  ],
   "boundaries": {
     "visibility": "public",
     "containsNonPublicInformation": false,
@@ -409,12 +458,12 @@
     "lastEditedByUser": false,
     "pagesFetched": 8,
     "verification": {
-      "claims": 16,
-      "verifiedFacts": 16,
+      "claims": 19,
+      "verifiedFacts": 14,
       "unverified": 0
     },
     "verificationWarnings": [
-      "c11 (markets): quote not found on cited pages, removed: \"NKT medium-voltage cables ensure the greatest possible value for network owners.\""
+      "c8 (markets): quote not found on cited pages, removed: \"NKT medium-voltage cables ensure the greatest possible value for network owners.\""
     ]
   }
 }

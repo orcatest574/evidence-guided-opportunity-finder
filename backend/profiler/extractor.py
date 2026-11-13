@@ -47,9 +47,17 @@ class Topic(BaseModel):
     based_on: list[str] = Field(description="local_ids of supporting claims")
 
 
+class InferredInterest(BaseModel):
+    value: str = Field(description="One readable English sentence (not a slug) naming a concrete type of opportunity that could help the company: a kind of testbed, funding theme, event topic or partner competence")
+    confidence: Literal["high", "medium", "low"]
+    reasoning: str = Field(description="Why the facts suggest this interest")
+    based_on: list[str] = Field(description="local_ids of the fact claims it builds on")
+
+
 class Extraction(BaseModel):
     summary: str = Field(description="Two neutral sentences about what the company does, based only on facts")
-    claims: list[ExtractedClaim]
+    claims: list[ExtractedClaim] = Field(description="Fact claims for every section except inferredInterests")
+    inferred_interests: list[InferredInterest] = Field(description="3 to 6 inferred interests. Never empty")
     missing: list[MissingField]
     uncertainties: list[Uncertainty]
     topics: list[Topic]
@@ -75,7 +83,9 @@ Rules:
 - Only cite URLs that appear in a <page url=...> attribute.
 - Do not infer confidential plans, finances, procurement needs or willingness to collaborate.
 - When information for a section is absent, add an entry to missing instead of guessing. Put conflicting or outdated information in uncertainties.
-- Prefer fewer, well-supported claims over many weak ones."""
+- Prefer fewer, well-supported claims over many weak ones.
+- collaborations means partnerships, joint research projects and consortia only. Acquisitions, customer orders and awarded contracts are not collaborations; leave them out unless the company presents them as a stated priority.
+- Always give 3 to 6 inferred_interests. Each names a concrete type of opportunity that could help the company (for example a kind of testbed, a funding theme, an event topic or a partner competence) and lists the fact claims it builds on in based_on."""
 
 
 def _render_pages(pages: list[Page]) -> str:
@@ -105,6 +115,16 @@ def extract_profile(member: Member, pages: list[Page]) -> Extraction:
         raise RuntimeError(f"The model declined to profile {member.name}: {choice.message.refusal}")
     if choice.finish_reason == "length" or choice.message.parsed is None:
         raise RuntimeError(f"Incomplete answer for {member.name} (finish_reason={choice.finish_reason}). Raise MAX_COMPLETION_TOKENS in config.py.")
+    parsed = choice.message.parsed
+    # Move inferred interests into the claim list so the rest of the pipeline treats them like other claims.
+    facts = {c.local_id: c for c in parsed.claims}
+    for i, interest in enumerate(parsed.inferred_interests, 1):
+        basis = [facts[b] for b in interest.based_on if b in facts]
+        parsed.claims.append(ExtractedClaim(
+            local_id=f"inf{i}", section="inferredInterests", value=interest.value, type="inferred",
+            confidence=interest.confidence, source_urls=sorted({u for c in basis for u in c.source_urls}),
+            quotes=[], reasoning=interest.reasoning, based_on=interest.based_on,
+        ))
     usage = response.usage
     log.info("  %s: %d claims (%d input / %d output tokens)", config.MODEL, len(choice.message.parsed.claims), usage.prompt_tokens, usage.completion_tokens)
     return choice.message.parsed

@@ -7,7 +7,7 @@
     "website": "https://www.ericsson.com"
   },
   "summary": {
-    "text": "Ericsson develops and provides telecommunications infrastructure, cloud-native software and services (including 5G/6G, OSS/BSS, managed network services and a fintech platform). The company serves communication service providers, enterprises, public sector and financial partners globally and emphasises AI-driven network automation, R&D and ecosystem collaborations.",
+    "text": "Ericsson develops and supplies telecommunications infrastructure, cloud software and services across networks, cloud, OSS/BSS, automation/AI and enterprise connectivity. The company emphasizes R&D (including 6G), AI-enabled autonomous network operations, Open RAN and fintech platform offerings and works with global partners and service providers.",
     "claimEvidence": [
       "ev-1",
       "ev-2",
@@ -15,7 +15,6 @@
       "ev-4",
       "ev-5",
       "ev-6",
-      "ev-7",
       "ev-8"
     ],
     "type": "inferred",
@@ -31,24 +30,100 @@
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "Ericsson Utvecklar och tillhandahåller infrastruktur, programvara och tjänster för informations- och kommunikationsteknologi till teleoperatörer och företag"
+        "Utvecklar och tillhandahåller infrastruktur, programvara och tjänster för informations- och kommunikationsteknologi till teleoperatörer och företag"
       ]
     },
     {
       "id": "wtd-2",
-      "value": "Ericsson offers products and services including 5G RAN, 5G Core, 5G Transport, Network services, OSS/BSS, Automation and AI, and Managed services.",
+      "value": "Ericsson positions itself as a company that creates global communications connections and solutions that enable new business and societal outcomes.",
       "claimEvidence": [
         "ev-1"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "5G RAN 5G Core 5G Transport Network services OSS/BSS Automation and AI Managed services"
+        "We create connections that make the unimaginable possible."
       ]
     },
     {
       "id": "wtd-3",
-      "value": "Ericsson provides a Fintech platform that supports digital wallets, payments, remittance, lending, rewards, embedded finance and digital currency use cases.",
+      "value": "Ericsson's key offerings include 5G RAN, 5G Core, 5G Transport, network services, OSS/BSS, automation and AI, and managed services.",
+      "claimEvidence": [
+        "ev-1"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "Service providers 5G RAN 5G Core 5G Transport Network services OSS/BSS Automation and AI Managed services"
+      ]
+    }
+  ],
+  "technologies": [
+    {
+      "id": "tech-1",
+      "value": "Ericsson is engaged in the development of 6G and anticipates it will deliver an extended-reality experience.",
+      "claimEvidence": [
+        "ev-1"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "Presently, Ericsson is also engaged in the development of 6G, anticipating that it will deliver an “extended reality” experience, engaging all our senses."
+      ]
+    },
+    {
+      "id": "tech-2",
+      "value": "Ericsson provides Open RAN services as part of its network services portfolio.",
+      "claimEvidence": [
+        "ev-3"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "Open RAN Services"
+      ]
+    },
+    {
+      "id": "tech-3",
+      "value": "Ericsson develops and applies agentic AI and AI-driven automation in its support and network services.",
+      "claimEvidence": [
+        "ev-3"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "Differentiated Support delivers modular, near real-time, trusted decision intelligence using agentic AI."
+      ]
+    },
+    {
+      "id": "tech-4",
+      "value": "Ericsson promotes cloud-native software and cloud solutions across its product and services portfolio.",
+      "claimEvidence": [
+        "ev-1"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "Cloud native"
+      ]
+    },
+    {
+      "id": "tech-5",
+      "value": "Ericsson's Fintech platform is modular and supports cloud-native or on-prem deployment.",
+      "claimEvidence": [
+        "ev-6"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "Cloud-native or on-prem deployment"
+      ]
+    }
+  ],
+  "applicationAreas": [
+    {
+      "id": "app-1",
+      "value": "Ericsson's Fintech platform supports use cases such as digital wallets, payments, remittance, rewards, embedded finance and digital currency.",
       "claimEvidence": [
         "ev-6"
       ],
@@ -59,152 +134,33 @@
       ]
     },
     {
-      "id": "wtd-4",
-      "value": "Ericsson Support Services include predictive analytics to prevent imminent network issues, fast network-level fault isolation and hardware services across product lifecycles.",
-      "claimEvidence": [
-        "ev-5"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Our support offerings include predictive analytics to prevent imminent network issues, speedy network-level fault isolation and hardware services throughout the lifecycle of our products."
-      ]
-    }
-  ],
-  "technologies": [
-    {
-      "id": "tech-1",
-      "value": "Ericsson works on 5G, is engaged in development of 6G, and has a long-standing role in enabling the Internet of Things.",
-      "claimEvidence": [
-        "ev-1"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "For long now, Ericsson has been dedicated to advancing 5G, enabling the Internet of Things. Presently, Ericsson is also engaged in the development of 6G"
-      ]
-    },
-    {
-      "id": "tech-2",
-      "value": "Ericsson uses AI, machine learning and cognitive technologies for network automation, optimization and decision intelligence.",
-      "claimEvidence": [
-        "ev-7",
-        "ev-3"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Enable performance and operational excellence through AI",
-        "AI and data-driven deployment"
-      ]
-    },
-    {
-      "id": "tech-3",
-      "value": "Ericsson offers cloud-native or on-prem deployment options and positions cloud-native software and cloud infrastructure as part of its offerings.",
-      "claimEvidence": [
-        "ev-6",
-        "ev-1"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Cloud-native or on-prem deployment",
-        "Cloud Core Cloud infrastructure"
-      ]
-    },
-    {
-      "id": "tech-4",
-      "value": "Ericsson provides Open RAN services and uses a 'Pre-integrated Cloud RAN' approach adapted to customer Open RAN scenarios.",
-      "claimEvidence": [
-        "ev-3"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Open RAN Services Ericsson Open RAN Services utilize the industrialized approach of Pre-integrated Cloud RAN solutions"
-      ]
-    },
-    {
-      "id": "tech-5",
-      "value": "Ericsson describes a 'Site Digital Twin' capability that lowers operational expenditure and digitalizes telecom site lifecycles.",
-      "claimEvidence": [
-        "ev-3"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Ericsson Site Digital Twin lowers operational expenditure."
-      ]
-    },
-    {
-      "id": "tech-6",
-      "value": "Ericsson references 'Quantum-safe networks' among future technologies and security topics.",
-      "claimEvidence": [
-        "ev-1"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Quantum-safe networks"
-      ]
-    }
-  ],
-  "applicationAreas": [
-    {
-      "id": "app-1",
-      "value": "Ericsson's solutions are used across service providers, enterprises and public sector industries including manufacturing, public safety, retail, finance and healthcare.",
-      "claimEvidence": [
-        "ev-1"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Industries Enterprises Enterprises Manufacturing Public safety Retail Finance Healthcare"
-      ]
-    },
-    {
       "id": "app-2",
-      "value": "Ericsson's Wireless WAN solutions provide connectivity for fixed locations, IoT devices, and vehicles.",
+      "value": "Ericsson's Wireless WAN solutions target fixed locations, IoT devices and vehicles and are deployable in retail stores, remote offices and fleets of vehicles.",
       "claimEvidence": [
         "ev-8"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "Our WWAN solutions provide highly reliable and secure connectivity for fixed locations, IoT devices, and vehicles."
-      ]
-    },
-    {
-      "id": "app-3",
-      "value": "Ericsson promotes private networks and mission critical communications and highlights 5G use cases such as air traffic control.",
-      "claimEvidence": [
-        "ev-1",
-        "ev-3"
-      ],
-      "type": "fact",
-      "confidence": "high",
-      "quotes": [
-        "Private networks",
-        "Transforming Air Traffic Control with 5G 5G revolutionizing air traffic control for safer, smarter skies."
+        "Whether deployed in retail stores, remote offices, or fleets of vehicles, our solutions ensure that businesses remain connected even in the most challenging situations."
       ]
     }
   ],
   "markets": [
     {
       "id": "mkt-1",
-      "value": "Ericsson positions its Fintech platform to serve communication service providers (CSPs), enterprises, banks and governments for digital financial services.",
+      "value": "Ericsson serves communication service providers (CSPs), enterprises, banks and governments.",
       "claimEvidence": [
-        "ev-6"
+        "ev-4"
       ],
-      "type": "fact",
+      "type": "unverified",
       "confidence": "high",
-      "quotes": [
-        "We help communication service providers (CSPs), enterprises, banks and governments build and scale financial services confidently."
-      ]
+      "quotes": [],
+      "note": "No verbatim quote could be found on the cited page. Check the source before relying on this."
     },
     {
       "id": "mkt-2",
-      "value": "Over 300 communication service providers (CSPs) use Ericsson OSS/BSS products and solutions.",
+      "value": "Ericsson reports that over 300 communication service providers use its OSS/BSS products and solutions.",
       "claimEvidence": [
         "ev-4"
       ],
@@ -218,7 +174,7 @@
   "geography": [
     {
       "id": "geo-1",
-      "value": "Ericsson states it has local presence in 180+ countries.",
+      "value": "Ericsson reports a local presence in over 180 countries.",
       "claimEvidence": [
         "ev-4"
       ],
@@ -227,76 +183,170 @@
       "quotes": [
         "180 + countries local presence"
       ]
+    },
+    {
+      "id": "geo-2",
+      "value": "Ericsson is listed by Blue Science Park with locations in Karlskrona and Stockholm (Sweden).",
+      "claimEvidence": [
+        "ev-2"
+      ],
+      "type": "unverified",
+      "confidence": "high",
+      "quotes": [],
+      "note": "No verbatim quote could be found on the cited page. Check the source before relying on this."
     }
   ],
   "statedPriorities": [
     {
       "id": "prio-1",
-      "value": "Ericsson emphasises continuous innovation, research and R&D investment including multiple R&D centres and a large R&D workforce.",
+      "value": "Ericsson states that continuous innovation and investment in expertise and research and development centers are key to its strategy.",
       "claimEvidence": [
         "ev-1"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "21.00 R&D centers 27739.00 R&D experts"
+        "That's why we invest in expertise and research and development centers."
       ]
     },
     {
       "id": "prio-2",
-      "value": "Ericsson is developing AI-driven network support capabilities, including Service Continuity AI apps and 'Differentiated Support' using agentic AI.",
+      "value": "Ericsson prioritizes a move toward autonomous operations by connecting operational data, AI-led observability and governed automation.",
       "claimEvidence": [
-        "ev-3"
+        "ev-4"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "Differentiated Support delivers modular, near real-time, trusted decision intelligence using agentic AI",
-        "Service Continuity AI Apps – a novel, agile, always-on, self-learning AI data-driven apps"
+        "We help you connect operational data, AI-led observability and governed automation to prevent issues, protect revenue, accelerate service activation and deliver more resilient customer experiences."
+      ]
+    },
+    {
+      "id": "prio-3",
+      "value": "Ericsson offers support services including predictive analytics, network-level fault isolation and hardware lifecycle services to ensure high-performing networks.",
+      "claimEvidence": [
+        "ev-5"
+      ],
+      "type": "fact",
+      "confidence": "high",
+      "quotes": [
+        "Our support offerings include predictive analytics to prevent imminent network issues, speedy network-level fault isolation and hardware services throughout the lifecycle of our products."
       ]
     }
   ],
   "collaborations": [
     {
       "id": "collab-1",
-      "value": "Ericsson co-authored a paper 'Securing an Open AI-Driven Mobile Network' with AT&T on security for AI-driven and open networks.",
+      "value": "Ericsson has co-authored work with AT&T on securing AI-driven and open mobile networks.",
       "claimEvidence": [
         "ev-1"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "Securing an Open AI-Driven Mobile Network Co-written with AT&T, this paper explores the security challenges as networks evolve to become more AI-driven and open"
+        "Securing an Open AI-Driven Mobile Network Co-written with AT&T"
       ]
     },
     {
       "id": "collab-2",
-      "value": "Ericsson collaborated with Far EasTone using its Service Continuity AI app suite, reporting a 25% energy saving in that collaboration.",
+      "value": "Ericsson has collaborated with Far EasTone on a sustainable network project that saved energy using its Service Continuity AI app suite.",
       "claimEvidence": [
         "ev-3"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "Service Continuity AI app suite supported a sustainable, healthy network and saved 25% energy in a collaboration with Far EasTone."
+        "Ericsson & Far EasTone: Sustainable healthy Network"
       ]
     },
     {
       "id": "collab-3",
-      "value": "Ericsson lists fintech partnerships and collaborations including with MTN Group, Mastercard and FIS in press items and customer stories.",
+      "value": "Ericsson partners with financial and telecom ecosystem players including MTN Group and Mastercard on fintech and mobile money initiatives.",
       "claimEvidence": [
         "ev-6"
       ],
       "type": "fact",
       "confidence": "high",
       "quotes": [
-        "Ericsson and FIS aim to make deploying wallet-led digital financial services easier",
-        "Ericsson and MTN Group Fintech modernize Mobile Money platform to support Ambition 2030",
         "Ericsson and Mastercard enhance global digital money movement and accelerate digital financial inclusion"
       ]
     }
   ],
-  "inferredInterests": [],
+  "inferredInterests": [
+    {
+      "id": "inf-1",
+      "value": "Open RAN interoperability and integration testbeds and SI partners would be relevant opportunities to support Ericsson's Open RAN services and cloudified RAN offerings.",
+      "claimEvidence": [],
+      "type": "inferred",
+      "confidence": "medium",
+      "quotes": [],
+      "reasoning": "Ericsson offers Open RAN services and promotes cloudifying the RAN; interoperability and system-integration testbeds help validate multi-vendor Open RAN deployments before operator roll-out.",
+      "basedOnClaims": [
+        "tech-2",
+        "wtd-3"
+      ],
+      "isConfirmedPriority": false
+    },
+    {
+      "id": "inf-2",
+      "value": "AI research collaborations, agentic-AI testbeds and edge/agent orchestration partners could accelerate Ericsson's autonomous network and differentiated support offerings.",
+      "claimEvidence": [],
+      "type": "inferred",
+      "confidence": "medium",
+      "quotes": [],
+      "reasoning": "Ericsson is using agentic AI in Differentiated Support and prioritizes connecting operational data with AI-led observability for autonomous operations; collaborative AI testbeds and research partners would help mature agentic AI in telecom contexts.",
+      "basedOnClaims": [
+        "tech-3",
+        "prio-2",
+        "prio-3"
+      ],
+      "isConfirmedPriority": false
+    },
+    {
+      "id": "inf-3",
+      "value": "Regulatory sandbox projects and fintech pilots in emerging markets are likely relevant opportunities to expand Ericsson's fintech platform and mobile-money ecosystem work.",
+      "claimEvidence": [],
+      "type": "inferred",
+      "confidence": "medium",
+      "quotes": [],
+      "reasoning": "Ericsson’s Fintech Platform supports wallets, remittance and embedded finance and Ericsson already works with partners such as MTN and Mastercard, indicating benefit from regulatory pilot environments and local fintech partners.",
+      "basedOnClaims": [
+        "app-1",
+        "collab-3",
+        "mkt-1"
+      ],
+      "isConfirmedPriority": false
+    },
+    {
+      "id": "inf-4",
+      "value": "6G research consortia, XR/extended-reality testbeds and sensor-integration partnerships could support Ericsson's 6G ambitions and extended reality vision.",
+      "claimEvidence": [],
+      "type": "inferred",
+      "confidence": "medium",
+      "quotes": [],
+      "reasoning": "Ericsson states active engagement in 6G development and anticipates extended reality use cases; cross-disciplinary 6G consortia and XR testbeds would accelerate prototyping and standardization.",
+      "basedOnClaims": [
+        "tech-1",
+        "prio-1"
+      ],
+      "isConfirmedPriority": false
+    },
+    {
+      "id": "inf-5",
+      "value": "Operator-led sustainability and energy-efficiency trials for networks (energy-saving AI applications and site digital twins) would align with Ericsson's sustainability and Service Continuity AI work.",
+      "claimEvidence": [],
+      "type": "inferred",
+      "confidence": "medium",
+      "quotes": [],
+      "reasoning": "Ericsson highlights sustainability, R&D investment and an energy-saving case with Far EasTone using Service Continuity AI apps; energy-efficiency trials and site-digital-twin pilots would build on that experience.",
+      "basedOnClaims": [
+        "prio-1",
+        "collab-2",
+        "prio-3"
+      ],
+      "isConfirmedPriority": false
+    }
+  ],
   "evidence": [
     {
       "id": "ev-1",
@@ -377,67 +427,51 @@
     "topics": [
       {
         "topic": "open-ran",
-        "weight": 0.8,
-        "basedOn": [
-          "tech-4",
-          "wtd-2"
-        ]
-      },
-      {
-        "topic": "agentic-ai-and-automation",
         "weight": 0.9,
         "basedOn": [
-          "prio-2",
-          "tech-2"
+          "tech-2",
+          "wtd-3"
         ]
       },
       {
-        "topic": "energy-efficiency-and-sustainability",
+        "topic": "autonomous-networks",
+        "weight": 0.9,
+        "basedOn": [
+          "tech-3",
+          "prio-2",
+          "prio-3"
+        ]
+      },
+      {
+        "topic": "fintech-mobile-money",
+        "weight": 0.85,
+        "basedOn": [
+          "app-1",
+          "collab-3",
+          "tech-5"
+        ]
+      },
+      {
+        "topic": "6g",
         "weight": 0.6,
         "basedOn": [
-          "collab-2",
+          "tech-1",
           "prio-1"
         ]
       },
       {
-        "topic": "fintech-and-digital-wallets",
-        "weight": 0.9,
-        "basedOn": [
-          "wtd-3",
-          "collab-3",
-          "mkt-1"
-        ]
-      },
-      {
-        "topic": "digital-twin-and-site-automation",
-        "weight": 0.6,
-        "basedOn": [
-          "tech-5",
-          "wtd-2"
-        ]
-      },
-      {
-        "topic": "wireless-wan-and-iot-connectivity",
-        "weight": 0.6,
-        "basedOn": [
-          "app-2",
-          "app-3"
-        ]
-      },
-      {
-        "topic": "cybersecurity-quantum-safe-networks",
+        "topic": "wireless-wan",
         "weight": 0.5,
         "basedOn": [
-          "tech-6",
-          "wtd-4"
+          "app-2"
         ]
       }
     ]
   },
   "uncertaintiesAndConflicts": [
     {
-      "topic": "geography",
-      "detail": "The Fintech page lists '24.00 Countries' while the OSS/BSS page states '180 + countries local presence'; the two figures appear inconsistent and likely refer to different scopes or contexts."
+      "topic": "numerical-reporting-format",
+      "detail": "Some numeric facts on the site use unusual formatting (for example '21.00 R&D centers' and '24.00 Countries'), which may reflect display formatting rather than precise counts."
     }
   ],
   "missing": [],
@@ -456,10 +490,15 @@
     "lastEditedByUser": false,
     "pagesFetched": 8,
     "verification": {
-      "claims": 21,
-      "verifiedFacts": 21,
-      "unverified": 0
+      "claims": 25,
+      "verifiedFacts": 18,
+      "unverified": 2
     },
-    "verificationWarnings": []
+    "verificationWarnings": [
+      "c10 (markets): quote not found on cited pages, removed: \"We help communication service providers (CSPs), enterprises, banks and governmen\"",
+      "c10 (markets): fact has no verified quote, downgraded to unverified",
+      "c12 (geography): quote not found on cited pages, removed: \"Ort Karlskrona , Stockholm\"",
+      "c12 (geography): fact has no verified quote, downgraded to unverified"
+    ]
   }
 }

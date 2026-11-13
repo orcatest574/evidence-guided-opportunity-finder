@@ -12,6 +12,7 @@ MEMBERS_FILE = BACKEND_DIR / "members.json"      # which companies to profile
 CACHE_DIR = BACKEND_DIR / "cache"                # fetched pages (not committed)
 OUTPUT_DIR = BACKEND_DIR / "output"              # generated profiles
 APP_DATA_DIR = REPO_ROOT / "src" / "data" / "companies"  # where the web app reads profiles
+APP_SOURCES_DIR = REPO_ROOT / "src" / "data" / "sources"  # page texts for quote highlighting
 
 # ---- AI model (Azure OpenAI), read from the .env file in the repo root ----
 # .env must contain API_KEY, AI_URL and MODEL_NAME. It is git-ignored: never commit it.
