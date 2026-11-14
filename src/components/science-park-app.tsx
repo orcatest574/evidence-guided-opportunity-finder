@@ -5,6 +5,7 @@ import { AskPanel } from "./vsp/ask-panel";
 import { EcosystemView } from "./vsp/ecosystem-view";
 import { MembersView } from "./vsp/members-view";
 import { MemberOpportunities, OpportunityDetail, StaffOpportunities } from "./vsp/opportunities-view";
+import { EventsList } from "./vsp/events-list";
 import { ProfileView } from "./vsp/profile-view";
 import { SourcePanel } from "./vsp/source-panel";
 import { CompanyLogo, Drawer } from "./vsp/ui";
@@ -15,6 +16,7 @@ type Session = { role: "member"; companyId: string } | { role: "staff" };
 const PASSWORD = "bluepark2026";
 const ACCOUNTS: Record<string, Session> = {
   staff: { role: "staff" },
+  roxtec: { role: "member", companyId: "roxtec" },
   ...Object.fromEntries(companies.map(c => [c.id, { role: "member", companyId: c.id } as Session])),
 };
 const SESSION_KEY = "vsp-session";
@@ -64,8 +66,8 @@ function LoginScreen({ onLogin }: { onLogin: (s: Session) => void }) {
 // ---- Shared layout ----
 type NavItem = { id: string; label: string; icon: ComponentType<{ size?: number }>; count?: number };
 
-function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children }: {
-  nav: NavItem[]; active: string; onNavigate: (id: string) => void; who: { name: string; role: string; logo?: string }; onLogout: () => void; onAsk?: () => void; children: React.ReactNode;
+function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children, disabledNav }: {
+  nav: NavItem[]; active: string; onNavigate: (id: string) => void; who: { name: string; role: string; logo?: string }; onLogout: () => void; onAsk?: () => void; children: React.ReactNode; disabledNav?: string[];
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -75,7 +77,10 @@ function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children }: {
     <aside className="sidebar" data-open={menuOpen}>
       <img src="/Blue-Science-Park-white-horizontal.svg" alt="Blue Science Park" className="sidebar-logo"/>
       <p className="nav-label">Virtual Science Park</p>
-      <nav aria-label="Main">{nav.map(n => <button key={n.id} className="nav-item" data-active={active === n.id} onClick={() => go(n.id)}><n.icon size={18}/>{n.label}{!!n.count && <span className="nav-count">{n.count}</span>}</button>)}</nav>
+      <nav aria-label="Main">{nav.map(n => {
+        const disabled = (disabledNav || []).includes(n.id);
+        return <button key={n.id} className="nav-item" data-active={active === n.id} onClick={() => !disabled && go(n.id)} disabled={disabled} aria-disabled={disabled}><n.icon size={18}/>{n.label}{!!n.count && <span className="nav-count">{n.count}</span>}</button>;
+      })}</nav>
       {onAsk && <><p className="nav-label">Get help</p><button className="nav-item" onClick={() => { onAsk(); setMenuOpen(false); }}><MessageSquareText size={18}/>Innovation assistant</button></>}
       <div className="sidebar-bottom">
         <button className="nav-item" onClick={() => setAboutOpen(true)}><CircleHelp size={18}/>About this prototype</button>
@@ -108,6 +113,9 @@ function MemberApp({ companyId, onLogout }: { companyId: string; onLogout: () =>
   const [source, setSource] = useState<{ claim: Claim; evidence: Evidence } | null>(null);
   const [detail, setDetail] = useState<Match | null>(null);
   const [askOpen, setAskOpen] = useState(false);
+  const [eventsLoading, setEventsLoading] = useState(false);
+  const [events, setEvents] = useState<import("@/api/events").EventItem[] | null>(null);
+  const [eventsError, setEventsError] = useState<string | null>(null);
   const company = companies.find(c => c.id === companyId) ?? companies[0]!;
   const edits = ws.editsFor(company.id);
   const claims = useMemo(() => effectiveClaims(company, edits), [company, edits]);
@@ -118,9 +126,14 @@ function MemberApp({ companyId, onLogout }: { companyId: string; onLogout: () =>
     { id: "opportunities", label: "Opportunities", icon: Sparkles },
     { id: "saved", label: "Saved", icon: Bookmark, count: ws.saved.length },
   ];
-  return <Shell nav={nav} active={view} onNavigate={setView} who={{ name: company.name, role: "Member company", logo: logoUrl(company.id) }} onLogout={onLogout} onAsk={() => setAskOpen(true)}>
+  return <Shell nav={nav} active={view} onNavigate={setView} who={{ name: company.name, role: "Member company", logo: logoUrl(company.id) }} onLogout={onLogout} onAsk={() => setAskOpen(true)} disabledNav={eventsLoading ? ["opportunities"] : []}>
     {view === "profile" && <ProfileView company={company} edits={edits} setEdits={e => ws.setEdits(company.id, e)} onOpenSource={(claim, evidence) => setSource({ claim, evidence })}/>}
-    {(view === "opportunities" || view === "saved") && <MemberOpportunities key={view} company={company} matches={matches} saved={ws.saved} toggleSaved={ws.toggleSaved} dismissed={ws.dismissed} savedOnly={view === "saved"} onOpen={setDetail}/>}
+    {view === "opportunities" && <>
+      {/* EventsList handles fetching events for this company and reports loading state */}
+      <EventsList companyName={company.name} onLoadingChange={setEventsLoading} onResults={(ev, err) => { setEvents(ev); setEventsError(err ?? null); }} />
+      <MemberOpportunities key={view} company={company} matches={matches} extraEvents={events ?? []} saved={ws.saved} toggleSaved={ws.toggleSaved} dismissed={ws.dismissed} savedOnly={view === "saved"} onOpen={setDetail}/>
+    </>}
+    {view === "saved" && <MemberOpportunities key={view} company={company} matches={matches} saved={ws.saved} toggleSaved={ws.toggleSaved} dismissed={ws.dismissed} savedOnly={view === "saved"} onOpen={setDetail}/>}    
     <Drawer open={!!source} onClose={() => setSource(null)} title="Source evidence" wide>{source && <SourcePanel claim={source.claim} evidence={source.evidence}/>}</Drawer>
     <Drawer open={!!detail} onClose={() => setDetail(null)} title="Opportunity">{detail && <OpportunityDetail opportunity={detail.opportunity} match={detail} company={company} claims={claims}
       saved={ws.saved.includes(detail.opportunity.id)} toggleSaved={() => ws.toggleSaved(detail.opportunity.id)} dismiss={() => { ws.dismiss(detail.opportunity.id); setDetail(null); }}/>}</Drawer>
@@ -134,6 +147,7 @@ function StaffApp({ onLogout }: { onLogout: () => void }) {
   const [openCompany, setOpenCompany] = useState<string | null>(null);
   const [source, setSource] = useState<{ claim: Claim; evidence: Evidence } | null>(null);
   const [detail, setDetail] = useState<Opportunity | null>(null);
+  const [askOpen, setAskOpen] = useState(false);
   const company = companies.find(c => c.id === openCompany);
   const openProfile = (id: string) => { setOpenCompany(id); setView("members"); window.scrollTo(0, 0); };
 
@@ -142,7 +156,12 @@ function StaffApp({ onLogout }: { onLogout: () => void }) {
     { id: "opportunities", label: "Opportunities", icon: Sparkles },
     { id: "ecosystem", label: "Ecosystem", icon: Network },
   ];
-  return <Shell nav={nav} active={view} onNavigate={id => { setView(id); setOpenCompany(null); }} who={{ name: "Blue Science Park", role: "Staff" }} onLogout={onLogout}>
+
+  // For the assistant use a visible company if one is open, otherwise fall back to the first company.
+  const askCompany = company ?? companies[0]!;
+  const askMatches = useMemo(() => rankOpportunities(effectiveClaims(askCompany, emptyEdits), emptyEdits), [askCompany]);
+
+  return <Shell nav={nav} active={view} onNavigate={id => { setView(id); setOpenCompany(null); }} who={{ name: "Blue Science Park", role: "Staff" }} onLogout={onLogout} onAsk={() => setAskOpen(true)}>
     {view === "members" && (company
       ? <ProfileView key={company.id} company={company} edits={emptyEdits} onBack={() => setOpenCompany(null)} onOpenSource={(claim, evidence) => setSource({ claim, evidence })}/>
       : <MembersView onOpen={openProfile}/>)}
@@ -150,6 +169,7 @@ function StaffApp({ onLogout }: { onLogout: () => void }) {
     {view === "ecosystem" && <EcosystemView onOpenCompany={openProfile}/>}
     <Drawer open={!!source} onClose={() => setSource(null)} title="Source evidence" wide>{source && <SourcePanel claim={source.claim} evidence={source.evidence}/>}</Drawer>
     <Drawer open={!!detail} onClose={() => setDetail(null)} title="Opportunity">{detail && <OpportunityDetail opportunity={detail}/>}</Drawer>
+    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title="Innovation assistant"><AskPanel company={askCompany} matches={askMatches}/></Drawer>
   </Shell>;
 }
 
