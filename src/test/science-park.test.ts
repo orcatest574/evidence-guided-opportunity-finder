@@ -3,6 +3,11 @@ import { classifyRequest, companies, emptyEdits, findQuote, opportunities, rankO
 
 describe("Profiles", () => {
   it("loads at least three company profiles", () => { expect(companies.length).toBeGreaterThanOrEqual(3); });
+  it("uses the supplied hero backgrounds for Ericsson, NKT, and Roxtec", () => {
+    for (const id of ["ericsson", "nkt", "roxtec"]) {
+      expect(companies.find(c => c.id === id)?.background).toBe(`/companies/${id}_background.png`);
+    }
+  });
   it("every fact has an https source and a quote", () => {
     for (const c of companies) for (const claim of c.claims.filter(x => x.type === "fact")) {
       expect(claim.evidence.length).toBeGreaterThan(0);
