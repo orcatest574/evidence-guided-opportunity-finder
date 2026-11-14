@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState, type ComponentType } from "react";
-import { Bookmark, Building2, CircleHelp, LogOut, Menu, MessageSquareText, Moon, Network, Sparkles, Sun, Users, X } from "lucide-react";
+import { Bookmark, Building2, CircleHelp, LayoutDashboard, LogOut, Menu, MessageSquareText, Moon, Network, Sparkles, Sun, Users, X } from "lucide-react";
 import { companies, effectiveClaims, emptyEdits, logoUrl, rankOpportunities, type Claim, type Evidence, type Match, type Opportunity } from "@/lib/science-park";
 import { EcosystemView } from "./vsp/ecosystem-view";
 import { MembersView } from "./vsp/members-view";
 import { MemberOpportunities, OpportunityDetail, StaffOpportunities } from "./vsp/opportunities-view";
 import { LiveEvents } from "./vsp/events-list";
 import { ProfileView } from "./vsp/profile-view";
+import { MemberHome, StaffHome } from "./vsp/home-view";
 import { SourcePanel } from "./vsp/source-panel";
 import { CompanyLogo, Drawer, ErrorBoundary } from "./vsp/ui";
 import AssistantChat from "./vsp/assistant-chat";
@@ -127,7 +128,7 @@ function Shell({ nav, active, onNavigate, who, onLogout, onAsk, askOpen, childre
 // ---- Member: sees only their own company ----
 function MemberApp({ companyId, onLogout, theme, onToggleTheme }: { companyId: string; onLogout: () => void; theme: Theme; onToggleTheme: () => void }) {
   const ws = useWorkspace();
-  const [view, setView] = useState("profile");
+  const [view, setView] = useState("home");
   const [source, setSource] = useState<{ claim: Claim; evidence: Evidence } | null>(null);
   const [detail, setDetail] = useState<Match | null>(null);
   const [askOpen, setAskOpen] = useState(false);
@@ -137,11 +138,14 @@ function MemberApp({ companyId, onLogout, theme, onToggleTheme }: { companyId: s
   const matches = useMemo(() => rankOpportunities(claims, edits), [claims, edits]);
 
   const nav: NavItem[] = [
+    { id: "home", label: "Overview", icon: LayoutDashboard },
     { id: "profile", label: "Company profile", icon: Building2 },
     { id: "opportunities", label: "Opportunities", icon: Sparkles },
     { id: "saved", label: "Saved", icon: Bookmark, count: ws.saved.length },
   ];
+  const go = (id: string) => { setView(id); window.scrollTo(0, 0); };
   return <Shell nav={nav} active={view} onNavigate={setView} who={{ name: company.name, role: "Member company", logo: logoUrl(company.id) }} onLogout={onLogout} onAsk={() => setAskOpen(o => !o)} askOpen={askOpen} theme={theme} onToggleTheme={onToggleTheme}>
+    {view === "home" && <MemberHome company={company} edits={edits} setEdits={e => ws.setEdits(company.id, e)} matches={matches} onNavigate={go} onOpenMatch={setDetail}/>}
     {view === "profile" && <ProfileView company={company} edits={edits} setEdits={e => ws.setEdits(company.id, e)} onOpenSource={(claim, evidence) => setSource({ claim, evidence })}/>}
     {(view === "opportunities" || view === "saved") && <MemberOpportunities key={view} company={company} matches={matches} saved={ws.saved} toggleSaved={ws.toggleSaved} dismissed={ws.dismissed} savedOnly={view === "saved"} onOpen={setDetail}/>}
     {view === "opportunities" && <LiveEvents companyId={company.id} companyName={company.name}/>}
@@ -154,7 +158,7 @@ function MemberApp({ companyId, onLogout, theme, onToggleTheme }: { companyId: s
 
 // ---- Staff: sees all members' public profiles, never their private edits ----
 function StaffApp({ onLogout, theme, onToggleTheme }: { onLogout: () => void; theme: Theme; onToggleTheme: () => void }) {
-  const [view, setView] = useState("members");
+  const [view, setView] = useState("home");
   const [openCompany, setOpenCompany] = useState<string | null>(null);
   const [source, setSource] = useState<{ claim: Claim; evidence: Evidence } | null>(null);
   const [detail, setDetail] = useState<Opportunity | null>(null);
@@ -163,6 +167,7 @@ function StaffApp({ onLogout, theme, onToggleTheme }: { onLogout: () => void; th
   const openProfile = (id: string) => { setOpenCompany(id); setView("members"); window.scrollTo(0, 0); };
 
   const nav: NavItem[] = [
+    { id: "home", label: "Overview", icon: LayoutDashboard },
     { id: "members", label: "Members", icon: Users },
     { id: "opportunities", label: "Opportunities", icon: Sparkles },
     { id: "ecosystem", label: "Ecosystem", icon: Network },
@@ -172,6 +177,7 @@ function StaffApp({ onLogout, theme, onToggleTheme }: { onLogout: () => void; th
   const askCompany = company ?? companies[0]!;
 
   return <Shell nav={nav} active={view} onNavigate={id => { setView(id); setOpenCompany(null); }} who={{ name: "Blue Science Park", role: "Staff" }} onLogout={onLogout} onAsk={() => setAskOpen(o => !o)} askOpen={askOpen} theme={theme} onToggleTheme={onToggleTheme}>
+    {view === "home" && <StaffHome onNavigate={id => { setView(id); setOpenCompany(null); window.scrollTo(0, 0); }} onOpenCompany={openProfile} onOpenOpportunity={setDetail}/>}
     {view === "members" && (company
       ? <ProfileView key={company.id} company={company} edits={emptyEdits} onBack={() => setOpenCompany(null)} onOpenSource={(claim, evidence) => setSource({ claim, evidence })}/>
       : <MembersView onOpen={openProfile}/>)}

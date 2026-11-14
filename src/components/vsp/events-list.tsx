@@ -5,6 +5,8 @@ import { OppCover } from "./ui";
 
 // Kept for the whole browser session so the slow live search only runs once per company.
 const cache: Record<string, { events: EventItem[]; dropped: number }> = {};
+// A search in progress, so the overview and the Opportunities page don't start two searches.
+const pending: Record<string, Promise<{ events: EventItem[]; dropped: number }> | undefined> = {};
 
 const CHECK_LABEL = {
   title_and_date: "Title and date found on the page",
@@ -12,13 +14,9 @@ const CHECK_LABEL = {
   title_only: "Title found on the page – date not confirmed",
 } as const;
 
-/**
- * Live results from the collector agent (AI + web search), shown below the curated opportunities.
- * Loads in the background and never blocks the rest of the page.
- */
-export function LiveEvents({ companyId, companyName }: { companyId: string; companyName: string }) {
+/** Live search results for a company, shared by the Opportunities page and the overview (one search per session). */
+export function useLiveEvents(companyId: string) {
   const [result, setResult] = useState(cache[companyId] ?? null);
-  const events = result?.events ?? null;
   const [error, setError] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
 
@@ -26,11 +24,21 @@ export function LiveEvents({ companyId, companyName }: { companyId: string; comp
     if (cache[companyId]) { setResult(cache[companyId]!); return; }
     let active = true;
     setResult(null); setError(null);
-    fetchEvents(companyId)
-      .then(res => { cache[companyId] = res; if (active) setResult(res); })
+    (pending[companyId] ??= fetchEvents(companyId).then(res => { cache[companyId] = res; return res; }).finally(() => { delete pending[companyId]; }))
+      .then(res => { if (active) setResult(res); })
       .catch((e: Error) => { if (active) setError(e.message); });
     return () => { active = false; };
   }, [companyId, attempt]);
+
+  return { result, events: result?.events ?? null, error, retry: () => setAttempt(a => a + 1) };
+}
+
+/**
+ * Live results from the collector agent (AI + web search), shown below the curated opportunities.
+ * Loads in the background and never blocks the rest of the page.
+ */
+export function LiveEvents({ companyId, companyName }: { companyId: string; companyName: string }) {
+  const { result, events, error, retry } = useLiveEvents(companyId);
 
   return <section className="live-section">
     <div className="live-head">
@@ -43,7 +51,7 @@ export function LiveEvents({ companyId, companyName }: { companyId: string; comp
 
     {error ? <div className="card live-error">
       <p className="text-sm">{error}</p>
-      <button className="btn mt-3" onClick={() => setAttempt(a => a + 1)}><RefreshCw size={14}/>Try again</button>
+      <button className="btn mt-3" onClick={retry}><RefreshCw size={14}/>Try again</button>
     </div>
     : !events ? <div className="opp-grid">{[0, 1, 2].map(i => <article key={i} className="opp-card skeleton-card" aria-busy="true"><span className="skeleton w-24"/><span className="skeleton w-3/4 mt-3"/><span className="skeleton w-full mt-2"/><span className="skeleton w-2/3 mt-2"/></article>)}
       <p className="card-help col-span-full">Searching the web – this takes up to half a minute…</p></div>
