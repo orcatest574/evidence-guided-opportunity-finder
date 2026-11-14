@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ComponentType } from "react";
-import { Bookmark, Building2, CircleHelp, LogOut, Menu, MessageSquareText, Moon, Network, Sparkles, Sun, Users } from "lucide-react";
+import { Bookmark, Building2, CircleHelp, LogOut, Menu, MessageSquareText, Moon, Network, Sparkles, Sun, Users, X } from "lucide-react";
 import { companies, effectiveClaims, emptyEdits, logoUrl, rankOpportunities, type Claim, type Evidence, type Match, type Opportunity } from "@/lib/science-park";
 import { EcosystemView } from "./vsp/ecosystem-view";
 import { MembersView } from "./vsp/members-view";
@@ -84,8 +84,8 @@ function ThemeToggle({ theme, onToggle }: { theme: Theme; onToggle: () => void }
   </button>;
 }
 
-function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children, theme, onToggleTheme }: {
-  nav: NavItem[]; active: string; onNavigate: (id: string) => void; who: { name: string; role: string; logo?: string }; onLogout: () => void; onAsk?: () => void; children: React.ReactNode; theme: Theme; onToggleTheme: () => void;
+function Shell({ nav, active, onNavigate, who, onLogout, onAsk, askOpen, children, theme, onToggleTheme }: {
+  nav: NavItem[]; active: string; onNavigate: (id: string) => void; who: { name: string; role: string; logo?: string }; onLogout: () => void; onAsk?: () => void; askOpen?: boolean; children: React.ReactNode; theme: Theme; onToggleTheme: () => void;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -116,8 +116,8 @@ function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children, theme,
         <span>Simulated: login, browser-only storage · AI: assistant and live search via the backend</span>
       </footer>
     </div>
-    {onAsk && <button className="chat-launcher" onClick={onAsk} aria-label="Open the innovation assistant">
-      <span className="chat-launcher-icon"><MessageSquareText size={22}/></span>
+    {onAsk && <button className="chat-launcher" data-open={!!askOpen} onClick={onAsk} aria-label={askOpen ? "Close the innovation assistant" : "Open the innovation assistant"} aria-expanded={!!askOpen}>
+      <span className="chat-launcher-icon">{askOpen ? <X size={22}/> : <MessageSquareText size={22}/>}</span>
       <span className="chat-launcher-text"><strong>Innovation assistant</strong><small>Ask about testing, funding, events</small></span>
     </button>}
     <Drawer open={aboutOpen} onClose={() => setAboutOpen(false)} title="About this prototype"><About/></Drawer>
@@ -141,14 +141,14 @@ function MemberApp({ companyId, onLogout, theme, onToggleTheme }: { companyId: s
     { id: "opportunities", label: "Opportunities", icon: Sparkles },
     { id: "saved", label: "Saved", icon: Bookmark, count: ws.saved.length },
   ];
-  return <Shell nav={nav} active={view} onNavigate={setView} who={{ name: company.name, role: "Member company", logo: logoUrl(company.id) }} onLogout={onLogout} onAsk={() => setAskOpen(true)} theme={theme} onToggleTheme={onToggleTheme}>
+  return <Shell nav={nav} active={view} onNavigate={setView} who={{ name: company.name, role: "Member company", logo: logoUrl(company.id) }} onLogout={onLogout} onAsk={() => setAskOpen(o => !o)} askOpen={askOpen} theme={theme} onToggleTheme={onToggleTheme}>
     {view === "profile" && <ProfileView company={company} edits={edits} setEdits={e => ws.setEdits(company.id, e)} onOpenSource={(claim, evidence) => setSource({ claim, evidence })}/>}
     {(view === "opportunities" || view === "saved") && <MemberOpportunities key={view} company={company} matches={matches} saved={ws.saved} toggleSaved={ws.toggleSaved} dismissed={ws.dismissed} savedOnly={view === "saved"} onOpen={setDetail}/>}
     {view === "opportunities" && <LiveEvents companyId={company.id} companyName={company.name}/>}
     <Drawer open={!!source} onClose={() => setSource(null)} title="Source evidence" wide>{source && <SourcePanel claim={source.claim} evidence={source.evidence}/>}</Drawer>
     <Drawer open={!!detail} onClose={() => setDetail(null)} title="Opportunity">{detail && <OpportunityDetail opportunity={detail.opportunity} match={detail} company={company} claims={claims}
       saved={ws.saved.includes(detail.opportunity.id)} toggleSaved={() => ws.toggleSaved(detail.opportunity.id)} dismiss={() => { ws.dismiss(detail.opportunity.id); setDetail(null); }}/>}</Drawer>
-    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title="Innovation assistant" chat><ErrorBoundary onReset={() => setAskOpen(false)}><AssistantChat company={company}/></ErrorBoundary></Drawer>
+    <ErrorBoundary onReset={() => setAskOpen(false)}><AssistantChat open={askOpen} onClose={() => setAskOpen(false)} company={company}/></ErrorBoundary>
   </Shell>;
 }
 
@@ -171,7 +171,7 @@ function StaffApp({ onLogout, theme, onToggleTheme }: { onLogout: () => void; th
   // Staff can ask about any member; the open profile is preselected.
   const askCompany = company ?? companies[0]!;
 
-  return <Shell nav={nav} active={view} onNavigate={id => { setView(id); setOpenCompany(null); }} who={{ name: "Blue Science Park", role: "Staff" }} onLogout={onLogout} onAsk={() => setAskOpen(true)} theme={theme} onToggleTheme={onToggleTheme}>
+  return <Shell nav={nav} active={view} onNavigate={id => { setView(id); setOpenCompany(null); }} who={{ name: "Blue Science Park", role: "Staff" }} onLogout={onLogout} onAsk={() => setAskOpen(o => !o)} askOpen={askOpen} theme={theme} onToggleTheme={onToggleTheme}>
     {view === "members" && (company
       ? <ProfileView key={company.id} company={company} edits={emptyEdits} onBack={() => setOpenCompany(null)} onOpenSource={(claim, evidence) => setSource({ claim, evidence })}/>
       : <MembersView onOpen={openProfile}/>)}
@@ -179,7 +179,7 @@ function StaffApp({ onLogout, theme, onToggleTheme }: { onLogout: () => void; th
     {view === "ecosystem" && <EcosystemView onOpenCompany={openProfile}/>}
     <Drawer open={!!source} onClose={() => setSource(null)} title="Source evidence" wide>{source && <SourcePanel claim={source.claim} evidence={source.evidence}/>}</Drawer>
     <Drawer open={!!detail} onClose={() => setDetail(null)} title="Opportunity">{detail && <OpportunityDetail opportunity={detail}/>}</Drawer>
-    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title="Innovation assistant" chat><ErrorBoundary onReset={() => setAskOpen(false)}><AssistantChat company={askCompany} companies={companies}/></ErrorBoundary></Drawer>
+    <ErrorBoundary onReset={() => setAskOpen(false)}><AssistantChat open={askOpen} onClose={() => setAskOpen(false)} company={askCompany} companies={companies}/></ErrorBoundary>
   </Shell>;
 }
 
