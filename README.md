@@ -43,6 +43,7 @@ Demo accounts: `staff` (Blue Science Park staff) and `nkt`, `ericsson`, `roxtec`
 | Profiling agent – fetches a member's public pages, extracts facts with verbatim quotes and inferred interests, verifies every quote against the page text | `backend/profiler/` (run `python -m profiler`) | Yes (extraction), no (verification) |
 | Assistant agent – answers in-scope questions from the profile | `backend/api.py` `POST /assistant`, `backend/assistent_agent.py` | Yes |
 | Search agent – finds upcoming events, testbeds and funding on the web | `backend/api.py` `POST /events`, `backend/collector_agent.py`, `backend/tools.py` | Yes |
+| Event verifier – fetches every page the search agent suggests and checks that the title (and date) are on it; unconfirmed suggestions are dropped | `backend/event_verifier.py` | No |
 
 ## Profiling agent
 
@@ -73,7 +74,7 @@ Profile edits and saved opportunities are stored in the browser (localStorage).
 
 - Login is a hardcoded demo account checked in the browser.
 - Edits are stored only in the browser.
-- Live search results are AI-generated and marked unverified; they are cached per company and day.
+- Live search results are AI-generated. Each page is fetched and the title/date checked by code, but relevance and quality are not checked. Results are cached per company and day.
 - Opportunities are curated snapshots from 2026-11-13; some details come from search results and are marked as such.
 
 ## Tests

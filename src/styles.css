@@ -370,3 +370,5 @@ button.member-chip:hover { color: var(--brand-deep); }
 .skeleton-card { min-height: 160px; }
 .skeleton { display: block; height: 12px; border-radius: 6px; background: linear-gradient(90deg, var(--muted) 25%, oklch(0.93 0.008 250) 50%, var(--muted) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; }
 @keyframes shimmer { to { background-position: -200% 0; } }
+.check-line { display: flex; align-items: center; gap: 5px; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--inferred); }
+.check-line[data-ok=true] { color: var(--verified); }

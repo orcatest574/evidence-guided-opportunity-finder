@@ -1,25 +1,32 @@
 import { useEffect, useState } from "react";
-import { CalendarDays, ExternalLink, MapPin, RefreshCw, Search } from "lucide-react";
+import { CalendarDays, CheckCircle2, CircleAlert, ExternalLink, MapPin, RefreshCw, Search } from "lucide-react";
 import { fetchEvents, type EventItem } from "@/api/events";
 
 // Kept for the whole browser session so the slow live search only runs once per company.
-const cache: Record<string, EventItem[]> = {};
+const cache: Record<string, { events: EventItem[]; dropped: number }> = {};
+
+const CHECK_LABEL = {
+  title_and_date: "Title and date found on the page",
+  title_and_month: "Title and month found on the page",
+  title_only: "Title found on the page – date not confirmed",
+} as const;
 
 /**
  * Live results from the collector agent (AI + web search), shown below the curated opportunities.
  * Loads in the background and never blocks the rest of the page.
  */
 export function LiveEvents({ companyId, companyName }: { companyId: string; companyName: string }) {
-  const [events, setEvents] = useState<EventItem[] | null>(cache[companyId] ?? null);
+  const [result, setResult] = useState(cache[companyId] ?? null);
+  const events = result?.events ?? null;
   const [error, setError] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
-    if (cache[companyId]) { setEvents(cache[companyId]!); return; }
+    if (cache[companyId]) { setResult(cache[companyId]!); return; }
     let active = true;
-    setEvents(null); setError(null);
+    setResult(null); setError(null);
     fetchEvents(companyId)
-      .then(res => { cache[companyId] = res; if (active) setEvents(res); })
+      .then(res => { cache[companyId] = res; if (active) setResult(res); })
       .catch((e: Error) => { if (active) setError(e.message); });
     return () => { active = false; };
   }, [companyId, attempt]);
@@ -28,9 +35,9 @@ export function LiveEvents({ companyId, companyName }: { companyId: string; comp
     <div className="live-head">
       <div>
         <h2 className="section-heading"><Search size={18}/>Found by the search agent</h2>
-        <p className="card-help">An AI agent searched the web for upcoming opportunities that fit {companyName}'s profile. These results are not verified – check the source before acting.</p>
+        <p className="card-help">An AI agent searched the web for upcoming opportunities that fit {companyName}'s profile. Each suggested page was then fetched and checked by code: suggestions whose title was not on the page were removed{result && result.dropped > 0 ? ` (${result.dropped} this time)` : ""}.</p>
       </div>
-      <span className="ai-badge">Live AI search · unverified</span>
+      <span className="ai-badge">Live AI search · checked against source</span>
     </div>
 
     {error ? <div className="card live-error">
@@ -42,6 +49,7 @@ export function LiveEvents({ companyId, companyName }: { companyId: string; comp
     : !events.length ? <div className="empty">The search agent found no upcoming opportunities this time.</div>
     : <div className="opp-grid">{events.map((e, i) => <article key={`${e.title}-${i}`} className="opp-card" data-live="true">
         <div className="opp-top"><div className="flex flex-wrap items-center gap-2">{e.type && <span className="type-tag" data-type={e.type}>{e.type}</span>}<span className="status">AI search result</span></div></div>
+        {e.verification && <p className="check-line" data-ok={e.verification !== "title_only"}>{e.verification === "title_only" ? <CircleAlert size={13}/> : <CheckCircle2 size={13}/>}{CHECK_LABEL[e.verification]}{e.checked_at && ` · checked ${e.checked_at}`}</p>}
         <h3 className="opp-title">{e.title}</h3>
         {e.description && <p className="opp-summary">{e.description}</p>}
         <div className="opp-meta">{e.date && <span><CalendarDays size={13}/>{e.date}</span>}{e.location && <span><MapPin size={13}/>{e.location}</span>}</div>
