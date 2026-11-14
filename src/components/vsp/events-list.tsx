@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { CalendarDays, CheckCircle2, CircleAlert, ExternalLink, MapPin, RefreshCw, Search } from "lucide-react";
 import { fetchEvents, type EventItem } from "@/api/events";
+import { OppCover } from "./ui";
 
 // Kept for the whole browser session so the slow live search only runs once per company.
 const cache: Record<string, { events: EventItem[]; dropped: number }> = {};
@@ -48,6 +49,7 @@ export function LiveEvents({ companyId, companyName }: { companyId: string; comp
       <p className="card-help col-span-full">Searching the web – this takes up to half a minute…</p></div>
     : !events.length ? <div className="empty">The search agent found no upcoming opportunities this time.</div>
     : <div className="opp-grid">{events.map((e, i) => <article key={`${e.title}-${i}`} className="opp-card" data-live="true">
+        <OppCover type={e.type}/>
         <div className="opp-top"><div className="flex flex-wrap items-center gap-2">{e.type && <span className="type-tag" data-type={e.type}>{e.type}</span>}<span className="status">AI search result</span></div></div>
         {e.verification && <p className="check-line" data-ok={e.verification !== "title_only"}>{e.verification === "title_only" ? <CircleAlert size={13}/> : <CheckCircle2 size={13}/>}{CHECK_LABEL[e.verification]}{e.checked_at && ` · checked ${e.checked_at}`}</p>}
         <h3 className="opp-title">{e.title}</h3>

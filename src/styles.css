@@ -419,3 +419,20 @@ button.member-chip:hover { color: var(--brand-deep); }
 .claim-badge[data-type=user_corrected] { color: var(--mine); background: var(--mine-soft); }
 .claim-edit { width: 100%; margin-top: 10px; border: 1px solid var(--brand); border-radius: 10px; padding: 8px 10px; background: var(--card); color: var(--foreground); font: inherit; font-size: 15px; line-height: 1.5; resize: vertical; }
 .claim-original { margin-top: 6px; font-size: 12px; color: var(--ink-soft); text-decoration: line-through; }
+
+/* ---- opportunity card image header (text sits below it) ---- */
+.opp-card { overflow: hidden; }
+.opp-cover { position: relative; height: 112px; margin: -18px -20px 14px; display: flex; align-items: flex-end; padding: 0 20px 14px; overflow: hidden;
+  background: linear-gradient(135deg, var(--cover-a), var(--cover-b)); }
+.opp-cover[data-type=Testing] { --cover-a: oklch(0.55 0.15 245); --cover-b: oklch(0.38 0.13 262); }
+.opp-cover[data-type=Funding] { --cover-a: oklch(0.58 0.12 160); --cover-b: oklch(0.4 0.1 175); }
+.opp-cover[data-type=Event]   { --cover-a: oklch(0.55 0.15 295); --cover-b: oklch(0.38 0.13 285); }
+.opp-cover[data-type=Web]     { --cover-a: oklch(0.6 0.03 255); --cover-b: oklch(0.42 0.04 260); }
+.opp-cover::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 85% 0%, oklch(1 0 0 / 0.22), transparent 55%); }
+.opp-cover-icon { position: absolute; right: -14px; top: -14px; color: oklch(1 0 0 / 0.16); }
+.opp-cover-logo { position: relative; z-index: 1; display: grid; place-items: center; width: 56px; height: 56px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px oklch(0 0 0 / 0.2); overflow: hidden; }
+.opp-cover-logo img { width: 74%; height: 74%; object-fit: contain; }
+.opp-cover-glyph { color: oklch(0.45 0.05 260); }
+.drawer-body .opp-cover { margin: -24px -24px 20px !important; height: 132px; }
+.opp-card[data-closed=true] .opp-cover { filter: saturate(0.45); }
+.skeleton-card .opp-cover { display: none; }

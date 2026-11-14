@@ -160,6 +160,18 @@ export function relevantMembers(opportunity: Opportunity): Company[] {
   return companies.filter(c => matchOpportunity(c.claims, emptyEdits, opportunity).score >= 40);
 }
 
+/** Organiser logos for opportunity cards (public/sources/). */
+const SOURCE_LOGOS: Record<string, string> = {
+  RISE: "/sources/rise.png",
+  Vinnova: "/sources/vinnova.png",
+  Energimyndigheten: "/sources/energimyndigheten.png",
+  "European Innovation Council": "/sources/eic.png",
+  "Blue Science Park": "/sources/bsp.png",
+  MTC: "/sources/mtc.png",
+  GSMA: "/sources/gsma.jpg",
+};
+export const sourceLogo = (source: string): string | undefined => SOURCE_LOGOS[source];
+
 export const logoUrl = (companyId: string) => companies.find(c => c.id === companyId)?.logo ?? `/logos/${companyId}.png`;
 
 export function rankOpportunities(claims: Claim[], edits: Edits): Match[] {
