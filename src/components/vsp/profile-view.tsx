@@ -138,9 +138,9 @@ function AboutProfile({ company }: { company: Company }) {
     <div className="card">
       <h3 className="card-title">How this profile was built</h3>
       <ol className="steps">
-        <li><strong>Sources:</strong> {company.pagesFetched} public web pages about {company.name}.</li>
-        <li><strong>Facts</strong> carry a verbatim quote that was checked against the page text. Quotes that could not be found were removed.</li>
-        <li><strong>Inferred interests</strong> are reasoned from the facts and are not confirmed priorities.</li>
+        <li><strong>Profiling agent – fetch:</strong> {company.pagesFetched} public web pages about {company.name}.</li>
+        <li><strong>Profiling agent – extract:</strong> an AI model drafts facts with verbatim quotes, inferred interests and missing information.</li>
+        <li><strong>Verify:</strong> plain code checks every quote against the page text. Quotes that could not be found were removed.</li>
         <li><strong>Review</strong> by the company, who can confirm, remove or add.</li>
       </ol>
       <p className="card-help mt-3">Snapshot from {company.createdAt}.</p>

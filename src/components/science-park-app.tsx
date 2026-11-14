@@ -184,12 +184,12 @@ function About() {
   return <div className="space-y-6 text-sm leading-6">
     <section><h3 className="card-title">How it works</h3>
       <ol className="steps">
-        <li><strong>Profiles</strong> are JSON files built from members' public web pages. Every fact carries a verbatim quote, the source URL and the retrieval date; inferred interests carry their reasoning.</li>
+        <li><strong>Profiling agent</strong> (AI + code, backend) fetches each member's public web pages and extracts facts with verbatim quotes, inferred interests and missing information. A plain-code verifier checks every quote against the page before the profile is published as JSON.</li>
         <li><strong>Opportunities</strong> are a JSON list of testbeds, funding calls and events from public sources, each with a link and retrieval date.</li>
         <li><strong>Matching</strong> (plain code) ranks opportunities by what the profile mentions and the interests the member adds, and explains why.</li>
         <li><strong>Boundary check</strong> (plain code) classifies each question to the assistant before anything is answered. Out-of-scope questions, override attempts and eligibility decisions never reach the AI.</li>
         <li><strong>Assistant agent</strong> (AI, backend) answers in-scope questions using only the company's profile, separating facts from inferred interests.</li>
-        <li><strong>Search agent</strong> (AI, backend) searches the web for upcoming events, testbeds and funding that fit the profile. Results are marked unverified.</li>
+        <li><strong>Search agent</strong> (AI, backend) searches the web for upcoming events, testbeds and funding that fit the profile. Each suggested page is fetched and its title and date are checked by code; unconfirmed suggestions are dropped.</li>
       </ol>
     </section>
     <section><h3 className="card-title">Roles and privacy</h3><p>Members see and refine only their own profile. Blue Science Park staff see all public profiles read-only and never see members' edits, saved items or questions.</p></section>
