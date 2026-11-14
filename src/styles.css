@@ -361,6 +361,14 @@ button.member-chip:hover { color: var(--brand-deep); }
 .kpi span { font-size: 13px; color: var(--ink-soft); }
 @media (max-width: 600px) { .kpi-row { grid-template-columns: 1fr; } }
 .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.member-search-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.member-search { position: relative; display: block; width: min(100%, 480px); }
+.member-search > svg { position: absolute; top: 50%; left: 13px; z-index: 1; color: var(--ink-soft); transform: translateY(-50%); pointer-events: none; }
+.member-search .text-input { padding-left: 40px; padding-right: 40px; }
+.member-search-clear { position: absolute; top: 50%; right: 8px; display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 7px; background: transparent; color: var(--ink-soft); transform: translateY(-50%); }
+.member-search-clear:hover { background: var(--muted); color: var(--ink); }
+.member-results-count { font-size: 13px; color: var(--ink-soft); }
+.member-empty { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .member-card { text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px; color: var(--ink); transition: box-shadow .2s, transform .2s, border-color .2s; }
 .member-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); border-color: var(--brand); }
 .member-card-head { display: flex; justify-content: space-between; align-items: flex-start; }
