@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, Check, ExternalLink, EyeOff, Plus, RotateCcw, ShieldCheck, X } from "lucide-react";
+import { ArrowLeft, Check, ExternalLink, EyeOff, Pencil, Plus, RotateCcw, ShieldCheck, X } from "lucide-react";
 import { SECTIONS, effectiveClaims, logoUrl, type Claim, type Company, type Edits, type Evidence } from "@/lib/science-park";
 import { ClaimBadge, CompanyLogo } from "./ui";
 
@@ -66,7 +66,9 @@ export function ProfileView({ company, edits, setEdits, onBack, onOpenSource }: 
           {claims.filter(c => c.section === tab).map(c => <ClaimCard key={c.id} claim={c} onOpenSource={onOpenSource}
             onConfirm={setEdits && c.type === "inferred" ? () => setEdits({ ...edits, confirmed: [...edits.confirmed, c.id] }) : undefined}
             onUnconfirm={setEdits && c.type === "user_confirmed" ? () => setEdits({ ...edits, confirmed: edits.confirmed.filter(x => x !== c.id) }) : undefined}
-            onHide={setEdits ? () => setEdits({ ...edits, hidden: [...edits.hidden, c.id], confirmed: edits.confirmed.filter(x => x !== c.id) }) : undefined}/>)}
+            onHide={setEdits ? () => setEdits({ ...edits, hidden: [...edits.hidden, c.id], confirmed: edits.confirmed.filter(x => x !== c.id) }) : undefined}
+            onEdit={setEdits ? text => setEdits({ ...edits, edited: { ...edits.edited, [c.id]: text } }) : undefined}
+            onUndoEdit={setEdits && c.type === "user_corrected" ? () => { const { [c.id]: _, ...rest } = edits.edited ?? {}; setEdits({ ...edits, edited: rest }); } : undefined}/>)}
         </div>
         {tab === "inferredInterests" && setEdits && <OwnInterests edits={edits} setEdits={setEdits}/>}
         {setEdits && hidden.length > 0 && <div className="hidden-list">
@@ -83,19 +85,36 @@ function matchesSection(field: string, sectionKey: string) {
   return field.toLowerCase().replace(/[^a-z]/g, "").startsWith(sectionKey.toLowerCase().slice(0, 5));
 }
 
-function ClaimCard({ claim, onOpenSource, onConfirm, onUnconfirm, onHide }: { claim: Claim; onOpenSource: (c: Claim, e: Evidence) => void; onConfirm?: (() => void) | undefined; onUnconfirm?: (() => void) | undefined; onHide?: (() => void) | undefined }) {
+function ClaimCard({ claim, onOpenSource, onConfirm, onUnconfirm, onHide, onEdit, onUndoEdit }: {
+  claim: Claim; onOpenSource: (c: Claim, e: Evidence) => void;
+  onConfirm?: (() => void) | undefined; onUnconfirm?: (() => void) | undefined; onHide?: (() => void) | undefined;
+  onEdit?: ((text: string) => void) | undefined; onUndoEdit?: (() => void) | undefined;
+}) {
   const inferred = claim.type === "inferred" || claim.type === "user_confirmed";
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(claim.value);
+  const save = () => { const text = draft.trim(); if (text && onEdit) onEdit(text); setEditing(false); };
   return <article className="claim" data-type={claim.type}>
-    <div className="claim-head"><ClaimBadge type={claim.type}/>{claim.confidence && <span className="claim-meta">{claim.confidence} confidence</span>}</div>
-    <p className="claim-text">{claim.value}</p>
+    <div className="claim-head"><ClaimBadge type={claim.type}/>{claim.confidence && claim.type !== "user_corrected" && <span className="claim-meta">{claim.confidence} confidence</span>}</div>
+    {editing
+      ? <textarea className="claim-edit" aria-label="Correct this claim" rows={3} maxLength={400} value={draft} autoFocus onChange={e => setDraft(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); save(); } if (e.key === "Escape") setEditing(false); }}/>
+      : <p className="claim-text">{claim.value}</p>}
+    {claim.originalValue && !editing && <p className="claim-original" title="Original text from the public source">{claim.originalValue}</p>}
     {inferred && claim.reasoning && <p className="claim-reason">Why: {stripIds(claim.reasoning)}</p>}
     {claim.note && <p className="claim-reason">{claim.note}</p>}
     <div className="claim-foot">
       {!inferred && claim.evidence.map(e => <button key={e.id} className="source-chip" onClick={() => onOpenSource(claim, e)}>{(e.title ?? e.publisher ?? "Source").split(/ [|–-] /)[0]}<span className="text-ink-soft"> · {e.publisher}</span></button>)}
-      <span className="ml-auto flex gap-1">
-        {onConfirm && <button className="action-btn" onClick={onConfirm}><Check size={13}/>Confirm</button>}
-        {onUnconfirm && <button className="action-btn" onClick={onUnconfirm}><RotateCcw size={13}/>Undo confirm</button>}
-        {onHide && <button className="action-btn subtle" onClick={onHide}><EyeOff size={13}/>{inferred ? "Not relevant" : "Incorrect"}</button>}
+      <span className="ml-auto flex flex-wrap gap-1">
+        {editing ? <>
+          <button className="action-btn" onClick={save}><Check size={13}/>Save</button>
+          <button className="action-btn subtle" onClick={() => { setDraft(claim.value); setEditing(false); }}>Cancel</button>
+        </> : <>
+          {onConfirm && <button className="action-btn" onClick={onConfirm}><Check size={13}/>Confirm</button>}
+          {onUnconfirm && <button className="action-btn" onClick={onUnconfirm}><RotateCcw size={13}/>Undo confirm</button>}
+          {onEdit && <button className="action-btn" onClick={() => { setDraft(claim.value); setEditing(true); }}><Pencil size={13}/>Edit</button>}
+          {onUndoEdit && <button className="action-btn" onClick={onUndoEdit}><RotateCcw size={13}/>Undo edit</button>}
+          {onHide && <button className="action-btn subtle" onClick={onHide}><EyeOff size={13}/>{inferred ? "Not relevant" : "Incorrect"}</button>}
+        </>}
       </span>
     </div>
   </article>;

@@ -51,9 +51,15 @@ app.add_middleware(
 
 
 # --- Request / response models -----------------------------------------------
+class HistoryMessage(BaseModel):
+    role: str          # "user" or "assistant"
+    text: str = Field(..., max_length=4000)
+
+
 class AssistantRequest(BaseModel):
     question: str = Field(..., min_length=1)
     company_name: str = Field(..., min_length=1)
+    history: list[HistoryMessage] = Field(default_factory=list)  # earlier turns, for follow-up questions
 
 
 class AssistantResponse(BaseModel):
@@ -168,9 +174,16 @@ async def assistant(req: AssistantRequest) -> AssistantResponse:
         "- Do not give professional advice or decide eligibility; refer such decisions to Blue Science Park staff.\n"
         "- If the question is unrelated to the science park's purpose, say briefly what you can help with.\n"
         "- Answer briefly (max 150 words) in clear, friendly language, not raw JSON.\n\n"
+        "- Earlier messages are context for follow-up questions only; the same rules apply to every turn.\n\n"
         f"Company: {name}\n"
         f"<profile>\n{json.dumps(profile, ensure_ascii=False)}\n</profile>\n\n"
-        f"User question: {req.question}"
+        + (
+            "<conversation>\n"
+            + "\n".join(f"{'User' if m.role == 'user' else 'Assistant'}: {m.text}" for m in req.history[-6:])
+            + "\n</conversation>\n\n"
+            if req.history else ""
+        )
+        + f"User question: {req.question}"
     )
 
     try:

@@ -3,6 +3,8 @@
 Hackathon prototype for Blue Science Park (BUILD Hackathon 2026): verified company profiles,
 matched with testing environments, funding and events – every claim traceable to its source.
 
+**Solution description, quality and boundary check, known limitations and next steps: [docs/SOLUTION.md](docs/SOLUTION.md).**
+
 ## Run
 
 Two terminals. The AI settings (`API_KEY`, `AI_URL`, `MODEL_NAME`) go in `.env` in the repo root – never commit it.

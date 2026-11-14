@@ -6,8 +6,8 @@ import opportunityData from "@/data/opportunities.json";
 // =====================================================================
 
 export type Evidence = { id: string; url: string; title?: string; publisher?: string; publishedAt?: string; retrievedAt: string; verification?: string; evidenceKind?: string };
-export type ClaimType = "fact" | "inferred" | "unverified" | "user_confirmed";
-type RawClaim = { id: string; value: string; type: ClaimType; confidence?: string; claimEvidence?: string[]; basedOnClaims?: string[]; reasoning?: string; note?: string; quotes?: string[] };
+export type ClaimType = "fact" | "inferred" | "unverified" | "user_confirmed" | "user_corrected";
+type RawClaim = { id: string; value: string; originalValue?: string; type: ClaimType; confidence?: string; claimEvidence?: string[]; basedOnClaims?: string[]; reasoning?: string; note?: string; quotes?: string[] };
 export type Claim = RawClaim & { section: string; evidence: Evidence[] };
 
 type CompanyFile = {
@@ -107,14 +107,20 @@ export function statusLabel(o: Opportunity): string {
 // =====================================================================
 
 export type Focus = "All" | OpportunityType;
-export type Edits = { hidden: string[]; confirmed: string[]; interests: string[]; focus: Focus };
-export const emptyEdits: Edits = { hidden: [], confirmed: [], interests: [], focus: "All" };
+/** Everything a member changes on their own profile. `edited` maps a claim id to the corrected text. */
+export type Edits = { hidden: string[]; confirmed: string[]; edited: Record<string, string>; interests: string[]; focus: Focus };
+export const emptyEdits: Edits = { hidden: [], confirmed: [], edited: {}, interests: [], focus: "All" };
 
-/** The profile as the user sees it: hidden claims removed, confirmed interests marked. */
+/** The profile as the user sees it: hidden claims removed, corrections applied, confirmed interests marked. */
 export function effectiveClaims(company: Company, edits: Edits): Claim[] {
+  const edited = edits.edited ?? {};
   return company.claims
     .filter(c => !edits.hidden.includes(c.id))
-    .map(c => (edits.confirmed.includes(c.id) ? { ...c, type: "user_confirmed" as const } : c));
+    .map(c => {
+      const corrected = edited[c.id];
+      if (corrected !== undefined && corrected !== c.value) return { ...c, value: corrected, originalValue: c.value, type: "user_corrected" as const };
+      return edits.confirmed.includes(c.id) ? { ...c, type: "user_confirmed" as const } : c;
+    });
 }
 
 // =====================================================================

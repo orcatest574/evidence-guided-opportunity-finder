@@ -49,7 +49,9 @@ export function AssistantChat({ company, companies }: { company: Company; compan
     const typingId = push({ role: "assistant", text: "Thinking…", kind: "relevant", source: "ai" });
     setLoading(true);
     try {
-      const answer = await askAssistant(q, current.id);
+      // Earlier turns (without the one just sent) so the agent understands follow-up questions.
+      const history = messages.filter(m => m.role !== "error").map(m => ({ role: m.role === "user" ? "user" as const : "assistant" as const, text: m.text }));
+      const answer = await askAssistant(q, current.id, history);
       setMessages(prev => prev.map(m => (m.id === typingId ? { ...m, text: answer } : m)));
     } catch (err) {
       setMessages(prev => prev.map(m => (m.id === typingId ? { ...m, role: "error", kind: undefined, text: (err as Error).message } : m)));

@@ -7,6 +7,7 @@ export const CLAIM_LABEL: Record<ClaimType, string> = {
   unverified: "Unverified",
   inferred: "Inferred",
   user_confirmed: "Confirmed by you",
+  user_corrected: "Corrected by you",
 };
 
 const CLAIM_HINT: Record<ClaimType, string> = {
@@ -14,6 +15,7 @@ const CLAIM_HINT: Record<ClaimType, string> = {
   unverified: "Claimed as a fact, but the quote could not be found on the source page",
   inferred: "Our reasoning from the facts – not a confirmed company priority",
   user_confirmed: "An inferred interest you have confirmed",
+  user_corrected: "You corrected this claim – the original text is kept for reference",
 };
 
 export function ClaimBadge({ type }: { type: ClaimType }) {

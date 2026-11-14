@@ -373,3 +373,7 @@ button.member-chip:hover { color: var(--brand-deep); }
 @keyframes shimmer { to { background-position: -200% 0; } }
 .check-line { display: flex; align-items: center; gap: 5px; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--inferred); }
 .check-line[data-ok=true] { color: var(--verified); }
+.claim[data-type=user_corrected] { border-top-color: var(--mine); }
+.claim-badge[data-type=user_corrected] { color: var(--mine); background: var(--mine-soft); }
+.claim-edit { width: 100%; margin-top: 10px; border: 1px solid var(--brand); border-radius: 10px; padding: 8px 10px; font: inherit; font-size: 15px; line-height: 1.5; resize: vertical; }
+.claim-original { margin-top: 6px; font-size: 12px; color: var(--ink-soft); text-decoration: line-through; }
