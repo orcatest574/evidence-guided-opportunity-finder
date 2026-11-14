@@ -9,6 +9,7 @@ import { EventsList } from "./vsp/events-list";
 import { ProfileView } from "./vsp/profile-view";
 import { SourcePanel } from "./vsp/source-panel";
 import { CompanyLogo, Drawer, ErrorBoundary } from "./vsp/ui";
+import AssistantChat from "./vsp/assistant-chat";
 import { useWorkspace } from "./vsp/use-workspace";
 
 // ---- Hardcoded demo accounts. Not real security: the check runs in the browser. ----
@@ -137,7 +138,7 @@ function MemberApp({ companyId, onLogout }: { companyId: string; onLogout: () =>
     <Drawer open={!!source} onClose={() => setSource(null)} title="Source evidence" wide>{source && <SourcePanel claim={source.claim} evidence={source.evidence}/>}</Drawer>
     <Drawer open={!!detail} onClose={() => setDetail(null)} title="Opportunity">{detail && <OpportunityDetail opportunity={detail.opportunity} match={detail} company={company} claims={claims}
       saved={ws.saved.includes(detail.opportunity.id)} toggleSaved={() => ws.toggleSaved(detail.opportunity.id)} dismiss={() => { ws.dismiss(detail.opportunity.id); setDetail(null); }}/>}</Drawer>
-    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title="Innovation assistant"><ErrorBoundary onReset={() => setAskOpen(false)}><AskPanel company={company} matches={matches}/></ErrorBoundary></Drawer>
+    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title="Innovation assistant"><ErrorBoundary onReset={() => setAskOpen(false)}><AssistantChat companyName={company.id}/></ErrorBoundary></Drawer>
   </Shell>;
 }
 
@@ -169,7 +170,7 @@ function StaffApp({ onLogout }: { onLogout: () => void }) {
     {view === "ecosystem" && <EcosystemView onOpenCompany={openProfile}/>}
     <Drawer open={!!source} onClose={() => setSource(null)} title="Source evidence" wide>{source && <SourcePanel claim={source.claim} evidence={source.evidence}/>}</Drawer>
     <Drawer open={!!detail} onClose={() => setDetail(null)} title="Opportunity">{detail && <OpportunityDetail opportunity={detail}/>}</Drawer>
-    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title="Innovation assistant"><ErrorBoundary onReset={() => setAskOpen(false)}><AskPanel company={askCompany} matches={askMatches}/></ErrorBoundary></Drawer>
+    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title="Innovation assistant"><ErrorBoundary onReset={() => setAskOpen(false)}><AssistantChat companyName={askCompany.id}/></ErrorBoundary></Drawer>
   </Shell>;
 }
 
