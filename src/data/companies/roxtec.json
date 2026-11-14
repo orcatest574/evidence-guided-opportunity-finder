@@ -5,7 +5,8 @@
     "id": "roxtec",
     "name": "Roxtec",
     "website": "https://www.roxtec.com",
-    "logo": "/companies/roxtec.png"
+    "logo": "/companies/roxtec.png",
+    "background": "/companies/roxtec_background.png"
   },
   "summary": {
     "text": "Roxtec develops, manufactures and delivers modular sealing solutions for cable and pipe penetrations and provides related services such as installation training, onsite supervision and certified transit inspections. The company offers digital design tools (Roxtec Transit Designer™, Roxtec Software Suite™), electromagnetic shielding products and publishes sustainability work while serving customers worldwide from its headquarters in Karlskrona, Sweden.",

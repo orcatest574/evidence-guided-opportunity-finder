@@ -11,7 +11,7 @@ type RawClaim = { id: string; value: string; type: ClaimType; confidence?: strin
 export type Claim = RawClaim & { section: string; evidence: Evidence[] };
 
 type CompanyFile = {
-  company: { id: string; name: string; website?: string; logo?: string };
+  company: { id: string; name: string; website?: string; logo?: string; background?: string };
   summary?: { text: string };
   evidence?: Evidence[];
   matchingProfile?: { topics?: { topic: string; weight: number }[] };
@@ -33,7 +33,7 @@ export const SECTIONS: { key: string; label: string }[] = [
 ];
 
 export type Company = {
-  id: string; name: string; logo: string; website: string; summary: string; createdAt: string; createdBy: string; pagesFetched: number;
+  id: string; name: string; logo: string; background?: string; website: string; summary: string; createdAt: string; createdBy: string; pagesFetched: number;
   claims: Claim[];
   evidence: Evidence[];
   topics: { topic: string; weight: number }[];
@@ -51,6 +51,7 @@ function toCompany(file: CompanyFile): Company {
     id: file.company.id,
     name: file.company.name,
     logo: file.company.logo ?? `/logos/${file.company.id}.png`,
+    background: file.company.background,
     website: file.company.website ?? "",
     summary: file.summary?.text ?? "",
     createdAt: file.metadata?.createdAt ?? "",
