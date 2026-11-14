@@ -19,7 +19,23 @@ Staff never see a member's edits, saved items or questions.
 
 ---
 
-## 2. Agents and how they work together
+## 2. System context
+
+Who uses the system and which external systems it depends on. A PNG version for slides is in `docs/context-diagram.png`.
+
+![System context diagram](context-diagram.svg)
+
+
+## 3. How the parts fit together
+
+The four parts of the system and how data flows between them. PNG for slides: `docs/container-diagram.png`.
+
+![How the parts fit together](container-diagram.svg)
+
+
+Core rule of the design: **the AI writes, plain code checks.** Quotes are verified against the page by the quote verifier, live search results by the event verifier, and every question passes the boundary check before the AI sees it.
+
+## 4. Agents and how they work together
 
 ```
                  members.json (id, name, website, seed URLs)
@@ -57,7 +73,7 @@ Design principle: **the AI writes, plain code checks.** Every AI output that rea
 
 ---
 
-## 3. Sources
+## 5. Sources
 
 | Kind | Sources | Retrieved |
 |---|---|---|
@@ -69,13 +85,13 @@ Every claim and opportunity carries its URL and retrieval date in the UI.
 
 ---
 
-## 4. Matching
+## 6. Matching
 
 Each curated opportunity has a keyword list (e.g. RISE high-voltage lab: *high-voltage, cable, insulation, hvdc*). For a company the matcher counts which keywords appear in its claims (unverified claims are ignored), adds points for interests the member added and subtracts points for closed calls. The score is never shown as a number: the UI shows **Strong match / Possible match** and the reason, e.g. *“Your profile mentions high-voltage, cable, insulation”*, plus the exact claims behind it. Every match is labelled *a potential match on topic – not confirmed eligibility*.
 
 ---
 
-## 5. How profiles stay current
+## 7. How profiles stay current
 
 - The profiling agent can be re-run at any time (`python -m profiler --all --publish`); in production it would run on a schedule, e.g. weekly.
 - Publishing keeps hand-added fields (logo, background) and does not overwrite a profile marked `lastEditedByUser` unless forced.
@@ -84,7 +100,7 @@ Each curated opportunity has a keyword list (e.g. RISE high-voltage lab: *high-v
 
 ---
 
-## 6. Service boundaries – how they are implemented
+## 8. Service boundaries – how they are implemented
 
 | Requirement | Implementation |
 |---|---|
@@ -98,9 +114,9 @@ Each curated opportunity has a keyword list (e.g. RISE high-voltage lab: *high-v
 
 ---
 
-## 7. Quality and boundary check
+## 9. Quality and boundary check
 
-### 7.1 Profile accuracy
+### 9.1 Profile accuracy
 
 | | Ericsson | NKT | Roxtec | Total |
 |---|---|---|---|---|
@@ -119,13 +135,13 @@ Each curated opportunity has a keyword list (e.g. RISE high-voltage lab: *high-v
 
 **Conclusion:** the verifier guarantees that every quote exists on the source page, but not that the AI's wording adds nothing beyond it. Users can correct claims directly in the profile.
 
-### 7.2 Source traceability
+### 9.2 Source traceability
 
 - **52 of 52 verified facts (100 %)** can be highlighted word-for-word in the stored page text – shown in the “Source evidence” panel.
 - 14 of 14 curated opportunities have a source URL and retrieval date; 6 were checked on the source page, 8 come from search results and are labelled as such.
 - Live search (test run 2026-11-14): NKT 2 shown / 2 dropped by the event verifier, Ericsson 3 shown / 0 dropped, Roxtec 0 found. Every shown result states what was confirmed on the page (title and date, or title only).
 
-### 7.3 Recommendation relevance
+### 9.3 Recommendation relevance
 
 Top 3 per company on the baseline profile:
 
@@ -137,7 +153,7 @@ Top 3 per company on the baseline profile:
 
 The three companies get clearly different rankings, and adding an interest (e.g. “hydrogen”) raises matching opportunities (covered by tests). **Weakness:** keyword matching does not understand context or eligibility (e.g. SME-only calls are still suggested to large companies, with an eligibility caveat).
 
-### 7.4 Interaction limits
+### 9.4 Interaction limits
 
 Rule-based classification (automated tests, all passing):
 
@@ -158,7 +174,7 @@ Automated tests: `npm test` – 14 tests covering profile evidence, quote highli
 
 ---
 
-## 8. Handover
+## 10. Handover
 
 ### Setup
 
@@ -182,8 +198,8 @@ See `README.md`. In short: `.env` with `API_KEY`, `AI_URL`, `MODEL_NAME` in the 
 - **Login is simulated** (hardcoded accounts, checked in the browser).
 - **Member edits are stored in the browser only** – they are not shared, not visible to staff, and the profiler's “do not overwrite edited profiles” rule is never triggered in practice.
 - **Profiles cover 3 members**; Roxtec's Blue Science Park membership was not confirmed from a public member page.
-- **Keyword matching** does not understand context or eligibility (see 7.3).
-- **The verifier proves the quote exists, not that the AI's paraphrase is exact** (see 7.1).
+- **Keyword matching** does not understand context or eligibility (see 9.3).
+- **The verifier proves the quote exists, not that the AI's paraphrase is exact** (see 9.1).
 - **Live search** depends on DuckDuckGo; results vary between runs, take ~30 s, and source quality is not assessed.
 - **Curated opportunities are a snapshot** from 2026-11-13; several Vinnova calls are already closed.
 - **No knowledge/trend monitoring** (research, news) – not in scope for the prototype.

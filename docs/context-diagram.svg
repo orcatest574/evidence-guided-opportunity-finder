@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="1200" height="620" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a5a75"/>
+    </marker>
+    <style>
+      .person { fill: #eaf2fb; stroke: #0b4fa8; stroke-width: 1.5; }
+      .system { fill: #0b4fa8; }
+      .ext { fill: #f3f4f6; stroke: #6b7280; stroke-width: 1.4; rx: 12; }
+      .name { font-size: 16px; font-weight: 700; fill: #13233d; }
+      .desc { font-size: 13px; fill: #45536b; }
+      .line { stroke: #4a5a75; stroke-width: 1.8; fill: none; marker-end: url(#arrow); }
+      .label { font-size: 13px; fill: #13233d; }
+      .labelbold { font-size: 13px; fill: #13233d; font-weight: 700; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" fill="#ffffff"/>
+  <text x="40" y="38" font-size="22" font-weight="700" fill="#13233d">Virtual Science Park – system context</text>
+  <text x="40" y="62" font-size="14" fill="#5a6b85">Who uses the system and which external systems it depends on</text>
+
+  <!-- People -->
+  <rect x="40" y="150" width="230" height="96" rx="48" class="person"/>
+  <text x="155" y="186" text-anchor="middle" class="name">Member company</text>
+  <text x="155" y="206" text-anchor="middle" class="desc">NKT · Ericsson · Roxtec</text>
+  <text x="155" y="224" text-anchor="middle" class="desc">(40+ members in production)</text>
+
+  <rect x="40" y="380" width="230" height="96" rx="48" class="person"/>
+  <text x="155" y="420" text-anchor="middle" class="name">Blue Science Park</text>
+  <text x="155" y="440" text-anchor="middle" class="desc">staff</text>
+
+  <!-- System -->
+  <rect x="440" y="200" width="320" height="230" rx="18" class="system"/>
+  <text x="600" y="246" text-anchor="middle" font-size="22" font-weight="700" fill="#ffffff">Virtual Science Park</text>
+  <text x="600" y="282" text-anchor="middle" font-size="14" fill="#dbe8fb">Verified company profiles</text>
+  <text x="600" y="304" text-anchor="middle" font-size="14" fill="#dbe8fb">Matched testbeds, funding, events</text>
+  <text x="600" y="326" text-anchor="middle" font-size="14" fill="#dbe8fb">Ecosystem: themes and connections</text>
+  <text x="600" y="348" text-anchor="middle" font-size="14" fill="#dbe8fb">Innovation assistant · live search</text>
+  <text x="600" y="396" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">AI writes · plain code checks</text>
+
+  <!-- External systems -->
+  <rect x="900" y="96" width="260" height="84" class="ext"/>
+  <text x="1030" y="128" text-anchor="middle" class="name">Company websites</text>
+  <text x="1030" y="150" text-anchor="middle" class="desc">+ BSP member pages</text>
+
+  <rect x="900" y="212" width="260" height="96" class="ext"/>
+  <text x="1030" y="242" text-anchor="middle" class="name">Opportunity sources</text>
+  <text x="1030" y="264" text-anchor="middle" class="desc">Vinnova · RISE · Energimyndigheten</text>
+  <text x="1030" y="284" text-anchor="middle" class="desc">EIC · BSP · MTC · GSMA</text>
+
+  <rect x="900" y="340" width="260" height="84" class="ext"/>
+  <text x="1030" y="372" text-anchor="middle" class="name">Web search</text>
+  <text x="1030" y="394" text-anchor="middle" class="desc">DuckDuckGo + result pages</text>
+
+  <rect x="900" y="456" width="260" height="84" class="ext"/>
+  <text x="1030" y="488" text-anchor="middle" class="name">AI model</text>
+  <text x="1030" y="510" text-anchor="middle" class="desc">Azure OpenAI · gpt-5-mini</text>
+
+  <!-- People -> system -->
+  <path d="M270,198 L438,262" class="line"/>
+  <text x="290" y="160" class="labelbold">Reviews and corrects own profile,</text>
+  <text x="290" y="178" class="label">finds opportunities, asks questions</text>
+
+  <path d="M270,428 L438,370" class="line"/>
+  <text x="282" y="482" class="labelbold">Explores all members,</text>
+  <text x="282" y="500" class="label">shared themes and connections</text>
+
+  <!-- System -> externals -->
+  <path d="M760,232 L898,140" class="line"/>
+  <text x="766" y="122" class="label">fetches public pages</text>
+
+  <path d="M760,282 L898,262" class="line"/>
+  <text x="776" y="258" class="label">curated</text>
+
+  <path d="M760,340 L898,382" class="line"/>
+  <text x="772" y="380" class="label">searches</text>
+
+  <path d="M760,400 L898,494" class="line"/>
+  <text x="768" y="478" class="label">prompts</text>
+</svg>

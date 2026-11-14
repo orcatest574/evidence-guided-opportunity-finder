@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" width="1200" height="760" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a5a75"/>
+    </marker>
+    <style>
+      .group { fill: #f5f8fc; stroke: #9fb3cf; stroke-width: 1.5; rx: 14; }
+      .title { font-size: 16px; font-weight: 700; fill: #13233d; }
+      .sub { font-size: 12px; fill: #5a6b85; }
+      .box { fill: #ffffff; stroke: #0b4fa8; stroke-width: 1.4; rx: 9; }
+      .store { fill: #eaf2fb; stroke: #0b4fa8; stroke-width: 1.4; rx: 9; }
+      .ext { fill: #f3f4f6; stroke: #6b7280; stroke-width: 1.4; rx: 9; }
+      .name { font-size: 14px; font-weight: 700; fill: #13233d; }
+      .desc { font-size: 12px; fill: #45536b; }
+      .line { stroke: #4a5a75; stroke-width: 1.6; fill: none; marker-end: url(#arrow); }
+      .label { font-size: 12px; fill: #13233d; font-weight: 600; }
+      .labelbg { fill: #ffffff; }
+      .ai { fill: #fff4dc; stroke: #c98a12; }
+      .aitext { font-size: 10px; font-weight: 700; fill: #9a6608; }
+      .code { fill: #e3f5ec; stroke: #2e8b57; }
+      .codetext { font-size: 10px; font-weight: 700; fill: #1f6b42; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="760" fill="#ffffff"/>
+  <text x="40" y="34" font-size="20" font-weight="700" fill="#13233d">Virtual Science Park – how the parts fit together</text>
+
+  <!-- Users -->
+  <rect x="80" y="62" width="240" height="52" rx="26" fill="#eaf2fb" stroke="#0b4fa8" stroke-width="1.4"/>
+  <text x="200" y="85" text-anchor="middle" class="name">Member  ·  BSP staff</text>
+  <text x="200" y="102" text-anchor="middle" class="desc">use the app in the browser</text>
+
+  <!-- ① Web app -->
+  <rect x="40" y="160" width="360" height="270" class="group"/>
+  <text x="58" y="186" class="title">① Web app</text>
+  <text x="58" y="203" class="sub">React, runs in the browser</text>
+  <rect x="62" y="216" width="316" height="56" class="box"/>
+  <text x="76" y="239" class="name">Views</text>
+  <text x="76" y="258" class="desc">Profile · Opportunities · Ecosystem · Chat</text>
+  <rect x="62" y="284" width="316" height="56" class="box"/>
+  <text x="76" y="307" class="name">Matcher + Boundary check</text>
+  <text x="76" y="326" class="desc">ranks opportunities · classifies questions</text>
+  <rect x="318" y="292" width="48" height="18" rx="9" class="code"/><text x="342" y="305" text-anchor="middle" class="codetext">CODE</text>
+  <rect x="62" y="352" width="316" height="56" class="store"/>
+  <text x="76" y="375" class="name">localStorage</text>
+  <text x="76" y="394" class="desc">login session · member edits · saved items</text>
+
+  <!-- ② JSON data -->
+  <rect x="470" y="160" width="260" height="270" class="group"/>
+  <text x="488" y="186" class="title">② JSON data</text>
+  <text x="488" y="203" class="sub">src/data – one source for app and API</text>
+  <rect x="490" y="216" width="220" height="56" class="store"/>
+  <text x="504" y="239" class="name">companies/*.json</text>
+  <text x="504" y="258" class="desc">profiles: facts, quotes, interests</text>
+  <rect x="490" y="284" width="220" height="56" class="store"/>
+  <text x="504" y="307" class="name">sources/*.json</text>
+  <text x="504" y="326" class="desc">page texts for quote highlighting</text>
+  <rect x="490" y="352" width="220" height="56" class="store"/>
+  <text x="504" y="375" class="name">opportunities.json</text>
+  <text x="504" y="394" class="desc">14 curated, 7 public sources</text>
+
+  <!-- ③ Backend API -->
+  <rect x="800" y="160" width="360" height="270" class="group"/>
+  <text x="818" y="186" class="title">③ Backend API</text>
+  <text x="818" y="203" class="sub">FastAPI, port 8000</text>
+  <rect x="822" y="216" width="316" height="56" class="box"/>
+  <text x="836" y="239" class="name">Assistant agent</text>
+  <text x="836" y="258" class="desc">POST /assistant · answers from the profile</text>
+  <rect x="1090" y="224" width="36" height="18" rx="9" class="ai"/><text x="1108" y="237" text-anchor="middle" class="aitext">AI</text>
+  <rect x="822" y="284" width="316" height="56" class="box"/>
+  <text x="836" y="307" class="name">Search agent</text>
+  <text x="836" y="326" class="desc">POST /events · upcoming events, testbeds, funding</text>
+  <rect x="1090" y="292" width="36" height="18" rx="9" class="ai"/><text x="1108" y="305" text-anchor="middle" class="aitext">AI</text>
+  <rect x="822" y="352" width="316" height="56" class="box"/>
+  <text x="836" y="375" class="name">Event verifier</text>
+  <text x="836" y="394" class="desc">fetches each page, checks title and date</text>
+  <rect x="1078" y="360" width="48" height="18" rx="9" class="code"/><text x="1102" y="373" text-anchor="middle" class="codetext">CODE</text>
+  <path d="M980,340 L980,350" class="line"/>
+
+  <!-- ④ Profiling agent -->
+  <rect x="470" y="500" width="260" height="230" class="group"/>
+  <text x="488" y="526" class="title">④ Profiling agent</text>
+  <text x="488" y="543" class="sub">CLI: python -m profiler</text>
+  <rect x="490" y="556" width="220" height="42" class="box"/>
+  <text x="504" y="582" class="name">Fetcher</text>
+  <rect x="490" y="614" width="220" height="42" class="box"/>
+  <text x="504" y="640" class="name">AI extractor</text>
+  <rect x="662" y="626" width="36" height="18" rx="9" class="ai"/><text x="680" y="639" text-anchor="middle" class="aitext">AI</text>
+  <rect x="490" y="672" width="220" height="42" class="box"/>
+  <text x="504" y="698" class="name">Quote verifier</text>
+  <rect x="650" y="684" width="48" height="18" rx="9" class="code"/><text x="674" y="697" text-anchor="middle" class="codetext">CODE</text>
+  <path d="M600,598 L600,612" class="line"/>
+  <path d="M600,656 L600,670" class="line"/>
+
+  <!-- External systems -->
+  <rect x="822" y="520" width="150" height="64" class="ext"/>
+  <text x="897" y="546" text-anchor="middle" class="name">Azure OpenAI</text>
+  <text x="897" y="565" text-anchor="middle" class="desc">gpt-5-mini</text>
+  <rect x="990" y="520" width="170" height="64" class="ext"/>
+  <text x="1075" y="546" text-anchor="middle" class="name">Public web</text>
+  <text x="1075" y="565" text-anchor="middle" class="desc">company sites · DuckDuckGo</text>
+
+  <!-- Arrows between groups -->
+  <!-- users -> web app -->
+  <path d="M200,114 L200,158" class="line"/>
+
+  <!-- data -> web app -->
+  <path d="M470,244 L402,244" class="line"/>
+  <rect x="404" y="222" width="64" height="16" class="labelbg"/><text x="436" y="234" text-anchor="middle" class="label">loads</text>
+
+  <!-- web app -> API (over the top) -->
+  <path d="M330,160 L330,138 L980,138 L980,158" class="line"/>
+  <rect x="520" y="122" width="310" height="18" class="labelbg"/><text x="675" y="135" text-anchor="middle" class="label">in-scope questions · company id</text>
+
+  <!-- API -> data -->
+  <path d="M800,312 L732,312" class="line"/>
+  <rect x="734" y="290" width="64" height="16" class="labelbg"/><text x="766" y="302" text-anchor="middle" class="label">reads</text>
+
+  <!-- API -> Azure -->
+  <path d="M897,430 L897,518" class="line"/>
+  <rect x="860" y="466" width="74" height="16" class="labelbg"/><text x="897" y="478" text-anchor="middle" class="label">prompts</text>
+
+  <!-- API -> public web -->
+  <path d="M1075,430 L1075,518" class="line"/>
+  <rect x="1012" y="466" width="126" height="16" class="labelbg"/><text x="1075" y="478" text-anchor="middle" class="label">search + page checks</text>
+
+  <!-- profiling -> data -->
+  <path d="M600,500 L600,432" class="line"/>
+  <rect x="606" y="458" width="72" height="16" class="labelbg"/><text x="642" y="470" text-anchor="middle" class="label">--publish</text>
+
+  <!-- profiling -> Azure -->
+  <path d="M730,635 L790,635 L790,560 L820,560" class="line"/>
+  <rect x="734" y="606" width="74" height="16" class="labelbg"/><text x="771" y="618" text-anchor="middle" class="label">extraction</text>
+
+  <!-- profiling -> public web -->
+  <path d="M730,700 L1075,700 L1075,586" class="line"/>
+  <rect x="860" y="682" width="96" height="16" class="labelbg"/><text x="908" y="694" text-anchor="middle" class="label">fetch pages</text>
+
+  <!-- Legend -->
+  <rect x="40" y="500" width="360" height="150" rx="12" fill="#ffffff" stroke="#d6dde8"/>
+  <text x="58" y="526" class="title">Legend</text>
+  <rect x="58" y="542" width="36" height="18" rx="9" class="ai"/><text x="76" y="555" text-anchor="middle" class="aitext">AI</text>
+  <text x="106" y="556" class="desc">uses the AI model</text>
+  <rect x="58" y="570" width="48" height="18" rx="9" class="code"/><text x="82" y="583" text-anchor="middle" class="codetext">CODE</text>
+  <text x="116" y="584" class="desc">deterministic check, no AI</text>
+  <text x="58" y="616" class="desc" font-weight="700">Rule: the AI writes, plain code checks.</text>
+  <text x="58" y="634" class="desc">Every AI output is checked against its source or fixed rules.</text>
+</svg>
