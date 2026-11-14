@@ -47,3 +47,35 @@ export function CompanyLogo({ src, name, size = 48 }: { src: string; name: strin
     {failed ? <span className="company-logo-fallback">{name.slice(0, 1)}</span> : <img src={src} alt={`${name} logo`} onError={() => setFailed(true)}/>}
   </span>;
 }
+
+// Simple error boundary to prevent the entire route from falling back when a UI panel throws.
+import React from "react";
+
+export class ErrorBoundary extends React.Component<{ children: React.ReactNode; onReset?: () => void }, { hasError: boolean; error?: Error }>{
+  constructor(props: any) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error: Error, info: any) {
+    // Log for debugging in the browser console.
+    // eslint-disable-next-line no-console
+    console.error("ErrorBoundary caught:", error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-4">
+          <p className="text-sm font-semibold">Assistant failed to load.</p>
+          <p className="text-xs text-muted-foreground">Try closing and re-opening the assistant. If the problem persists, check the browser console.</p>
+          <div className="mt-3">
+            <button className="btn" onClick={() => { this.setState({ hasError: false, error: undefined }); this.props.onReset?.(); }}>Close</button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children as React.ReactElement;
+  }
+}
