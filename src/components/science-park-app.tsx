@@ -145,7 +145,7 @@ function MemberApp({ companyId, onLogout, theme, onToggleTheme }: { companyId: s
   ];
   const go = (id: string) => { setView(id); window.scrollTo(0, 0); };
   return <Shell nav={nav} active={view} onNavigate={setView} who={{ name: company.name, role: "Member company", logo: logoUrl(company.id) }} onLogout={onLogout} onAsk={() => setAskOpen(o => !o)} askOpen={askOpen} theme={theme} onToggleTheme={onToggleTheme}>
-    {view === "home" && <MemberHome company={company} edits={edits} setEdits={e => ws.setEdits(company.id, e)} matches={matches} onNavigate={go} onOpenMatch={setDetail}/>}
+    {view === "home" && <MemberHome company={company} edits={edits} setEdits={e => ws.setEdits(company.id, e)} matches={matches} saved={ws.saved} toggleSaved={ws.toggleSaved} onNavigate={go} onOpenMatch={setDetail}/>}
     {view === "profile" && <ProfileView company={company} edits={edits} setEdits={e => ws.setEdits(company.id, e)} onOpenSource={(claim, evidence) => setSource({ claim, evidence })}/>}
     {(view === "opportunities" || view === "saved") && <MemberOpportunities key={view} company={company} matches={matches} saved={ws.saved} toggleSaved={ws.toggleSaved} dismissed={ws.dismissed} savedOnly={view === "saved"} onOpen={setDetail}/>}
     {view === "opportunities" && <LiveEvents companyId={company.id} companyName={company.name}/>}

@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type ComponentType, type ReactNode } from "react";
 import { CalendarDays, FlaskConical, Globe2, Landmark, X } from "lucide-react";
 import type { ClaimType, OpportunityType } from "@/lib/science-park";
 
@@ -82,13 +82,24 @@ export class ErrorBoundary extends React.Component<{ children: React.ReactNode; 
   }
 }
 
-/** Image header for an opportunity card: colour and icon by type, organiser logo on a white tile. Text goes below it. */
-export function OppCover({ type, logo, organiser }: { type?: string | null | undefined; logo?: string | undefined; organiser?: string | undefined }) {
-  const kind = type === "Testing" || type === "Funding" || type === "Event" ? type : "Web";
-  const Icon = kind === "Testing" ? FlaskConical : kind === "Funding" ? Landmark : kind === "Event" ? CalendarDays : Globe2;
-  return <div className="opp-cover" data-type={kind} aria-hidden="true">
-    <Icon className="opp-cover-icon" size={120} strokeWidth={1.2}/>
-    {logo ? <span className="opp-cover-logo"><img src={logo} alt=""/></span> : <span className="opp-cover-logo opp-cover-glyph"><Icon size={28}/></span>}
-    {organiser && <span className="sr-only">{organiser}</span>}
+export type CoverTone = "blue" | "green" | "purple" | "amber" | "red" | "gray" | "navy";
+type IconType = ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
+
+/** Image header for a card: a coloured gradient with a large faint icon and a white tile. Text goes below it. */
+export function Cover({ tone, icon: Icon, logo, small }: { tone: CoverTone; icon: IconType; logo?: string | undefined; small?: boolean }) {
+  return <div className="opp-cover" data-tone={tone} data-small={small} aria-hidden="true">
+    <Icon className="opp-cover-icon" size={small ? 96 : 120} strokeWidth={1.2}/>
+    {logo ? <span className="opp-cover-logo"><img src={logo} alt=""/></span> : <span className="opp-cover-logo opp-cover-glyph"><Icon size={small ? 22 : 28}/></span>}
   </div>;
+}
+
+const OPP_TONE: Record<string, CoverTone> = { Testing: "blue", Funding: "green", Event: "purple" };
+
+/** Image header for an opportunity card: colour and icon by type, organiser logo on a white tile. */
+export function OppCover({ type, logo, organiser }: { type?: string | null | undefined; logo?: string | undefined; organiser?: string | undefined }) {
+  const Icon = type === "Testing" ? FlaskConical : type === "Funding" ? Landmark : type === "Event" ? CalendarDays : Globe2;
+  return <>
+    <Cover tone={OPP_TONE[type ?? ""] ?? "gray"} icon={Icon} logo={logo}/>
+    {organiser && <span className="sr-only">{organiser}</span>}
+  </>;
 }

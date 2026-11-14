@@ -31,31 +31,34 @@ export function MemberOpportunities({ company, matches, saved, toggleSaved, dism
     </header>
     <Filters value={filter} onChange={setFilter} counts={counts}/>
     <div className="opp-grid">
-      {list.map(m => {
-        const o = m.opportunity, level = matchLevel(m.score);
-        const reasons = m.keywordHits.slice(0, 3).map(h => h.keyword);
-        return <article key={o.id} className="opp-card" data-closed={o.status === "closed"}>
-          <OppCover type={o.type} logo={sourceLogo(o.source)} organiser={o.organiser}/>
-          <div className="opp-top">
-            <div className="flex flex-wrap items-center gap-2"><TypeTag type={o.type}/><span className="status" data-status={o.status}>{statusLabel(o)}</span></div>
-            <button className="icon-btn" aria-label={saved.includes(o.id) ? `Unsave ${o.title}` : `Save ${o.title}`} onClick={() => toggleSaved(o.id)}><Bookmark size={17} className={saved.includes(o.id) ? "fill-current text-brand" : ""}/></button>
-          </div>
-          <h3 className="opp-title">{o.title}</h3>
-          <p className="opp-summary">{o.summary}</p>
-          <Meta o={o}/>
-          <div className="opp-foot">
-            <div className="reason">
-              {level && <span className="match-badge" data-level={level}>{level}</span>}
-              <span>{reasons.length ? <>Your profile mentions <strong>{reasons.join(", ")}</strong>{m.interestHits.length > 0 && <> and your interest <strong>{m.interestHits.join(", ")}</strong></>}</> : m.interestHits.length ? <>Matches your interest <strong>{m.interestHits.join(", ")}</strong></> : "A broader opportunity to explore"}</span>
-            </div>
-            <button className="link text-sm font-semibold" onClick={() => onOpen(m)}>View details<ArrowUpRight size={14}/></button>
-          </div>
-        </article>;
-      })}
+      {list.map(m => <MatchCard key={m.opportunity.id} match={m} saved={saved.includes(m.opportunity.id)} toggleSaved={() => toggleSaved(m.opportunity.id)} onOpen={() => onOpen(m)}/>)}
 
       {!list.length && <div className="empty">{savedOnly ? "Save an opportunity to see it here." : "No opportunities in this category."}</div>}
     </div>
   </div>;
+}
+
+/** One opportunity ranked for a member: image header, status, summary and why it matches. Used on Opportunities and Overview. */
+export function MatchCard({ match: m, saved, toggleSaved, onOpen }: { match: Match; saved: boolean; toggleSaved: () => void; onOpen: () => void }) {
+  const o = m.opportunity, level = matchLevel(m.score);
+  const reasons = m.keywordHits.slice(0, 3).map(h => h.keyword);
+  return <article className="opp-card" data-closed={o.status === "closed"}>
+    <OppCover type={o.type} logo={sourceLogo(o.source)} organiser={o.organiser}/>
+    <div className="opp-top">
+      <div className="flex flex-wrap items-center gap-2"><TypeTag type={o.type}/><span className="status" data-status={o.status}>{statusLabel(o)}</span></div>
+      <button className="icon-btn" aria-label={saved ? `Unsave ${o.title}` : `Save ${o.title}`} onClick={toggleSaved}><Bookmark size={17} className={saved ? "fill-current text-brand" : ""}/></button>
+    </div>
+    <h3 className="opp-title">{o.title}</h3>
+    <p className="opp-summary">{o.summary}</p>
+    <Meta o={o}/>
+    <div className="opp-foot">
+      <div className="reason">
+        {level && <span className="match-badge" data-level={level}>{level}</span>}
+        <span>{reasons.length ? <>Your profile mentions <strong>{reasons.join(", ")}</strong>{m.interestHits.length > 0 && <> and your interest <strong>{m.interestHits.join(", ")}</strong></>}</> : m.interestHits.length ? <>Matches your interest <strong>{m.interestHits.join(", ")}</strong></> : "A broader opportunity to explore"}</span>
+      </div>
+      <button className="link text-sm font-semibold" onClick={onOpen}>View details<ArrowUpRight size={14}/></button>
+    </div>
+  </article>;
 }
 
 /** Staff view: every opportunity, with the members it is relevant to. */

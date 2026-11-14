@@ -1,10 +1,11 @@
 import { ArrowRight, ArrowUpRight, CalendarClock, Check, CheckCircle2, CircleAlert, ExternalLink, Lightbulb, Network, RefreshCw, Search, ShieldCheck, Sparkles } from "lucide-react";
 import {
-  TODAY, THEMES, companies, effectiveClaims, logoUrl, matchLevel, opportunities, relevantMembers, statusLabel, suggestedConnections, themeClaims,
+  TODAY, THEMES, companies, effectiveClaims, logoUrl, matchLevel, opportunities, relevantMembers, suggestedConnections, themeClaims,
   type Claim, type Company, type Edits, type Match, type Opportunity,
 } from "@/lib/science-park";
 import { useLiveEvents } from "./events-list";
-import { CompanyLogo, TypeTag } from "./ui";
+import { MatchCard } from "./opportunities-view";
+import { CompanyLogo, Cover, type CoverTone } from "./ui";
 
 const daysUntil = (date: string) => Math.round((Date.parse(date) - Date.parse(TODAY)) / 86_400_000);
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -32,9 +33,10 @@ function HomeHero({ image, eyebrow, title, text, children }: { image: string; ey
   </section>;
 }
 
-function Panel({ icon: Icon, title, action, children, wide }: { icon: typeof Sparkles; title: string; action?: React.ReactNode; children: React.ReactNode; wide?: boolean }) {
-  return <section className="card home-panel" data-wide={wide}>
-    <header className="home-panel-head"><h2 className="home-panel-title"><Icon size={17}/>{title}</h2>{action}</header>
+function Panel({ icon: Icon, tone, title, action, children, wide }: { icon: typeof Sparkles; tone: CoverTone; title: string; action?: React.ReactNode; children: React.ReactNode; wide?: boolean }) {
+  return <section className="opp-card home-panel" data-wide={wide}>
+    <Cover tone={tone} icon={Icon} small/>
+    <header className="home-panel-head"><h2 className="home-panel-title">{title}</h2>{action}</header>
     {children}
   </section>;
 }
@@ -43,8 +45,8 @@ function Panel({ icon: Icon, title, action, children, wide }: { icon: typeof Spa
 // Member overview
 // =====================================================================
 
-export function MemberHome({ company, edits, setEdits, matches, onNavigate, onOpenMatch }: {
-  company: Company; edits: Edits; setEdits: (e: Edits) => void; matches: Match[]; onNavigate: (view: string) => void; onOpenMatch: (m: Match) => void;
+export function MemberHome({ company, edits, setEdits, matches, saved, toggleSaved, onNavigate, onOpenMatch }: {
+  company: Company; edits: Edits; setEdits: (e: Edits) => void; matches: Match[]; saved: string[]; toggleSaved: (id: string) => void; onNavigate: (view: string) => void; onOpenMatch: (m: Match) => void;
 }) {
   const claims = effectiveClaims(company, edits);
   const top = matches.filter(m => matchLevel(m.score) && m.opportunity.status !== "closed").slice(0, 3);
@@ -61,23 +63,19 @@ export function MemberHome({ company, edits, setEdits, matches, onNavigate, onOp
       <button className="btn hero-btn" onClick={() => onNavigate("profile")}>Open your profile</button>
     </HomeHero>
 
-    <div className="home-grid">
-      <Panel icon={Sparkles} title="Best matches for you" wide action={<button className="link text-sm" onClick={() => onNavigate("opportunities")}>All {matches.length}<ArrowUpRight size={14}/></button>}>
-        <div className="home-matches">
-          {top.map(m => {
-            const reasons = [...m.keywordHits.slice(0, 3).map(h => h.keyword), ...m.interestHits];
-            return <button key={m.opportunity.id} className="home-match" onClick={() => onOpenMatch(m)}>
-              <div className="flex flex-wrap items-center gap-2"><TypeTag type={m.opportunity.type}/><span className="match-badge" data-level={matchLevel(m.score)}>{matchLevel(m.score)}</span></div>
-              <h3 className="home-match-title">{m.opportunity.title}</h3>
-              <p className="home-match-why">{reasons.length ? <>Your profile mentions <strong>{reasons.join(", ")}</strong></> : m.opportunity.summary}</p>
-              <span className="home-match-meta">{m.opportunity.organiser} · {statusLabel(m.opportunity)}</span>
-            </button>;
-          })}
-          {!top.length && <p className="card-help">No clear matches yet. Add your own interests on the profile to improve them.</p>}
-        </div>
-      </Panel>
+    <section className="home-section">
+      <header className="home-section-head">
+        <h2 className="section-heading"><Sparkles size={18}/>Best matches for you</h2>
+        <button className="link text-sm font-semibold" onClick={() => onNavigate("opportunities")}>All {matches.length} opportunities<ArrowUpRight size={14}/></button>
+      </header>
+      <div className="opp-grid">
+        {top.map(m => <MatchCard key={m.opportunity.id} match={m} saved={saved.includes(m.opportunity.id)} toggleSaved={() => toggleSaved(m.opportunity.id)} onOpen={() => onOpenMatch(m)}/>)}
+        {!top.length && <div className="empty">No clear matches yet. Add your own interests on the profile to improve them.</div>}
+      </div>
+    </section>
 
-      <Panel icon={CalendarClock} title="Coming up">
+    <div className="home-grid">
+      <Panel icon={CalendarClock} tone="blue" title="Coming up">
         <ul className="home-list">
           {deadlines.map(({ o, m }) => <li key={o.id}>
             <DateBlock date={o.deadline!}/>
@@ -90,7 +88,7 @@ export function MemberHome({ company, edits, setEdits, matches, onNavigate, onOp
         </ul>
       </Panel>
 
-      <Panel icon={Lightbulb} title="Is this right?" action={<button className="link text-sm" onClick={() => onNavigate("profile")}>Review all<ArrowUpRight size={14}/></button>}>
+      <Panel icon={Lightbulb} tone="amber" title="Is this right?" action={<button className="link text-sm" onClick={() => onNavigate("profile")}>Review all<ArrowUpRight size={14}/></button>}>
         <p className="card-help">The AI inferred these interests from your public pages. They are not facts until you confirm them. Confirmed interests count in the matching.</p>
         <ul className="home-review">
           {toReview.slice(0, 3).map(c => <li key={c.id}>
@@ -104,7 +102,7 @@ export function MemberHome({ company, edits, setEdits, matches, onNavigate, onOp
 
       <LivePreview companyId={company.id} onNavigate={onNavigate}/>
 
-      <Panel icon={ShieldCheck} title="Your profile">
+      <Panel icon={ShieldCheck} tone="green" title="Your profile">
         <div className="home-stats">
           <div><strong>{facts}</strong><span>verified facts, each with a quote from the source</span></div>
           <div><strong>{company.pagesFetched}</strong><span>public pages read by the profiling agent</span></div>
@@ -120,7 +118,7 @@ export function MemberHome({ company, edits, setEdits, matches, onNavigate, onOp
 /** Two newest results from the search agent; uses the same session cache as the Opportunities page. */
 function LivePreview({ companyId, onNavigate }: { companyId: string; onNavigate: (view: string) => void }) {
   const { events, error, retry } = useLiveEvents(companyId);
-  return <Panel icon={Search} title="Found by the search agent" action={<span className="ai-badge">Live</span>}>
+  return <Panel icon={Search} tone="gray" title="Found by the search agent" action={<span className="ai-badge">Live</span>}>
     {error ? <div><p className="card-help">{error}</p><button className="btn btn-sm mt-2" onClick={retry}><RefreshCw size={14}/>Try again</button></div>
     : !events ? <div className="space-y-3" aria-busy="true"><span className="skeleton w-3/4"/><span className="skeleton w-1/2"/><span className="skeleton w-2/3 mt-4"/><span className="skeleton w-1/3"/><p className="card-help">Searching the web…</p></div>
     : !events.length ? <p className="card-help">Nothing new found this time.</p>
@@ -162,7 +160,7 @@ export function StaffHome({ onNavigate, onOpenCompany, onOpenOpportunity }: { on
     </div>
 
     <div className="home-grid">
-      <Panel icon={CalendarClock} title="Deadlines – who should know?" wide>
+      <Panel icon={CalendarClock} tone="blue" title="Deadlines – who should know?" wide>
         <ul className="home-list">
           {deadlines.map(o => {
             const members = relevantMembers(o);
@@ -178,7 +176,7 @@ export function StaffHome({ onNavigate, onOpenCompany, onOpenOpportunity }: { on
         </ul>
       </Panel>
 
-      <Panel icon={Network} title="Introductions to consider" action={<button className="link text-sm" onClick={() => onNavigate("ecosystem")}>All<ArrowUpRight size={14}/></button>}>
+      <Panel icon={Network} tone="purple" title="Introductions to consider" action={<button className="link text-sm" onClick={() => onNavigate("ecosystem")}>All<ArrowUpRight size={14}/></button>}>
         <ul className="home-list">
           {connections.slice(0, 3).map(c => <li key={c.a.id + c.b.id}>
             <span className="home-pair"><CompanyLogo src={logoUrl(c.a.id)} name={c.a.name} size={28}/><CompanyLogo src={logoUrl(c.b.id)} name={c.b.name} size={28}/></span>
@@ -190,7 +188,7 @@ export function StaffHome({ onNavigate, onOpenCompany, onOpenOpportunity }: { on
         </ul>
       </Panel>
 
-      <Panel icon={Sparkles} title="Shared themes">
+      <Panel icon={Sparkles} tone="navy" title="Shared themes">
         <ul className="home-list">
           {themes.map(t => <li key={t.name}>
             <div className="min-w-0 flex-1">
@@ -202,7 +200,7 @@ export function StaffHome({ onNavigate, onOpenCompany, onOpenOpportunity }: { on
         </ul>
       </Panel>
 
-      <Panel icon={ShieldCheck} title="Profile quality" wide>
+      <Panel icon={ShieldCheck} tone="green" title="Profile quality" wide>
         <div className="home-quality">
           {companies.map(c => {
             const unverified = c.claims.filter(x => x.type === "unverified").length;

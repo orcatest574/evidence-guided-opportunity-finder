@@ -1,7 +1,14 @@
 import { useState } from "react";
-import { ArrowLeft, Check, ExternalLink, EyeOff, Pencil, Plus, RotateCcw, ShieldCheck, X } from "lucide-react";
+import { ArrowLeft, Bot, Briefcase, CalendarDays, Check, CircleAlert, Cpu, ExternalLink, EyeOff, Factory, FileSearch, Globe2, Handshake, Layers, Lightbulb, MapPin, Pencil, Plus, RotateCcw, ShieldCheck, Target, X } from "lucide-react";
 import { SECTIONS, effectiveClaims, logoUrl, type Claim, type Company, type Edits, type Evidence } from "@/lib/science-park";
-import { ClaimBadge, CompanyLogo } from "./ui";
+import { ClaimBadge, CompanyLogo, Cover, type CoverTone } from "./ui";
+
+const SECTION_ICON: Record<string, typeof Factory> = {
+  whatTheyDo: Factory, technologies: Cpu, applicationAreas: Layers, markets: Briefcase, geography: MapPin,
+  statedPriorities: Target, collaborations: Handshake, inferredInterests: Lightbulb,
+};
+/** Same colour language as the opportunity cards: the header colour shows what kind of claim it is. */
+const CLAIM_TONE: Record<string, CoverTone> = { fact: "green", inferred: "amber", unverified: "red", user_confirmed: "purple", user_corrected: "purple" };
 
 /** Removes the AI model's internal claim references such as "(c9)" or "(c2, c7)". */
 const stripIds = (text: string) => text.replace(/\s*\((?:c\d+(?:,\s*)?)+\)/g, "");
@@ -51,10 +58,10 @@ export function ProfileView({ company, edits, setEdits, onBack, onOpenSource }: 
       </div>
     </section>
 
-    <nav className="section-tabs" aria-label="Profile sections">
+    <nav className="filter-bar profile-filters" aria-label="Profile sections">
       {tabs.map(t => {
         const n = claims.filter(c => c.section === t.key).length;
-        return <button key={t.key} data-active={tab === t.key} onClick={() => setTab(t.key)}>{t.label}{t.key !== "about" && <span className="tab-count">{n}</span>}</button>;
+        return <button key={t.key} className="filter-btn" data-active={tab === t.key} onClick={() => setTab(t.key)}>{t.label}{t.key !== "about" && <span className="tab-count">{n}</span>}</button>;
       })}
     </nav>
 
@@ -62,7 +69,7 @@ export function ProfileView({ company, edits, setEdits, onBack, onOpenSource }: 
       {tab === "about" ? <AboutProfile company={company}/> : <>
         {tab === "inferredInterests" && <p className="tab-intro">These interests are our reasoning from the verified facts – not confirmed company priorities.{setEdits && " Confirm the ones that are right, remove the rest, or add your own."}</p>}
         {company.missing.filter(m => matchesSection(m.field, tab)).map(m => <p key={m.field} className="missing-inline">Not found in public sources: {stripIds(m.reason)}</p>)}
-        <div className="claim-grid">
+        <div className="opp-grid">
           {claims.filter(c => c.section === tab).map(c => <ClaimCard key={c.id} claim={c} onOpenSource={onOpenSource}
             onConfirm={setEdits && c.type === "inferred" ? () => setEdits({ ...edits, confirmed: [...edits.confirmed, c.id] }) : undefined}
             onUnconfirm={setEdits && c.type === "user_confirmed" ? () => setEdits({ ...edits, confirmed: edits.confirmed.filter(x => x !== c.id) }) : undefined}
@@ -94,17 +101,20 @@ function ClaimCard({ claim, onOpenSource, onConfirm, onUnconfirm, onHide, onEdit
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(claim.value);
   const save = () => { const text = draft.trim(); if (text && onEdit) onEdit(text); setEditing(false); };
-  return <article className="claim" data-type={claim.type}>
+  const first = claim.evidence[0];
+  return <article className="opp-card claim-card" data-type={claim.type}>
+    <Cover tone={CLAIM_TONE[claim.type] ?? "gray"} icon={SECTION_ICON[claim.section] ?? Globe2} small/>
     <div className="claim-head"><ClaimBadge type={claim.type}/>{claim.confidence && claim.type !== "user_corrected" && <span className="claim-meta">{claim.confidence} confidence</span>}</div>
     {editing
       ? <textarea className="claim-edit" aria-label="Correct this claim" rows={3} maxLength={400} value={draft} autoFocus onChange={e => setDraft(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); save(); } if (e.key === "Escape") setEditing(false); }}/>
       : <p className="claim-text">{claim.value}</p>}
     {claim.originalValue && !editing && <p className="claim-original" title="Original text from the public source">{claim.originalValue}</p>}
-    {inferred && claim.reasoning && <p className="claim-reason">Why: {stripIds(claim.reasoning)}</p>}
-    {claim.note && <p className="claim-reason">{claim.note}</p>}
-    <div className="claim-foot">
-      {!inferred && claim.evidence.map(e => <button key={e.id} className="source-chip" onClick={() => onOpenSource(claim, e)}>{(e.title ?? e.publisher ?? "Source").split(/ [|–-] /)[0]}<span className="text-ink-soft"> · {e.publisher}</span></button>)}
-      <span className="ml-auto flex flex-wrap gap-1">
+    {inferred && claim.reasoning && <p className="opp-summary">Why: {stripIds(claim.reasoning)}</p>}
+    {claim.note && <p className="opp-summary">{claim.note}</p>}
+    {!inferred && first && <div className="opp-meta"><span><Globe2 size={13}/>{first.publisher ?? new URL(first.url).hostname}</span><span><CalendarDays size={13}/>Retrieved {first.retrievedAt}</span></div>}
+    <div className="opp-foot claim-foot">
+      {!inferred && claim.evidence.length > 0 && <div className="flex flex-wrap gap-1.5">{claim.evidence.map(e => <button key={e.id} className="source-chip" onClick={() => onOpenSource(claim, e)}>{(e.title ?? e.publisher ?? "Source").split(/ [|–-] /)[0]}<span className="text-ink-soft"> · show quote</span></button>)}</div>}
+      <span className="flex flex-wrap gap-1">
         {editing ? <>
           <button className="action-btn" onClick={save}><Check size={13}/>Save</button>
           <button className="action-btn subtle" onClick={() => { setDraft(claim.value); setEditing(false); }}>Cancel</button>
@@ -122,7 +132,8 @@ function ClaimCard({ claim, onOpenSource, onConfirm, onUnconfirm, onHide, onEdit
 
 function OwnInterests({ edits, setEdits }: { edits: Edits; setEdits: (e: Edits) => void }) {
   const [value, setValue] = useState("");
-  return <div className="own-interests card">
+  return <div className="own-interests opp-card">
+    <Cover tone="purple" icon={Plus} small/>
     <h3 className="card-title">Your own interests and priorities</h3>
     <p className="card-help">For example “marine testing” or “hydrogen”. They are used when matching opportunities.</p>
     <form className="mt-3 flex gap-2" onSubmit={e => { e.preventDefault(); const v = value.trim().toLowerCase(); if (v) { setEdits({ ...edits, interests: [...new Set([...edits.interests, v])] }); setValue(""); } }}>
@@ -135,7 +146,8 @@ function OwnInterests({ edits, setEdits }: { edits: Edits; setEdits: (e: Edits) 
 
 function AboutProfile({ company }: { company: Company }) {
   return <div className="about-grid">
-    <div className="card">
+    <div className="opp-card">
+      <Cover tone="navy" icon={Bot} small/>
       <h3 className="card-title">How this profile was built</h3>
       <ol className="steps">
         <li><strong>Profiling agent – fetch:</strong> {company.pagesFetched} public web pages about {company.name}.</li>
@@ -145,7 +157,8 @@ function AboutProfile({ company }: { company: Company }) {
       </ol>
       <p className="card-help mt-3">Snapshot from {company.createdAt}.</p>
     </div>
-    <div className="card">
+    <div className="opp-card">
+      <Cover tone="amber" icon={CircleAlert} small/>
       <h3 className="card-title">Missing or uncertain</h3>
       {company.missing.length + company.uncertainties.length === 0 ? <p className="card-help">Nothing flagged.</p> :
         <ul className="bullets">
@@ -153,7 +166,8 @@ function AboutProfile({ company }: { company: Company }) {
           {company.uncertainties.map(u => <li key={u.topic}><strong>{u.topic}</strong> – {stripIds(u.detail)}</li>)}
         </ul>}
     </div>
-    <div className="card about-wide">
+    <div className="opp-card about-wide">
+      <Cover tone="green" icon={FileSearch} small/>
       <h3 className="card-title">Verifier log</h3>
       <p className="card-help">What the verifier removed or downgraded before the profile was published.</p>
       {company.verifierLog.length ? <ul className="log">{company.verifierLog.map(w => <li key={w}>{w}</li>)}</ul> : <p className="card-help mt-2">Every quote was found on its source page.</p>}

@@ -432,10 +432,15 @@ button.member-chip:hover { color: var(--brand-deep); }
 .opp-card { overflow: hidden; }
 .opp-cover { position: relative; height: 112px; margin: -18px -20px 14px; display: flex; align-items: flex-end; padding: 0 20px 14px; overflow: hidden;
   background: linear-gradient(135deg, var(--cover-a), var(--cover-b)); }
-.opp-cover[data-type=Testing] { --cover-a: oklch(0.55 0.15 245); --cover-b: oklch(0.38 0.13 262); }
-.opp-cover[data-type=Funding] { --cover-a: oklch(0.58 0.12 160); --cover-b: oklch(0.4 0.1 175); }
-.opp-cover[data-type=Event]   { --cover-a: oklch(0.55 0.15 295); --cover-b: oklch(0.38 0.13 285); }
-.opp-cover[data-type=Web]     { --cover-a: oklch(0.6 0.03 255); --cover-b: oklch(0.42 0.04 260); }
+.opp-cover[data-tone=blue]   { --cover-a: oklch(0.55 0.15 245); --cover-b: oklch(0.38 0.13 262); }
+.opp-cover[data-tone=green]  { --cover-a: oklch(0.58 0.12 160); --cover-b: oklch(0.4 0.1 175); }
+.opp-cover[data-tone=purple] { --cover-a: oklch(0.55 0.15 295); --cover-b: oklch(0.38 0.13 285); }
+.opp-cover[data-tone=amber]  { --cover-a: oklch(0.72 0.14 75); --cover-b: oklch(0.55 0.13 55); }
+.opp-cover[data-tone=red]    { --cover-a: oklch(0.6 0.15 30); --cover-b: oklch(0.45 0.13 20); }
+.opp-cover[data-tone=gray]   { --cover-a: oklch(0.6 0.03 255); --cover-b: oklch(0.42 0.04 260); }
+.opp-cover[data-tone=navy]   { --cover-a: oklch(0.42 0.12 258); --cover-b: oklch(0.25 0.07 262); }
+.opp-cover[data-small=true] { height: 84px; padding-bottom: 12px; }
+.opp-cover[data-small=true] .opp-cover-logo { width: 44px; height: 44px; border-radius: 12px; }
 .opp-cover::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 85% 0%, oklch(1 0 0 / 0.22), transparent 55%); }
 .opp-cover-icon { position: absolute; right: -14px; top: -14px; color: oklch(1 0 0 / 0.16); }
 .opp-cover-logo { position: relative; z-index: 1; display: grid; place-items: center; width: 56px; height: 56px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px oklch(0 0 0 / 0.2); overflow: hidden; }
@@ -522,12 +527,13 @@ button.member-chip:hover { color: var(--brand-deep); }
 .btn.btn-sm { height: 30px; padding: 0 10px; font-size: 12px; }
 .home-kpis { grid-template-columns: repeat(4, 1fr); margin: 20px 0 0; }
 @media (max-width: 900px) { .home-kpis { grid-template-columns: repeat(2, 1fr); } }
-.home-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
+.home-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
 .home-panel[data-wide=true] { grid-column: 1 / -1; }
 @media (max-width: 900px) { .home-grid { grid-template-columns: 1fr; } }
-.home-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.home-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.home-section { margin-top: 28px; }
+.home-section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .home-panel-title { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 800; }
-.home-panel-title svg { color: var(--brand-deep); }
 .home-matches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 900px) { .home-matches { grid-template-columns: 1fr; } }
 .home-match { text-align: left; display: flex; flex-direction: column; gap: 8px; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--ink); transition: border-color .2s, box-shadow .2s, transform .2s; }
@@ -566,3 +572,13 @@ button.member-chip:hover { color: var(--brand-deep); }
 .home-quality-row [data-warn=true] { color: var(--unverified); }
 @media (max-width: 700px) { .home-quality-row { grid-template-columns: 32px 1fr 1fr; } .home-quality-row > :last-child { display: none; } }
 @media (max-width: 600px) { .home-hero-content { padding: 20px 16px; } .home-hero { min-height: 240px; } }
+
+/* ---- Profile claims in the same card style as opportunities ---- */
+.profile-filters { margin-top: 28px; }
+.claim-card .claim-head { margin-top: 2px; }
+.claim-card .claim-text { font-size: 15px; font-weight: 600; line-height: 1.5; margin-top: 10px; }
+.claim-card .claim-foot { flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+.claim-card[data-type=unverified] { background: var(--muted); }
+.own-interests.opp-card { margin-top: 18px; }
+.about-grid .opp-card .steps, .about-grid .opp-card .bullets { margin-top: 10px; }
+@media (max-width: 700px) { .profile-filters { flex-wrap: nowrap; overflow-x: auto; margin-left: -16px; margin-right: -16px; padding: 0 16px 4px; scrollbar-width: none; } .profile-filters .filter-btn { flex-shrink: 0; } }
