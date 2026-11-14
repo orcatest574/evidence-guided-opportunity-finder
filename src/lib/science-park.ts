@@ -33,7 +33,7 @@ export const SECTIONS: { key: string; label: string }[] = [
 ];
 
 export type Company = {
-  id: string; name: string; logo: string; background?: string; website: string; summary: string; createdAt: string; createdBy: string; pagesFetched: number;
+  id: string; name: string; logo: string; background?: string | undefined; website: string; summary: string; createdAt: string; createdBy: string; pagesFetched: number;
   claims: Claim[];
   evidence: Evidence[];
   topics: { topic: string; weight: number }[];
