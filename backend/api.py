@@ -17,7 +17,7 @@ import json
 import re
 from pathlib import Path
 from typing import Any
-
+from agents import Runner
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -95,44 +95,9 @@ def load_profile(company_name: str) -> dict[str, Any]:
 
     raise HTTPException(status_code=404, detail=f"No profile found for '{company_name}'")
 
-
-async def run_agent(agent: Any, prompt: str) -> str:
-    """
-    Call an agent in a tolerant way. Supports:
-      - plain functions / async functions:   agent(prompt)
-      - objects with .run / .invoke / .ainvoke / .arun
-    Sync calls run in a worker thread so the event loop is not blocked.
-    Returns the answer as a string.
-    """
-    if callable(agent):
-        fn = agent
-    else:
-        fn = None
-        for name in ("arun", "ainvoke", "run", "invoke"):
-            if hasattr(agent, name):
-                fn = getattr(agent, name)
-                break
-        if fn is None:
-            raise RuntimeError("Agent has no callable interface (expected callable, run or invoke)")
-
-    result = fn(prompt)
-    if inspect.isawaitable(result):
-        result = await result
-    elif not inspect.iscoroutinefunction(fn):
-        # sync function: we already called it above; if it was slow it blocked.
-        pass
-    return extract_text(result)
-
-
-async def run_agent_threaded(agent: Any, prompt: str) -> str:
-    """Run a (possibly blocking) agent call without blocking the event loop."""
-    loop = asyncio.get_running_loop()
-
-    def _call() -> str:
-        return asyncio.run(run_agent(agent, prompt))
-
-    return await loop.run_in_executor(None, _call)
-
+async def run_agent(agent, prompt: str, max_turns: int = 10) -> str:
+    result = await Runner.run(agent, input=prompt, max_turns=max_turns)
+    return str(result.final_output or "")
 
 def extract_text(result: Any) -> str:
     """Normalise different agent return types to plain text."""
@@ -187,7 +152,7 @@ async def assistant(req: AssistantRequest) -> AssistantResponse:
     )
 
     try:
-        answer = await run_agent_threaded(assistent_agent, prompt)
+        answer = await run_agent(assistent_agent, prompt)
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"Assistant agent failed: {exc}")
 
@@ -201,16 +166,19 @@ async def assistant(req: AssistantRequest) -> AssistantResponse:
 @app.post("/events", response_model=EventsResponse)
 async def events(req: EventsRequest) -> EventsResponse:
     prompt = (
-        f"Use the web_search tool to investigate the company '{req.company_name}' "
-        "and find the 5 most relevant events (e.g. conferences, product launches, "
-        "earnings calls, webinars, trade shows, announcements - upcoming or recent).\n\n"
-        "Return ONLY a JSON array with exactly 5 objects, no extra text, in this shape:\n"
-        '[{"title": "...", "date": "YYYY-MM-DD or text", "location": "...", '
-        '"description": "one or two sentences", "url": "source link"}]'
-    )
+    f"Find the 5 most relevant events for the company '{req.company_name}' "
+    "(conferences, trade shows, product launches, webinars, announcements).\n\n"
+    "Rules:\n"
+    "- Use web_search at most 3 times, then stop searching.\n"
+    "- Even if results are imperfect, you MUST finish by answering with what you found.\n"
+    "- Final answer: ONLY a JSON array of exactly 5 objects, no markdown, no extra text:\n"
+    '[{"title": "...", "date": "...", "location": "...", "description": "...", "url": "..."}]'
+)
+    #print  username
+    print(f"Fetching events for company: {req.company_name}")
 
     try:
-        raw = await run_agent_threaded(collector_agent, prompt)
+        raw = await run_agent(collector_agent, prompt)
         items = parse_events(raw)
     except ValueError as exc:
         raise HTTPException(status_code=502, detail=f"Could not parse collector output: {exc}")

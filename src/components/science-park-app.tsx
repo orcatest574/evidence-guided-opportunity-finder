@@ -18,6 +18,7 @@ const PASSWORD = "bluepark2026";
 const ACCOUNTS: Record<string, Session> = {
   staff: { role: "staff" },
   roxtec: { role: "member", companyId: "roxtec" },
+  ericsson: { role: "member", companyId: "ericsson" },
   ...Object.fromEntries(companies.map(c => [c.id, { role: "member", companyId: c.id } as Session])),
 };
 const SESSION_KEY = "vsp-session";
