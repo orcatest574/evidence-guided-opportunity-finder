@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ArrowLeft, Check, ExternalLink, EyeOff, Plus, RotateCcw, ShieldCheck, X } from "lucide-react";
-import waterfront from "@/assets/karlskrona-waterfront.jpg";
 import { SECTIONS, effectiveClaims, logoUrl, type Claim, type Company, type Edits, type Evidence } from "@/lib/science-park";
 import { ClaimBadge, CompanyLogo } from "./ui";
 
@@ -30,7 +29,7 @@ export function ProfileView({ company, edits, setEdits, onBack, onOpenSource }: 
     {onBack && <button className="back-link" onClick={onBack}><ArrowLeft size={15}/>All members</button>}
 
     <section className="profile-hero">
-      <img className="profile-hero-img" src={company.background ?? waterfront} alt="" width={1600} height={608}/>
+      <img className="profile-hero-img" src={company.background ?? "/companies/BSP_background.png"} alt="" width={1600} height={608}/>
       <div className="profile-hero-overlay"/>
       <div className="profile-hero-content">
         <CompanyLogo src={logoUrl(company.id)} name={company.name} size={72}/>
