@@ -19,6 +19,7 @@ const ACCOUNTS: Record<string, Session> = {
   staff: { role: "staff" },
   roxtec: { role: "member", companyId: "roxtec" },
   ericsson: { role: "member", companyId: "ericsson" },
+  nkt: { role: "member", companyId: "nkt" },
   ...Object.fromEntries(companies.map(c => [c.id, { role: "member", companyId: c.id } as Session])),
 };
 const SESSION_KEY = "vsp-session";
