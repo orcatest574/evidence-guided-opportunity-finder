@@ -67,7 +67,7 @@ collector_agent = Agent(
 
 
 def main():
-    with open("profiles/roxtec.json", "r") as f:
+    with open("../src/data/companies/roxtec.json", "r") as f:
         profile = json.load(f)
     result = Runner.run_sync(
             collector_agent,

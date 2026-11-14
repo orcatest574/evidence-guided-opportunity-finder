@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ArrowUpRight, Bookmark, Building2, CalendarDays, ExternalLink, Globe2, Sparkles, ThumbsDown } from "lucide-react";
 import { logoUrl, matchLevel, opportunities, relevantMembers, statusLabel, type Claim, type Company, type Match, type Opportunity, type OpportunityType } from "@/lib/science-park";
-import type { EventItem } from "@/api/events";
 import { CompanyLogo, TypeTag } from "./ui";
 
 const FILTERS: ("All" | OpportunityType)[] = ["All", "Testing", "Funding", "Event"];
@@ -16,19 +15,12 @@ function Meta({ o }: { o: Opportunity }) {
 }
 
 /** Member view: opportunities ranked for the signed-in company. */
-export function MemberOpportunities({ company, matches, saved, toggleSaved, dismissed, savedOnly, onOpen, extraEvents }: {
-  company: Company; matches: Match[]; saved: string[]; toggleSaved: (id: string) => void; dismissed: string[]; savedOnly: boolean; onOpen: (m: Match) => void; extraEvents?: EventItem[];
+export function MemberOpportunities({ company, matches, saved, toggleSaved, dismissed, savedOnly, onOpen }: {
+  company: Company; matches: Match[]; saved: string[]; toggleSaved: (id: string) => void; dismissed: string[]; savedOnly: boolean; onOpen: (m: Match) => void;
 }) {
   const [filter, setFilter] = useState<"All" | OpportunityType>("All");
   const base = matches.filter(m => !dismissed.includes(m.opportunity.id) && (!savedOnly || saved.includes(m.opportunity.id)));
-  // avoid duplicates: prefer fetched events but don't repeat titles already in opportunities
-  const existingTitles = new Set(base.map(m => (m.opportunity.title || "").trim().toLowerCase()));
-  const dedupeEvents = (extraEvents || []).filter(e => !(existingTitles.has((e.title || "").trim().toLowerCase())));
-  const eventsCount = dedupeEvents.length;
   const counts = Object.fromEntries(FILTERS.map(f => [f, base.filter(m => f === "All" || m.opportunity.type === f).length]));
-  // include fetched events in totals and Event tab
-  counts["All"] = (counts["All"] ?? 0) + eventsCount;
-  counts["Event"] = (counts["Event"] ?? 0) + eventsCount;
 
   const list = base.filter(m => filter === "All" || m.opportunity.type === filter);
 
@@ -39,8 +31,7 @@ export function MemberOpportunities({ company, matches, saved, toggleSaved, dism
     </header>
     <Filters value={filter} onChange={setFilter} counts={counts}/>
     <div className="opp-grid">
-      {/* Show matched opportunities first (or the filtered subset) */}
-      {filter !== "Event" && list.map(m => {
+      {list.map(m => {
         const o = m.opportunity, level = matchLevel(m.score);
         const reasons = m.keywordHits.slice(0, 3).map(h => h.keyword);
         return <article key={o.id} className="opp-card" data-closed={o.status === "closed"}>
@@ -61,17 +52,7 @@ export function MemberOpportunities({ company, matches, saved, toggleSaved, dism
         </article>;
       })}
 
-      {/* Show fetched events either in All or when Events filter selected */}
-      {(filter === "All" || filter === "Event") && dedupeEvents.map((e, i) => <article key={`${e.title}-${i}`} className="opp-card">
-        <div className="opp-top"><div className="flex flex-wrap items-center gap-2"><TypeTag type={"Event" as any}/></div></div>
-        <h3 className="opp-title"><strong>{e.title}</strong></h3>
-        <p className="mt-1 text-sm text-ink-soft">{e.date ? <span>{e.date}</span> : null}{e.date && e.location ? <span> · </span> : null}{e.location ? <span>{e.location}</span> : null}</p>
-        <p className="opp-summary">{e.description}</p>
-        <div className="opp-foot">{e.url ? <a className="link text-sm font-semibold" href={e.url} target="_blank" rel="noopener noreferrer">Learn more</a> : null}</div>
-      </article>)}
-
-      {/* Empty state when nothing to show */}
-      {((filter === "Event" && dedupeEvents.length === 0) || (filter !== "Event" && list.length === 0 && dedupeEvents.length === 0)) && <div className="empty">{savedOnly ? "Save an opportunity to see it here." : (filter === "Event" ? `No events found for ${company.name}.` : "No opportunities in this category.")}</div>}
+      {!list.length && <div className="empty">{savedOnly ? "Save an opportunity to see it here." : "No opportunities in this category."}</div>}
     </div>
   </div>;
 }

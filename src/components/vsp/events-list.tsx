@@ -1,111 +1,51 @@
-import { useEffect, useRef, useState } from "react";
-import type { EventItem, fetchEvents as _fetchEvents } from "@/api/events";
-import { fetchEvents } from "@/api/events";
+import { useEffect, useState } from "react";
+import { CalendarDays, ExternalLink, MapPin, RefreshCw, Search } from "lucide-react";
+import { fetchEvents, type EventItem } from "@/api/events";
 
-export function EventsList({ companyName, onLoadingChange, onResults }: { companyName: string; onLoadingChange?: (loading: boolean) => void; onResults?: (events: EventItem[] | null, error?: string | null) => void }) {
-  const cache = useRef<Record<string, EventItem[] | null>>({});
-  const [loading, setLoading] = useState(false);
+// Kept for the whole browser session so the slow live search only runs once per company.
+const cache: Record<string, EventItem[]> = {};
+
+/**
+ * Live results from the collector agent (AI + web search), shown below the curated opportunities.
+ * Loads in the background and never blocks the rest of the page.
+ */
+export function LiveEvents({ companyId, companyName }: { companyId: string; companyName: string }) {
+  const [events, setEvents] = useState<EventItem[] | null>(cache[companyId] ?? null);
   const [error, setError] = useState<string | null>(null);
-  const [events, setEvents] = useState<EventItem[] | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
-    let mounted = true;
-    setError(null);
-    setEvents(null);
-    onResults?.(null, null);
-    if (!companyName) return;
-    const cached = cache.current[companyName];
-    if (cached) {
-      setEvents(cached);
-      onResults?.(cached, null);
-      return;
-    }
-    setLoading(true);
-    onLoadingChange?.(true);
-    (async () => {
-      try {
-        const res = await fetchEvents(companyName);
-        if (!mounted) return;
-        cache.current[companyName] = res;
-        setEvents(res);
-        onResults?.(res, null);
-      } catch (e: any) {
-        if (!mounted) return;
-        const msg = e?.message || "Failed to fetch events";
-        setError(msg);
-        onResults?.(null, msg);
-      } finally {
-        if (!mounted) return;
-        setLoading(false);
-        onLoadingChange?.(false);
-      }
-    })();
-    return () => { mounted = false; };
-  }, [companyName]);
+    if (cache[companyId]) { setEvents(cache[companyId]!); return; }
+    let active = true;
+    setEvents(null); setError(null);
+    fetchEvents(companyId)
+      .then(res => { cache[companyId] = res; if (active) setEvents(res); })
+      .catch((e: Error) => { if (active) setError(e.message); });
+    return () => { active = false; };
+  }, [companyId, attempt]);
 
-  if (!companyName) return null;
-
-  if (loading) {
-    return <div>
-      <header className="page-head">
-        <h2 className="page-title">Events</h2>
-        <p className="page-sub">Searching for events...</p>
-      </header>
-      <div className="opp-grid">
-        {[0,1,2].map(i => <article key={i} className="opp-card" aria-busy="true"><div className="opp-top"><div className="skeleton" style={{width:120,height:14}}/></div><h3 className="opp-title">Searching for events...</h3><p className="opp-summary">&nbsp;</p></article>)}
+  return <section className="live-section">
+    <div className="live-head">
+      <div>
+        <h2 className="section-heading"><Search size={18}/>Found by the search agent</h2>
+        <p className="card-help">An AI agent searched the web for upcoming opportunities that fit {companyName}'s profile. These results are not verified – check the source before acting.</p>
       </div>
-    </div>;
-  }
-
-  if (error) {
-    return <div className="card">
-      <div className="card-body">
-        <p className="text-danger">Error searching for events: {error}</p>
-        <div className="mt-3"><button className="btn" onClick={() => {
-          // retry: clear cache for this company and re-run effect by bumping state
-          delete cache.current[companyName];
-          setError(null);
-          setEvents(null);
-          setLoading(true);
-          onLoadingChange?.(true);
-          (async () => {
-            try {
-              const res = await fetchEvents(companyName);
-              cache.current[companyName] = res;
-              setEvents(res);
-            } catch (e: any) {
-              setError(e?.message || "Failed to fetch events");
-            } finally {
-              setLoading(false);
-              onLoadingChange?.(false);
-            }
-          })();
-        }}>Try again</button></div>
-      </div>
-    </div>;
-  }
-
-  if (events && events.length === 0) {
-    return <div className="card">
-      <div className="card-body">No events found for {companyName}.</div>
-    </div>;
-  }
-
-  return <div>
-    <header className="page-head">
-      <h2 className="page-title">Events</h2>
-      <p className="page-sub">Events found for {companyName}</p>
-    </header>
-    <div className="opp-grid">
-      {events?.map((e, i) => <article key={`${e.title}-${i}`} className="opp-card">
-        <div className="opp-top" />
-        <h3 className="opp-title"><strong>{e.title}</strong></h3>
-        <p className="mt-1 text-sm text-ink-soft">{e.date ? <span>{e.date}</span> : null}{e.date && e.location ? <span> · </span> : null}{e.location ? <span>{e.location}</span> : null}</p>
-        <p className="opp-summary">{e.description}</p>
-        <div className="opp-foot">
-          {e.url ? <a className="link text-sm font-semibold" href={e.url} target="_blank" rel="noopener noreferrer">Learn more</a> : null}
-        </div>
-      </article>)}
+      <span className="ai-badge">Live AI search · unverified</span>
     </div>
-  </div>;
+
+    {error ? <div className="card live-error">
+      <p className="text-sm">{error}</p>
+      <button className="btn mt-3" onClick={() => setAttempt(a => a + 1)}><RefreshCw size={14}/>Try again</button>
+    </div>
+    : !events ? <div className="opp-grid">{[0, 1, 2].map(i => <article key={i} className="opp-card skeleton-card" aria-busy="true"><span className="skeleton w-24"/><span className="skeleton w-3/4 mt-3"/><span className="skeleton w-full mt-2"/><span className="skeleton w-2/3 mt-2"/></article>)}
+      <p className="card-help col-span-full">Searching the web – this takes up to half a minute…</p></div>
+    : !events.length ? <div className="empty">The search agent found no upcoming opportunities this time.</div>
+    : <div className="opp-grid">{events.map((e, i) => <article key={`${e.title}-${i}`} className="opp-card" data-live="true">
+        <div className="opp-top"><div className="flex flex-wrap items-center gap-2">{e.type && <span className="type-tag" data-type={e.type}>{e.type}</span>}<span className="status">AI search result</span></div></div>
+        <h3 className="opp-title">{e.title}</h3>
+        {e.description && <p className="opp-summary">{e.description}</p>}
+        <div className="opp-meta">{e.date && <span><CalendarDays size={13}/>{e.date}</span>}{e.location && <span><MapPin size={13}/>{e.location}</span>}</div>
+        <div className="opp-foot">{e.url ? <a className="link text-sm font-semibold" href={e.url} target="_blank" rel="noopener noreferrer">Check the source<ExternalLink size={13}/></a> : <span className="card-help">No source link – treat with caution.</span>}</div>
+      </article>)}</div>}
+  </section>;
 }

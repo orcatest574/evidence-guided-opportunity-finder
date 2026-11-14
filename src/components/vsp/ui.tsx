@@ -51,7 +51,7 @@ export function CompanyLogo({ src, name, size = 48 }: { src: string; name: strin
 // Simple error boundary to prevent the entire route from falling back when a UI panel throws.
 import React from "react";
 
-export class ErrorBoundary extends React.Component<{ children: React.ReactNode; onReset?: () => void }, { hasError: boolean; error?: Error }>{
+export class ErrorBoundary extends React.Component<{ children: React.ReactNode; onReset?: (() => void) | undefined }, { hasError: boolean; error?: Error | undefined }>{
   constructor(props: any) {
     super(props);
     this.state = { hasError: false };
@@ -59,12 +59,12 @@ export class ErrorBoundary extends React.Component<{ children: React.ReactNode; 
   static getDerivedStateFromError(error: Error) {
     return { hasError: true, error };
   }
-  componentDidCatch(error: Error, info: any) {
+  override componentDidCatch(error: Error, info: any) {
     // Log for debugging in the browser console.
     // eslint-disable-next-line no-console
     console.error("ErrorBoundary caught:", error, info);
   }
-  render() {
+  override render() {
     if (this.state.hasError) {
       return (
         <div className="p-4">

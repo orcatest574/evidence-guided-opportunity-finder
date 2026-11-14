@@ -28,10 +28,10 @@ assistent_agent = Agent(
 
 
 def main():
-    with open("profiles/roxtec.json", "r") as f:
+    with open("../src/data/companies/roxtec.json", "r") as f:
         profile = json.load(f)
     result = Runner.run_sync(
-            agent,
+            assistent_agent,
             input=f"Given the following profile, what are the top 3 opportunities for this company?\n\n{json.dumps(profile, indent=2)}",
             max_turns=10,
         )
