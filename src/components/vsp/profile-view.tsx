@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { ArrowLeft, Bot, Briefcase, CalendarDays, Check, CircleAlert, Cpu, ExternalLink, EyeOff, Factory, FileSearch, Globe2, Handshake, Layers, Lightbulb, MapPin, Pencil, Plus, RotateCcw, ShieldCheck, Target, X } from "lucide-react";
+import { ArrowLeft, Bot, Info, LayoutGrid, Briefcase, CalendarDays, Check, CircleAlert, Cpu, ExternalLink, EyeOff, Factory, FileSearch, Globe2, Handshake, Layers, Lightbulb, MapPin, Pencil, Plus, RotateCcw, ShieldCheck, Target, X } from "lucide-react";
 import { SECTIONS, effectiveClaims, logoUrl, type Claim, type Company, type Edits, type Evidence } from "@/lib/science-park";
-import { ClaimBadge, CompanyLogo, Cover, type CoverTone } from "./ui";
+import { ClaimBadge, CompanyLogo, Cover, PillRail, type CoverTone } from "./ui";
 
 const SECTION_ICON: Record<string, typeof Factory> = {
   whatTheyDo: Factory, technologies: Cpu, applicationAreas: Layers, markets: Briefcase, geography: MapPin,
@@ -30,7 +30,29 @@ export function ProfileView({ company, edits, setEdits, onBack, onOpenSource }: 
     { key: "about", label: "About this profile" },
   ];
   const [tab, setTab] = useState(tabs[0]!.key);
-  const hidden = company.claims.filter(c => edits.hidden.includes(c.id) && c.section === tab);
+
+  /** The cards of one section, with its notes and the member's own controls. */
+  const section = (key: string) => {
+    const hidden = company.claims.filter(c => edits.hidden.includes(c.id) && c.section === key);
+    return <>
+        {key === "inferredInterests" && <p className="tab-intro">These interests are our reasoning from the verified facts – not confirmed company priorities.{setEdits && " Confirm the ones that are right, remove the rest, or add your own."}</p>}
+        {company.missing.filter(m => matchesSection(m.field, key)).map(m => <p key={m.field} className="missing-inline">Not found in public sources: {stripIds(m.reason)}</p>)}
+        <div className="opp-grid">
+          {claims.filter(c => c.section === key).map(c => <ClaimCard key={c.id} claim={c} onOpenSource={onOpenSource}
+            onConfirm={setEdits && c.type === "inferred" ? () => setEdits({ ...edits, confirmed: [...edits.confirmed, c.id] }) : undefined}
+            onUnconfirm={setEdits && c.type === "user_confirmed" ? () => setEdits({ ...edits, confirmed: edits.confirmed.filter(x => x !== c.id) }) : undefined}
+            onHide={setEdits ? () => setEdits({ ...edits, hidden: [...edits.hidden, c.id], confirmed: edits.confirmed.filter(x => x !== c.id) }) : undefined}
+            onEdit={setEdits ? text => setEdits({ ...edits, edited: { ...edits.edited, [c.id]: text } }) : undefined}
+            onUndoEdit={setEdits && c.type === "user_corrected" ? () => { const { [c.id]: _, ...rest } = edits.edited ?? {}; setEdits({ ...edits, edited: rest }); } : undefined}/>)}
+        </div>
+        {key === "inferredInterests" && setEdits && <OwnInterests edits={edits} setEdits={setEdits}/>}
+        {setEdits && hidden.length > 0 && <div className="hidden-list">
+          <span className="text-xs font-semibold">Removed by you</span>
+          {hidden.map(c => <div key={c.id} className="hidden-row"><span className="line-through">{c.value}</span>
+            <button className="link text-xs" onClick={() => setEdits({ ...edits, hidden: edits.hidden.filter(x => x !== c.id) })}><RotateCcw size={12}/>Undo</button></div>)}
+        </div>}
+      </>;
+  };
 
   return <div>
     {onBack && <button className="back-link" onClick={onBack}><ArrowLeft size={15}/>All members</button>}
@@ -58,34 +80,24 @@ export function ProfileView({ company, edits, setEdits, onBack, onOpenSource }: 
       </div>
     </section>
 
-    <nav className="filter-bar profile-filters" aria-label="Profile sections">
-      {tabs.map(t => {
-        const n = claims.filter(c => c.section === t.key).length;
-        return <button key={t.key} className="filter-btn" data-active={tab === t.key} onClick={() => setTab(t.key)}>{t.label}{t.key !== "about" && <span className="tab-count">{n}</span>}</button>;
-      })}
-    </nav>
+    <PillRail label="Profile sections" value={tab} onChange={setTab}
+      items={tabs.map(t => ({ key: t.key, label: t.label, icon: SECTION_ICON[t.key] ?? Info, count: t.key === "about" ? undefined : claims.filter(c => c.section === t.key).length }))}
+      extra={<><button className="pill pill-all" data-active={tab === "all"} aria-current={tab === "all"} onClick={() => setTab("all")}><LayoutGrid size={15}/>Show all</button><span className="pill-sep" aria-hidden="true"/></>}/>
 
     <div className="tab-panel">
-      {tab === "about" ? <AboutProfile company={company}/> : <>
-        {tab === "inferredInterests" && <p className="tab-intro">These interests are our reasoning from the verified facts – not confirmed company priorities.{setEdits && " Confirm the ones that are right, remove the rest, or add your own."}</p>}
-        {company.missing.filter(m => matchesSection(m.field, tab)).map(m => <p key={m.field} className="missing-inline">Not found in public sources: {stripIds(m.reason)}</p>)}
-        <div className="opp-grid">
-          {claims.filter(c => c.section === tab).map(c => <ClaimCard key={c.id} claim={c} onOpenSource={onOpenSource}
-            onConfirm={setEdits && c.type === "inferred" ? () => setEdits({ ...edits, confirmed: [...edits.confirmed, c.id] }) : undefined}
-            onUnconfirm={setEdits && c.type === "user_confirmed" ? () => setEdits({ ...edits, confirmed: edits.confirmed.filter(x => x !== c.id) }) : undefined}
-            onHide={setEdits ? () => setEdits({ ...edits, hidden: [...edits.hidden, c.id], confirmed: edits.confirmed.filter(x => x !== c.id) }) : undefined}
-            onEdit={setEdits ? text => setEdits({ ...edits, edited: { ...edits.edited, [c.id]: text } }) : undefined}
-            onUndoEdit={setEdits && c.type === "user_corrected" ? () => { const { [c.id]: _, ...rest } = edits.edited ?? {}; setEdits({ ...edits, edited: rest }); } : undefined}/>)}
-        </div>
-        {tab === "inferredInterests" && setEdits && <OwnInterests edits={edits} setEdits={setEdits}/>}
-        {setEdits && hidden.length > 0 && <div className="hidden-list">
-          <span className="text-xs font-semibold">Removed by you</span>
-          {hidden.map(c => <div key={c.id} className="hidden-row"><span className="line-through">{c.value}</span>
-            <button className="link text-xs" onClick={() => setEdits({ ...edits, hidden: edits.hidden.filter(x => x !== c.id) })}><RotateCcw size={12}/>Undo</button></div>)}
-        </div>}
-      </>}
+      {tab === "all"
+        ? tabs.map(t => <section key={t.key} className="profile-block">
+            <h2 className="section-heading"><SectionIcon section={t.key}/>{t.label}{t.key !== "about" && <span className="pill-count">{claims.filter(c => c.section === t.key).length}</span>}</h2>
+            {t.key === "about" ? <AboutProfile company={company}/> : section(t.key)}
+          </section>)
+        : tab === "about" ? <AboutProfile company={company}/> : section(tab)}
     </div>
   </div>;
+}
+
+function SectionIcon({ section }: { section: string }) {
+  const Icon = SECTION_ICON[section] ?? Info;
+  return <Icon size={18}/>;
 }
 
 function matchesSection(field: string, sectionKey: string) {

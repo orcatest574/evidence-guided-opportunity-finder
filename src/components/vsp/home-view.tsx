@@ -1,11 +1,11 @@
-import { ArrowRight, ArrowUpRight, CalendarClock, Check, CheckCircle2, CircleAlert, ExternalLink, Lightbulb, Network, RefreshCw, Search, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Building2, ArrowUpRight, CalendarClock, Check, CheckCircle2, CircleAlert, ExternalLink, Lightbulb, Network, RefreshCw, Search, ShieldCheck, Sparkles } from "lucide-react";
 import {
   TODAY, THEMES, companies, effectiveClaims, logoUrl, matchLevel, opportunities, relevantMembers, suggestedConnections, themeClaims,
   type Claim, type Company, type Edits, type Match, type Opportunity,
 } from "@/lib/science-park";
 import { useLiveEvents } from "./events-list";
 import { MatchCard } from "./opportunities-view";
-import { CompanyLogo, Cover, type CoverTone } from "./ui";
+import { CompanyLogo, Cover, Kpi, type CoverTone } from "./ui";
 
 const daysUntil = (date: string) => Math.round((Date.parse(date) - Date.parse(TODAY)) / 86_400_000);
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -153,10 +153,10 @@ export function StaffHome({ onNavigate, onOpenCompany, onOpenOpportunity }: { on
     </HomeHero>
 
     <div className="kpi-row home-kpis">
-      <div className="kpi"><strong>{companies.length}</strong><span>Members profiled</span></div>
-      <div className="kpi"><strong>{facts}</strong><span>Verified facts with quotes</span></div>
-      <div className="kpi"><strong>{opportunities.filter(o => o.status !== "closed").length}</strong><span>Open or upcoming opportunities</span></div>
-      <div className="kpi"><strong>{connections.length}</strong><span>Suggested connections</span></div>
+      <Kpi icon={Building2} tone="blue" value={companies.length} label="Members profiled"/>
+      <Kpi icon={ShieldCheck} tone="green" value={facts} label="Verified facts with quotes"/>
+      <Kpi icon={Sparkles} tone="purple" value={opportunities.filter(o => o.status !== "closed").length} label="Open or upcoming opportunities"/>
+      <Kpi icon={Network} tone="amber" value={connections.length} label="Suggested connections"/>
     </div>
 
     <div className="home-grid">

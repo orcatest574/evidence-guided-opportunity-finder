@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
-import { ArrowUpRight, Search, X } from "lucide-react";
+import { ArrowRight, Building2, Globe2, Search, ShieldCheck, Sparkles, X } from "lucide-react";
 import { companies, logoUrl, opportunities, relevantMembers } from "@/lib/science-park";
-import { CompanyLogo } from "./ui";
+import { CompanyLogo, Kpi } from "./ui";
 
 /** Staff start page: every profiled member as a card. Click a card to open the profile. */
 export function MembersView({ onOpen }: { onOpen: (companyId: string) => void }) {
@@ -35,9 +35,9 @@ export function MembersView({ onOpen }: { onOpen: (companyId: string) => void })
     </header>
 
     <div className="kpi-row">
-      <div className="kpi"><strong>{companies.length}</strong><span>Members profiled</span></div>
-      <div className="kpi"><strong>{companies.reduce((n, c) => n + c.claims.filter(x => x.type === "fact").length, 0)}</strong><span>Verified facts</span></div>
-      <div className="kpi"><strong>{opportunities.length}</strong><span>Opportunities from {sources} sources</span></div>
+      <Kpi icon={Building2} tone="blue" value={companies.length} label="Members profiled"/>
+      <Kpi icon={ShieldCheck} tone="green" value={companies.reduce((n, c) => n + c.claims.filter(x => x.type === "fact").length, 0)} label="Verified facts with quotes"/>
+      <Kpi icon={Sparkles} tone="purple" value={opportunities.length} label={`Opportunities from ${sources} sources`}/>
     </div>
 
     <div className="member-search-row">
@@ -61,22 +61,34 @@ export function MembersView({ onOpen }: { onOpen: (companyId: string) => void })
         const facts = c.claims.filter(x => x.type === "fact").length;
         const interests = c.claims.filter(x => x.type === "inferred").length;
         const relevant = opportunities.filter(o => relevantMembers(o).some(m => m.id === c.id)).length;
-        return <button key={c.id} className="member-card" onClick={() => onOpen(c.id)}>
-          <div className="member-card-head">
-            <CompanyLogo src={logoUrl(c.id)} name={c.name} size={56}/>
-            <ArrowUpRight size={18} className="text-ink-soft"/>
+        const topics = [...c.topics].sort((x, y) => y.weight - x.weight).slice(0, 3);
+        return <button key={c.id} className="opp-card member-card" onClick={() => onOpen(c.id)}>
+          <div className="member-cover">
+            <img src={c.background ?? "/companies/BSP_background.png"} alt="" loading="lazy"/>
+            <span className="member-cover-shade"/>
+            <CompanyLogo src={logoUrl(c.id)} name={c.name} size={60}/>
           </div>
           <h3 className="member-name">{c.name}</h3>
+          {c.website && <span className="member-site"><Globe2 size={13}/>{c.website.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}</span>}
           <p className="member-summary">{c.summary}</p>
-          <div className="member-stats">
-            <span><strong>{facts}</strong> verified facts</span>
-            <span><strong>{interests}</strong> interests</span>
-            <span><strong>{relevant}</strong> relevant opportunities</span>
+          {topics.length > 0 && <div className="member-topics">{topics.map(t => <span key={t.topic}>{topicLabel(t.topic)}</span>)}</div>}
+          <div className="member-figures">
+            <div><strong>{facts}</strong><span>facts</span></div>
+            <div><strong>{interests}</strong><span>interests</span></div>
+            <div><strong>{relevant}</strong><span>matches</span></div>
           </div>
-          <span className="member-date">Profile built {c.createdAt}</span>
+          <div className="member-foot"><span>Built {c.createdAt}</span><span className="member-open">Open profile<ArrowRight size={14}/></span></div>
         </button>;
       })}
     </div> : <div className="empty member-empty">No companies match “{query}”. <button className="link" onClick={() => setQuery("")}>Clear search</button></div>}
     <p className="fine-print">Currently showing {companies.length} profiled members. Add more by placing their profile JSON in src/data/companies/.</p>
   </div>;
+}
+
+const ACRONYMS = new Set(["hvdc", "emc", "ai", "5g", "6g", "ran", "lca", "epd", "hemp", "iot"]);
+/** "open-ran" → "Open RAN", "offshore-wind" → "Offshore wind". */
+function topicLabel(slug: string) {
+  const words = slug.split(/[-_\s]+/).map(w => (ACRONYMS.has(w.toLowerCase()) ? w.toUpperCase() : w.toLowerCase()));
+  const text = words.join(" ");
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }

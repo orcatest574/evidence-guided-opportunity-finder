@@ -103,3 +103,23 @@ export function OppCover({ type, logo, organiser }: { type?: string | null | und
     {organiser && <span className="sr-only">{organiser}</span>}
   </>;
 }
+
+/** Key figure tile: coloured icon, big number, label. */
+export function Kpi({ icon: Icon, tone, value, label }: { icon: IconType; tone: CoverTone; value: number | string; label: string }) {
+  return <div className="kpi" data-tone={tone}>
+    <span className="kpi-icon"><Icon size={20}/></span>
+    <div className="min-w-0"><strong>{value}</strong><span>{label}</span></div>
+  </div>;
+}
+
+/** Pill navigation used for profile sections and ecosystem tabs. */
+export function PillRail<K extends string>({ items, value, onChange, label, extra }: {
+  items: { key: K; label: string; icon?: IconType | undefined; count?: number | undefined }[]; value: K; onChange: (k: K) => void; label: string; extra?: ReactNode;
+}) {
+  return <nav className="pill-rail" aria-label={label}>
+    {extra}
+    {items.map(({ key, label: text, icon: Icon, count }) => <button key={key} className="pill" data-active={value === key} aria-current={value === key} onClick={() => onChange(key)}>
+      {Icon && <Icon size={15}/>}{text}{count !== undefined && <span className="pill-count">{count}</span>}
+    </button>)}
+  </nav>;
+}

@@ -1,7 +1,18 @@
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { Bot, ChevronDown, FlaskConical, Leaf, Link2, Network, RadioTower, Ship, ShieldCheck, Sparkles, Wind, Zap } from "lucide-react";
 import { THEMES, companies, logoUrl, suggestedConnections, themeClaims, type Connection } from "@/lib/science-park";
-import { CompanyLogo } from "./ui";
+import { CompanyLogo, Cover, PillRail, type CoverTone } from "./ui";
+
+const THEME_LOOK: Record<string, { icon: typeof Wind; tone: CoverTone }> = {
+  "Offshore & wind energy": { icon: Wind, tone: "blue" },
+  "Power grids & cables": { icon: Zap, tone: "amber" },
+  "Marine & naval": { icon: Ship, tone: "navy" },
+  "Materials & testing": { icon: FlaskConical, tone: "purple" },
+  "Connectivity 5G/6G": { icon: RadioTower, tone: "blue" },
+  "AI & automation": { icon: Bot, tone: "purple" },
+  "Security & resilience": { icon: ShieldCheck, tone: "red" },
+  "Sustainability": { icon: Leaf, tone: "green" },
+};
 
 /** Staff view: themes members share and possible connections between them. */
 export function EcosystemView({ onOpenCompany }: { onOpenCompany: (id: string) => void }) {
@@ -17,14 +28,15 @@ export function EcosystemView({ onOpenCompany }: { onOpenCompany: (id: string) =
       <p className="page-sub">Shared interests and possible connections across members, based only on their public profiles.</p>
     </header>
 
-    <nav className="section-tabs" aria-label="Ecosystem">
-      <button data-active={tab === "themes"} onClick={() => setTab("themes")}>Shared themes<span className="tab-count">{themes.length}</span></button>
-      <button data-active={tab === "connections"} onClick={() => setTab("connections")}>Suggested connections<span className="tab-count">{connections.length}</span></button>
-    </nav>
+    <PillRail label="Ecosystem" value={tab} onChange={setTab} items={[
+      { key: "themes", label: "Shared themes", icon: Sparkles, count: themes.length },
+      { key: "connections", label: "Suggested connections", icon: Network, count: connections.length },
+    ]}/>
 
     {tab === "themes" ? <div className="theme-grid">
-      {themes.map(t => <article key={t.name} className="card theme-card">
-        <div className="flex items-center justify-between"><h3 className="card-title">{t.name}</h3><span className="text-xs text-ink-soft">{t.members.length} of {companies.length} members</span></div>
+      {themes.map(t => <article key={t.name} className="opp-card theme-card">
+        <Cover tone={THEME_LOOK[t.name]?.tone ?? "gray"} icon={THEME_LOOK[t.name]?.icon ?? Sparkles} small/>
+        <div className="flex items-center justify-between gap-3"><h3 className="opp-title mt-0">{t.name}</h3><span className="theme-share">{t.members.length} of {companies.length} members</span></div>
         <ul className="theme-members">
           {t.members.map(m => <li key={m.company.id}>
             <button className="member-chip" onClick={() => onOpenCompany(m.company.id)}><CompanyLogo src={logoUrl(m.company.id)} name={m.company.name} size={22}/>{m.company.name}</button>
@@ -42,12 +54,15 @@ export function EcosystemView({ onOpenCompany }: { onOpenCompany: (id: string) =
 
 function ConnectionCard({ connection: c }: { connection: Connection }) {
   const [open, setOpen] = useState(false);
-  return <article className="card connection-card">
-    <div className="connection-pair">
-      <span className="member-chip"><CompanyLogo src={logoUrl(c.a.id)} name={c.a.name} size={28}/>{c.a.name}</span>
-      <span className="pair-line"/>
-      <span className="member-chip"><CompanyLogo src={logoUrl(c.b.id)} name={c.b.name} size={28}/>{c.b.name}</span>
+  return <article className="opp-card connection-card">
+    <div className="opp-cover connection-cover" data-tone="purple" data-small="true" aria-hidden="true">
+      <Network className="opp-cover-icon" size={96} strokeWidth={1.2}/>
+      <span className="opp-cover-logo"><img src={logoUrl(c.a.id)} alt=""/></span>
+      <span className="connection-link"><Link2 size={16}/></span>
+      <span className="opp-cover-logo"><img src={logoUrl(c.b.id)} alt=""/></span>
     </div>
+    <h3 className="opp-title mt-0">{c.a.name} <span className="text-ink-soft">+</span> {c.b.name}</h3>
+    <p className="opp-summary">{c.themes.length} shared {c.themes.length === 1 ? "theme" : "themes"} in their public profiles.</p>
     <div className="chip-row">{c.themes.map(t => <span key={t.name} className="chip static">{t.name}</span>)}</div>
     <button className="link mt-3 text-sm" onClick={() => setOpen(!open)} aria-expanded={open}>Why this suggestion<ChevronDown size={14} className={open ? "rotate-180" : ""}/></button>
     {open && <div className="mt-3 space-y-4">{c.themes.slice(0, 3).map(t => <div key={t.name}>
