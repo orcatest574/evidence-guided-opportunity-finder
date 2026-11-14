@@ -94,8 +94,8 @@
 
   <!-- External systems -->
   <rect x="822" y="520" width="150" height="64" class="ext"/>
-  <text x="897" y="546" text-anchor="middle" class="name">Azure OpenAI</text>
-  <text x="897" y="565" text-anchor="middle" class="desc">gpt-5-mini</text>
+  <text x="897" y="546" text-anchor="middle" class="name">Local LLM</text>
+  <text x="897" y="565" text-anchor="middle" class="desc">AI model</text>
   <rect x="990" y="520" width="170" height="64" class="ext"/>
   <text x="1075" y="546" text-anchor="middle" class="name">Public web</text>
   <text x="1075" y="565" text-anchor="middle" class="desc">company sites · DuckDuckGo</text>
@@ -116,7 +116,7 @@
   <path d="M800,312 L732,312" class="line"/>
   <rect x="734" y="290" width="64" height="16" class="labelbg"/><text x="766" y="302" text-anchor="middle" class="label">reads</text>
 
-  <!-- API -> Azure -->
+  <!-- API -> LLM -->
   <path d="M897,430 L897,518" class="line"/>
   <rect x="860" y="466" width="74" height="16" class="labelbg"/><text x="897" y="478" text-anchor="middle" class="label">prompts</text>
 
@@ -128,7 +128,7 @@
   <path d="M600,500 L600,432" class="line"/>
   <rect x="606" y="458" width="72" height="16" class="labelbg"/><text x="642" y="470" text-anchor="middle" class="label">--publish</text>
 
-  <!-- profiling -> Azure -->
+  <!-- profiling -> LLM -->
   <path d="M730,635 L790,635 L790,560 L820,560" class="line"/>
   <rect x="734" y="606" width="74" height="16" class="labelbg"/><text x="771" y="618" text-anchor="middle" class="label">extraction</text>
 

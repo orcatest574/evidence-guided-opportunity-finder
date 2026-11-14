@@ -54,7 +54,7 @@
 
   <rect x="900" y="456" width="260" height="84" class="ext"/>
   <text x="1030" y="488" text-anchor="middle" class="name">AI model</text>
-  <text x="1030" y="510" text-anchor="middle" class="desc">Azure OpenAI · gpt-5-mini</text>
+  <text x="1030" y="510" text-anchor="middle" class="desc">Local LLM</text>
 
   <!-- People -> system -->
   <path d="M270,198 L438,262" class="line"/>
