@@ -251,7 +251,8 @@ async def events(req: EventsRequest) -> EventsResponse:
     print(f"  {len(verified)} verified, {dropped} dropped")
     events_list = [Event(**{k: v for k, v in item.items() if k in Event.model_fields}) for item in verified[:5]]
     response = EventsResponse(company_name=name, events=events_list, dropped=dropped)
-    _events_cache[(req.company_name.lower(), today)] = response
+    if events_list:  # an empty result is not cached, so the next request searches again
+        _events_cache[(req.company_name.lower(), today)] = response
     return response
 
 
