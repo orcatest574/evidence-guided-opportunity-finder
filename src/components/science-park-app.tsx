@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ComponentType } from "react";
-import { Bookmark, Building2, CircleHelp, LogOut, Menu, MessageSquareText, Network, Sparkles, Users } from "lucide-react";
+import { Bookmark, Building2, CircleHelp, LogOut, Menu, MessageSquareText, Moon, Network, Sparkles, Sun, Users } from "lucide-react";
 import { companies, effectiveClaims, emptyEdits, logoUrl, rankOpportunities, type Claim, type Evidence, type Match, type Opportunity } from "@/lib/science-park";
 import { EcosystemView } from "./vsp/ecosystem-view";
 import { MembersView } from "./vsp/members-view";
@@ -19,22 +19,34 @@ const ACCOUNTS: Record<string, Session> = {
   ...Object.fromEntries(companies.map(c => [c.id, { role: "member", companyId: c.id } as Session])),
 };
 const SESSION_KEY = "vsp-session";
+const THEME_KEY = "vsp-theme";
+type Theme = "light" | "dark";
 
 export function ScienceParkApp() {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
+  const [theme, setTheme] = useState<Theme>(() => {
+    try { return localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light"; } catch { return "light"; }
+  });
   useEffect(() => {
     try { const raw = localStorage.getItem(SESSION_KEY); setSession(raw ? (JSON.parse(raw) as Session) : null); } catch { setSession(null); }
   }, []);
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    try { localStorage.setItem(THEME_KEY, theme); } catch { /* Theme still applies until the page reloads. */ }
+  }, [theme]);
   const signIn = (s: Session) => { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); setSession(s); };
   const signOut = () => { localStorage.removeItem(SESSION_KEY); setSession(null); };
+  const toggleTheme = () => setTheme(current => current === "dark" ? "light" : "dark");
 
   if (session === undefined) return null;
-  if (!session) return <LoginScreen onLogin={signIn}/>;
+  if (!session) return <LoginScreen onLogin={signIn} theme={theme} onToggleTheme={toggleTheme}/>;
   if (!companies.length) return <div className="p-10 text-sm">No company data found in src/data/companies/.</div>;
-  return session.role === "staff" ? <StaffApp onLogout={signOut}/> : <MemberApp companyId={session.companyId} onLogout={signOut}/>;
+  return session.role === "staff"
+    ? <StaffApp onLogout={signOut} theme={theme} onToggleTheme={toggleTheme}/>
+    : <MemberApp companyId={session.companyId} onLogout={signOut} theme={theme} onToggleTheme={toggleTheme}/>;
 }
 
-function LoginScreen({ onLogin }: { onLogin: (s: Session) => void }) {
+function LoginScreen({ onLogin, theme, onToggleTheme }: { onLogin: (s: Session) => void; theme: Theme; onToggleTheme: () => void }) {
   const [user, setUser] = useState(""); const [password, setPassword] = useState(""); const [error, setError] = useState("");
   return <div className="login">
     <div className="login-side">
@@ -46,7 +58,7 @@ function LoginScreen({ onLogin }: { onLogin: (s: Session) => void }) {
       <p className="text-xs text-white/50">BUILD Hackathon 2026 · Prototype</p>
     </div>
     <form className="login-form" onSubmit={e => { e.preventDefault(); const s = ACCOUNTS[user.trim().toLowerCase()]; if (s && password === PASSWORD) onLogin(s); else setError("Wrong username or password."); }}>
-      <h2 className="page-title">Sign in</h2>
+      <div className="login-form-heading"><h2 className="page-title">Sign in</h2><ThemeToggle theme={theme} onToggle={onToggleTheme}/></div>
       <label className="field-label" htmlFor="login-user">Username</label>
       <input id="login-user" className="text-input" value={user} onChange={e => setUser(e.target.value)} autoComplete="username"/>
       <label className="field-label" htmlFor="login-password">Password</label>
@@ -65,8 +77,15 @@ function LoginScreen({ onLogin }: { onLogin: (s: Session) => void }) {
 // ---- Shared layout ----
 type NavItem = { id: string; label: string; icon: ComponentType<{ size?: number }>; count?: number };
 
-function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children }: {
-  nav: NavItem[]; active: string; onNavigate: (id: string) => void; who: { name: string; role: string; logo?: string }; onLogout: () => void; onAsk?: () => void; children: React.ReactNode;
+function ThemeToggle({ theme, onToggle }: { theme: Theme; onToggle: () => void }) {
+  const nextTheme = theme === "dark" ? "light" : "dark";
+  return <button className="icon-btn theme-toggle" type="button" onClick={onToggle} aria-label={`Switch to ${nextTheme} mode`} title={`Switch to ${nextTheme} mode`}>
+    {theme === "dark" ? <Sun size={18}/> : <Moon size={18}/>}
+  </button>;
+}
+
+function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children, theme, onToggleTheme }: {
+  nav: NavItem[]; active: string; onNavigate: (id: string) => void; who: { name: string; role: string; logo?: string }; onLogout: () => void; onAsk?: () => void; children: React.ReactNode; theme: Theme; onToggleTheme: () => void;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -90,7 +109,7 @@ function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children }: {
           {who.logo ? <CompanyLogo src={who.logo} name={who.name} size={32}/> : <span className="who-badge">BSP</span>}
           <div><div className="who-name">{who.name}</div><div className="who-role">{who.role}</div></div>
         </div>
-        <button className="btn ml-auto" onClick={onLogout}><LogOut size={15}/>Sign out</button>
+        <div className="topbar-actions"><ThemeToggle theme={theme} onToggle={onToggleTheme}/><button className="btn" onClick={onLogout}><LogOut size={15}/>Sign out</button></div>
       </header>
       <main className="page">{children}</main>
       <footer className="footer">
@@ -103,7 +122,7 @@ function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children }: {
 }
 
 // ---- Member: sees only their own company ----
-function MemberApp({ companyId, onLogout }: { companyId: string; onLogout: () => void }) {
+function MemberApp({ companyId, onLogout, theme, onToggleTheme }: { companyId: string; onLogout: () => void; theme: Theme; onToggleTheme: () => void }) {
   const ws = useWorkspace();
   const [view, setView] = useState("profile");
   const [source, setSource] = useState<{ claim: Claim; evidence: Evidence } | null>(null);
@@ -119,7 +138,7 @@ function MemberApp({ companyId, onLogout }: { companyId: string; onLogout: () =>
     { id: "opportunities", label: "Opportunities", icon: Sparkles },
     { id: "saved", label: "Saved", icon: Bookmark, count: ws.saved.length },
   ];
-  return <Shell nav={nav} active={view} onNavigate={setView} who={{ name: company.name, role: "Member company", logo: logoUrl(company.id) }} onLogout={onLogout} onAsk={() => setAskOpen(true)}>
+  return <Shell nav={nav} active={view} onNavigate={setView} who={{ name: company.name, role: "Member company", logo: logoUrl(company.id) }} onLogout={onLogout} onAsk={() => setAskOpen(true)} theme={theme} onToggleTheme={onToggleTheme}>
     {view === "profile" && <ProfileView company={company} edits={edits} setEdits={e => ws.setEdits(company.id, e)} onOpenSource={(claim, evidence) => setSource({ claim, evidence })}/>}
     {(view === "opportunities" || view === "saved") && <MemberOpportunities key={view} company={company} matches={matches} saved={ws.saved} toggleSaved={ws.toggleSaved} dismissed={ws.dismissed} savedOnly={view === "saved"} onOpen={setDetail}/>}
     {view === "opportunities" && <LiveEvents companyId={company.id} companyName={company.name}/>}
@@ -131,7 +150,7 @@ function MemberApp({ companyId, onLogout }: { companyId: string; onLogout: () =>
 }
 
 // ---- Staff: sees all members' public profiles, never their private edits ----
-function StaffApp({ onLogout }: { onLogout: () => void }) {
+function StaffApp({ onLogout, theme, onToggleTheme }: { onLogout: () => void; theme: Theme; onToggleTheme: () => void }) {
   const [view, setView] = useState("members");
   const [openCompany, setOpenCompany] = useState<string | null>(null);
   const [source, setSource] = useState<{ claim: Claim; evidence: Evidence } | null>(null);
@@ -149,7 +168,7 @@ function StaffApp({ onLogout }: { onLogout: () => void }) {
   // Staff can ask about any member; the open profile is preselected.
   const askCompany = company ?? companies[0]!;
 
-  return <Shell nav={nav} active={view} onNavigate={id => { setView(id); setOpenCompany(null); }} who={{ name: "Blue Science Park", role: "Staff" }} onLogout={onLogout} onAsk={() => setAskOpen(true)}>
+  return <Shell nav={nav} active={view} onNavigate={id => { setView(id); setOpenCompany(null); }} who={{ name: "Blue Science Park", role: "Staff" }} onLogout={onLogout} onAsk={() => setAskOpen(true)} theme={theme} onToggleTheme={onToggleTheme}>
     {view === "members" && (company
       ? <ProfileView key={company.id} company={company} edits={emptyEdits} onBack={() => setOpenCompany(null)} onOpenSource={(claim, evidence) => setSource({ claim, evidence })}/>
       : <MembersView onOpen={openProfile}/>)}
