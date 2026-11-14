@@ -100,6 +100,10 @@ Each curated opportunity has a keyword list (e.g. RISE high-voltage lab: *high-v
 
 ---
 
+### Scaling to all members
+
+Blue Science Park publishes a machine-readable list of all member pages (`medlem-sitemap.xml`, 56 members on 2026-11-14). `python -m profiler.import_members` reads it, takes each member's name and website from its member page and adds it to `members.json`; `python -m profiler --all --publish` then builds and verifies every profile. Nothing else changes: every new member automatically gets a login, a card in the staff view, matching and ecosystem themes. A dry run found all 53 missing members with a website.
+
 ## 8. Service boundaries – how they are implemented
 
 | Requirement | Implementation |
@@ -197,7 +201,7 @@ See `README.md`. In short: `.env` with `API_KEY`, `AI_URL`, `MODEL_NAME` in the 
 
 - **Login is simulated** (hardcoded accounts, checked in the browser).
 - **Member edits are stored in the browser only** – they are not shared, not visible to staff, and the profiler's “do not overwrite edited profiles” rule is never triggered in practice.
-- **Profiles cover 3 members**; Roxtec's Blue Science Park membership was not confirmed from a public member page.
+- **Profiles cover 3 of 56 members** in the prototype; all 56 can be imported from Blue Science Park's member directory (see “Scaling to all members”).
 - **Keyword matching** does not understand context or eligibility (see 9.3).
 - **The verifier proves the quote exists, not that the AI's paraphrase is exact** (see 9.1).
 - **Live search** depends on DuckDuckGo; results vary between runs, take ~30 s, and source quality is not assessed.

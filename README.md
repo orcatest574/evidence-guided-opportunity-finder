@@ -62,6 +62,15 @@ Steps: fetch seed URLs from `backend/members.json` plus same-site pages → AI e
 `--publish` keeps hand-added fields such as `logo` and `background`, and does not overwrite a profile with `metadata.lastEditedByUser: true` unless `--force` is given.
 To add a member: add `id`, `name`, `website` and a few `seed_urls` to `backend/members.json`.
 
+**All Blue Science Park members (56) in two commands:**
+
+```sh
+.venv/bin/python -m profiler.import_members        # reads bluesciencepark.se/medlem-sitemap.xml → members.json
+.venv/bin/python -m profiler --all --publish       # builds and verifies every profile
+```
+
+New members automatically get a login (their id), a card in the staff view, matching and ecosystem themes.
+
 ## Data
 
 No database. All data is JSON:
