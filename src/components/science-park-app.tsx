@@ -117,6 +117,10 @@ function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children, theme,
         <span>Simulated: login, browser-only storage · AI: assistant and live search via the backend</span>
       </footer>
     </div>
+    {onAsk && <button className="chat-launcher" onClick={onAsk} aria-label="Open the innovation assistant">
+      <span className="chat-launcher-icon"><MessageSquareText size={22}/></span>
+      <span className="chat-launcher-text"><strong>Innovation assistant</strong><small>Ask about testing, funding, events</small></span>
+    </button>}
     <Drawer open={aboutOpen} onClose={() => setAboutOpen(false)} title="About this prototype"><About/></Drawer>
   </div>;
 }
@@ -145,7 +149,7 @@ function MemberApp({ companyId, onLogout, theme, onToggleTheme }: { companyId: s
     <Drawer open={!!source} onClose={() => setSource(null)} title="Source evidence" wide>{source && <SourcePanel claim={source.claim} evidence={source.evidence}/>}</Drawer>
     <Drawer open={!!detail} onClose={() => setDetail(null)} title="Opportunity">{detail && <OpportunityDetail opportunity={detail.opportunity} match={detail} company={company} claims={claims}
       saved={ws.saved.includes(detail.opportunity.id)} toggleSaved={() => ws.toggleSaved(detail.opportunity.id)} dismiss={() => { ws.dismiss(detail.opportunity.id); setDetail(null); }}/>}</Drawer>
-    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title="Innovation assistant"><ErrorBoundary onReset={() => setAskOpen(false)}><AssistantChat company={company}/></ErrorBoundary></Drawer>
+    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title="Innovation assistant" chat><ErrorBoundary onReset={() => setAskOpen(false)}><AssistantChat company={company}/></ErrorBoundary></Drawer>
   </Shell>;
 }
 
@@ -176,7 +180,7 @@ function StaffApp({ onLogout, theme, onToggleTheme }: { onLogout: () => void; th
     {view === "ecosystem" && <EcosystemView onOpenCompany={openProfile}/>}
     <Drawer open={!!source} onClose={() => setSource(null)} title="Source evidence" wide>{source && <SourcePanel claim={source.claim} evidence={source.evidence}/>}</Drawer>
     <Drawer open={!!detail} onClose={() => setDetail(null)} title="Opportunity">{detail && <OpportunityDetail opportunity={detail}/>}</Drawer>
-    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title="Innovation assistant"><ErrorBoundary onReset={() => setAskOpen(false)}><AssistantChat company={askCompany} companies={companies}/></ErrorBoundary></Drawer>
+    <Drawer open={askOpen} onClose={() => setAskOpen(false)} title="Innovation assistant" chat><ErrorBoundary onReset={() => setAskOpen(false)}><AssistantChat company={askCompany} companies={companies}/></ErrorBoundary></Drawer>
   </Shell>;
 }
 

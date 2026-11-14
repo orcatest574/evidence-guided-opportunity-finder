@@ -26,7 +26,7 @@ export function TypeTag({ type }: { type: OpportunityType }) {
   return <span className="type-tag" data-type={type}>{type === "Event" ? "Event" : type === "Testing" ? "Testing" : "Funding"}</span>;
 }
 
-export function Drawer({ open, onClose, title, wide, children }: { open: boolean; onClose: () => void; title: string; wide?: boolean; children: ReactNode }) {
+export function Drawer({ open, onClose, title, wide, chat, children }: { open: boolean; onClose: () => void; title: string; wide?: boolean; chat?: boolean; children: ReactNode }) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -36,7 +36,7 @@ export function Drawer({ open, onClose, title, wide, children }: { open: boolean
   if (!open) return null;
   return <div className="drawer-root">
     <div className="drawer-scrim" onClick={onClose}/>
-    <aside className="drawer" data-wide={wide} role="dialog" aria-modal="true" aria-label={title}>
+    <aside className="drawer" data-wide={wide} data-chat={chat} role="dialog" aria-modal="true" aria-label={title}>
       <header className="drawer-head"><span className="eyebrow">{title}</span><button className="icon-btn" aria-label="Close" onClick={onClose}><X size={18}/></button></header>
       <div className="drawer-body">{children}</div>
     </aside>
