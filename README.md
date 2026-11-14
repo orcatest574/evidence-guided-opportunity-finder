@@ -40,8 +40,24 @@ Demo accounts: `staff` (Blue Science Park staff) and `nkt`, `ericsson`, `roxtec`
 | Opportunities – testbeds, funding, events with links and dates | `src/data/opportunities.json` | No (static data) |
 | Matching – ranks and explains opportunities per company | `src/lib/science-park.ts` | No |
 | Boundary check – classifies every question before the AI sees it | `src/lib/science-park.ts`, `src/components/vsp/assistant-chat.tsx` | No |
+| Profiling agent – fetches a member's public pages, extracts facts with verbatim quotes and inferred interests, verifies every quote against the page text | `backend/profiler/` (run `python -m profiler`) | Yes (extraction), no (verification) |
 | Assistant agent – answers in-scope questions from the profile | `backend/api.py` `POST /assistant`, `backend/assistent_agent.py` | Yes |
 | Search agent – finds upcoming events, testbeds and funding on the web | `backend/api.py` `POST /events`, `backend/collector_agent.py`, `backend/tools.py` | Yes |
+
+## Profiling agent
+
+Builds the baseline profiles in `src/data/companies/` from public web pages.
+
+```sh
+cd backend
+.venv/bin/python -m profiler --all --dry-run   # fetch pages only, no AI cost
+.venv/bin/python -m profiler roxtec            # one company -> backend/output/roxtec.json
+.venv/bin/python -m profiler --all --publish   # all members -> src/data/companies/ and src/data/sources/
+```
+
+Steps: fetch seed URLs from `backend/members.json` plus same-site pages → AI extraction (facts with verbatim quotes, inferred interests, gaps) → plain-code verifier (removes quotes not found on the page, downgrades unsupported facts to “unverified”) → v1.1 JSON.
+`--publish` keeps hand-added fields such as `logo` and `background`, and does not overwrite a profile with `metadata.lastEditedByUser: true` unless `--force` is given.
+To add a member: add `id`, `name`, `website` and a few `seed_urls` to `backend/members.json`.
 
 ## Data
 

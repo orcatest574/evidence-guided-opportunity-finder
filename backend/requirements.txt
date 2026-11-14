@@ -4,3 +4,6 @@ openai
 openai-agents
 python-dotenv
 ddgs
+pydantic>=2
+requests
+beautifulsoup4

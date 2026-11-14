@@ -42,3 +42,7 @@ __pycache__/
 ~$*
 .~lock.*
 
+
+# Profiler page cache
+backend/cache/
+backend/output/
