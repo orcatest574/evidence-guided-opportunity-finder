@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowUpRight, Bookmark, Building2, CalendarDays, ExternalLink, Globe2, Sparkles, ThumbsDown } from "lucide-react";
-import { logoUrl, matchLevel, opportunities, relevantMembers, statusLabel, type Claim, type Company, type Match, type Opportunity, type OpportunityType } from "@/lib/science-park";
-import { CompanyLogo, TypeTag } from "./ui";
+import { logoUrl, matchLevel, sourceLogo, opportunities, relevantMembers, statusLabel, type Claim, type Company, type Match, type Opportunity, type OpportunityType } from "@/lib/science-park";
+import { CompanyLogo, OppCover, TypeTag } from "./ui";
 
 const FILTERS: ("All" | OpportunityType)[] = ["All", "Testing", "Funding", "Event"];
 const filterLabel = (f: "All" | OpportunityType) => (f === "All" ? "All opportunities" : f === "Event" ? "Events" : f);
@@ -35,6 +35,7 @@ export function MemberOpportunities({ company, matches, saved, toggleSaved, dism
         const o = m.opportunity, level = matchLevel(m.score);
         const reasons = m.keywordHits.slice(0, 3).map(h => h.keyword);
         return <article key={o.id} className="opp-card" data-closed={o.status === "closed"}>
+          <OppCover type={o.type} logo={sourceLogo(o.source)} organiser={o.organiser}/>
           <div className="opp-top">
             <div className="flex flex-wrap items-center gap-2"><TypeTag type={o.type}/><span className="status" data-status={o.status}>{statusLabel(o)}</span></div>
             <button className="icon-btn" aria-label={saved.includes(o.id) ? `Unsave ${o.title}` : `Save ${o.title}`} onClick={() => toggleSaved(o.id)}><Bookmark size={17} className={saved.includes(o.id) ? "fill-current text-brand" : ""}/></button>
@@ -70,6 +71,7 @@ export function StaffOpportunities({ onOpen }: { onOpen: (o: Opportunity) => voi
     <Filters value={filter} onChange={setFilter} counts={counts}/>
     <div className="opp-grid">
       {rows.filter(r => filter === "All" || r.o.type === filter).map(({ o, members }) => <article key={o.id} className="opp-card" data-closed={o.status === "closed"}>
+        <OppCover type={o.type} logo={sourceLogo(o.source)} organiser={o.organiser}/>
         <div className="opp-top"><div className="flex flex-wrap items-center gap-2"><TypeTag type={o.type}/><span className="status" data-status={o.status}>{statusLabel(o)}</span></div></div>
         <h3 className="opp-title">{o.title}</h3>
         <p className="opp-summary">{o.summary}</p>
@@ -92,6 +94,7 @@ export function OpportunityDetail({ opportunity: o, match, company, claims, save
   const level = match ? matchLevel(match.score) : null;
   const members = match ? [] : relevantMembers(o);
   return <div className="space-y-6">
+    <OppCover type={o.type} logo={sourceLogo(o.source)} organiser={o.organiser}/>
     <div>
       <div className="flex flex-wrap items-center gap-2"><TypeTag type={o.type}/><span className="status" data-status={o.status}>{statusLabel(o)}</span></div>
       <h2 className="drawer-title">{o.title}</h2>
