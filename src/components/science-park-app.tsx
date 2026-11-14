@@ -96,7 +96,6 @@ function Shell({ nav, active, onNavigate, who, onLogout, onAsk, children, theme,
       <img src="/Blue-Science-Park-white-horizontal.svg" alt="Blue Science Park" className="sidebar-logo"/>
       <p className="nav-label">Virtual Science Park</p>
       <nav aria-label="Main">{nav.map(n => <button key={n.id} className="nav-item" data-active={active === n.id} onClick={() => go(n.id)}><n.icon size={18}/>{n.label}{!!n.count && <span className="nav-count">{n.count}</span>}</button>)}</nav>
-      {onAsk && <><p className="nav-label">Get help</p><button className="nav-item" onClick={() => { onAsk(); setMenuOpen(false); }}><MessageSquareText size={18}/>Innovation assistant</button></>}
       <div className="sidebar-bottom">
         <button className="nav-item" onClick={() => setAboutOpen(true)}><CircleHelp size={18}/>About this prototype</button>
         <a className="nav-item" href="https://www.bluesciencepark.se/" target="_blank" rel="noreferrer"><Network size={18}/>bluesciencepark.se</a>
