@@ -211,7 +211,7 @@ button.member-chip:hover { color: var(--brand-deep); }
 .hero-link { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: oklch(1 0 0 / 0.8); text-decoration: none; }
 .hero-link:hover { color: white; text-decoration: underline; }
 @media (max-width: 600px) { .profile-hero { height: 200px; } .profile-hero-content { left: 16px; right: 16px; bottom: 18px; gap: 14px; } .profile-hero-content .company-logo { width: 52px !important; height: 52px !important; } }
-.profile-summary { margin-top: -28px; margin-left: 20px; margin-right: 20px; position: relative; }
+.profile-summary { margin-top: 20px; margin-left: 20px; margin-right: 20px; position: relative; }
 @media (max-width: 600px) { .profile-summary { margin-left: 8px; margin-right: 8px; } }
 .summary-text { font-size: 16px; line-height: 1.65; }
 .stat-pills { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; }
