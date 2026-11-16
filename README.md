@@ -6,6 +6,12 @@ Built for **BUILD Hackathon 2026** (13–15 November 2026, Black Box, Ericsson, 
 
 Verified company profiles, matched with testing environments, funding and events. **Every claim can be traced back to its source.**
 
+
+
+https://github.com/user-attachments/assets/fa06ae28-2dea-419b-931d-5e167cbce6ce
+
+
+
 > Full solution description, quality and boundary check, known limitations and next steps: **[docs/SOLUTION.md](docs/SOLUTION.md)**
 
 ---
